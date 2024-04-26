@@ -1,10 +1,10 @@
-from django.urls import re_path
+from django.urls import path
 
 from blog import views
 
 urlpatterns = [
-    re_path(r'^$', views.index, name='blog_index'),
-    re_path(r'^create$', views.create, name='blog_create'),
-    re_path(r'^list$', views.list, name='blog_list'),
-    re_path(r'^(?P<pk>\d+)/edit/$', views.edit, name='blog_edit'),
+    path('', views.index, name='blog_index'),
+    path('create', views.create, name='blog_create'),
+    path('list', views.list, name='blog_list'),
+    path('<int:pk>/edit/', views.edit, name='blog_edit'),
 ]

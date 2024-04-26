@@ -165,7 +165,7 @@ WSGI_APPLICATION = "zosia16.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "zosia",
         "USER": "zosia",
     }

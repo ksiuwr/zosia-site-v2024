@@ -1,4 +1,4 @@
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 
 from users.models import User
@@ -11,7 +11,7 @@ class ActivateUser:
 
         try:
             # urlsafe_base64_decode() decodes to bytestring on Python 3
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             self.user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             self.user = None

@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.urls import path
 from django.urls import include, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -28,21 +29,21 @@ schema_view = get_schema_view(
 
 site_urls = [
     re_path(r'^admin/', admin.site.urls),
-    re_path(r'', include('conferences.urls')),
-    re_path(r'^accounts/', include('users.urls')),
-    re_path(r'^rooms/', include('rooms.urls')),
-    re_path(r'^blog/', include('blog.urls')),
-    re_path(r'^sponsors/', include('sponsors.urls')),
-    re_path(r'^lectures/', include('lectures.urls')),
-    re_path(r'^questions/', include('questions.urls')),
-    re_path(r'^boardgames/', include('boardgames.urls')),
-    re_path(r'^organizers/', include('organizers.urls')),
+    path('', include('conferences.urls')),
+    path('accounts/', include('users.urls')),
+    path('rooms/', include('rooms.urls')),
+    path('blog/', include('blog.urls')),
+    path('sponsors/', include('sponsors.urls')),
+    path('lectures/', include('lectures.urls')),
+    path('questions/', include('questions.urls')),
+    path('boardgames/', include('boardgames.urls')),
+    path('organizers/', include('organizers.urls')),
 ]
 
 api_urls = [
-    re_path(r'^api/v1/rooms/', include('rooms.api.v1.urls')),
-    re_path(r'^api/v2/rooms/', include('rooms.api.v2.urls')),
-    re_path(r'^api/v1/users/', include('users.api.urls')),
+    path('api/v1/rooms/', include('rooms.api.v1.urls')),
+    path('api/v2/rooms/', include('rooms.api.v2.urls')),
+    path('api/v1/users/', include('users.api.urls')),
 ]
 
 swagger_urls = [
