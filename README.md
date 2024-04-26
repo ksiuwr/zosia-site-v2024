@@ -1,16 +1,19 @@
-# zosia16-site
+# zosia25-site
 
-Django 3.2 version of ZOSIA registration page.
+Django 4.2 version of ZOSIA registration page.
 
 [![CircleCI](https://circleci.com/gh/ksiuwr/zosia16-site/tree/master.svg?style=svg)](https://circleci.com/gh/ksiuwr/zosia16-site/tree/master)
 
-- [Development](#development)
+- [zosia25-site](#zosia25-site)
+  - [Development](#development)
     - [Full in-docker local development](#full-in-docker-local-development)
-        - [Required software](#required-software)
-        - [How can I run it?](#how-can-i-run-it)
-        - [I have run it - what is happening?](#i-have-run-it---what-is-happening)
+      - [Required software](#required-software)
+      - [How can I run it?](#how-can-i-run-it)
+      - [I have run it - what is happening?](#i-have-run-it---what-is-happening)
     - [Troubleshooting](#troubleshooting)
-- [Hosting](#hosting)
+  - [Hosting](#hosting)
+    - [2019-2020](#2019-2020)
+    - [2022-2023](#2022-2023)
 
 ## Development
 
@@ -128,6 +131,6 @@ on container startup. Deployments were conducted by CircleCI after every commit 
 branch.
 All deployment scripts used for that are placed in the `.ecs` directory.
 
-### 2022 - 2023
+### 2022-2023
 We hosted the ZOSIA site on GCP App Engine with GCP SQL as Postgres managed database. Deployments
 were still done using CircleCI pipelines.
