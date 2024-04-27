@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from conferences.models import Transport, Zosia
 from utils.constants import II_UWR_EMAIL_DOMAIN, MAX_BONUS_MINUTES, MIN_BONUS_MINUTES, \
