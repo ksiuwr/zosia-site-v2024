@@ -77,3 +77,4 @@ workflows:
             branches:
               only:
                 # - master
+                - zosia_2025
