@@ -1,19 +1,18 @@
-# zosia25-site
+# zosia-site-v2024
 
 Django 4.2 version of ZOSIA registration page.
 
-[![CircleCI](https://circleci.com/gh/ksiuwr/zosia16-site/tree/master.svg?style=svg)](https://circleci.com/gh/ksiuwr/zosia16-site/tree/master)
+[![CircleCI](https://circleci.com/gh/ksiuwr/zosia-site-v2024/tree/master.svg?style=svg)](https://circleci.com/gh/ksiuwr/zosia-site-v2024/tree/master)
 
-- [zosia25-site](#zosia25-site)
-  - [Development](#development)
-    - [Full in-docker local development](#full-in-docker-local-development)
-      - [Required software](#required-software)
-      - [How can I run it?](#how-can-i-run-it)
-      - [I have run it - what is happening?](#i-have-run-it---what-is-happening)
-    - [Troubleshooting](#troubleshooting)
-  - [Hosting](#hosting)
-    - [2019-2020](#2019-2020)
-    - [2022-2023](#2022-2023)
+- [Development](#development)
+  - [Full in-docker local development](#full-in-docker-local-development)
+    - [Required software](#required-software)
+    - [How can I run it?](#how-can-i-run-it)
+    - [I have run it - what is happening?](#i-have-run-it---what-is-happening)
+  - [Troubleshooting](#troubleshooting)
+- [Hosting](#hosting)
+  - [2019-2020](#2019-2020)
+  - [2022-2023](#2022-2023)
 
 ## Development
 
