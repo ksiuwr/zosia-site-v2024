@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from blog.forms import BlogPostForm
 from blog.models import BlogPost

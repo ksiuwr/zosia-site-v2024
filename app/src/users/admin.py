@@ -29,10 +29,12 @@ def activate_user(modeladmin, request, queryset):
         user.save()
 
 
+@admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     actions = [accept_organization, reject_organization]
 
 
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     actions = [activate_user]
     list_display = ('first_name', 'last_name', 'email', 'hash', 'person_type', 'is_active',
@@ -64,6 +66,7 @@ class OrganizationNameListFilter(admin.SimpleListFilter):
         return queryset
 
 
+@admin.register(UserPreferences)
 class UserPreferencesAdmin(admin.ModelAdmin):
     list_display = ('user', 'is_student', 'payment_accepted', 'organization_name', 'accommodation_day_1',
                     'accommodation_day_2', 'accommodation_day_3', 'vegetarian',
@@ -334,6 +337,3 @@ class UserFiltersAdmin(admin.ModelAdmin):
         return obj.is_student 
 
 
-admin.site.register(User, UserAdmin)
-admin.site.register(UserPreferences, UserPreferencesAdmin)
-admin.site.register(Organization, OrganizationAdmin)

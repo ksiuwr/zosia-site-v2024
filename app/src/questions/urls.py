@@ -1,11 +1,11 @@
-from django.urls import re_path
+from django.urls import path
 
 from questions import views
 
 urlpatterns = [
-    re_path(r'^$', views.index, name='questions_index'),
-    re_path(r'^all/$', views.index_for_staff, name='questions_index_staff'),
-    re_path(r'^add/$', views.update, name='questions_add'),
-    re_path(r'^(?P<question_id>\d+)/$', views.update, name='questions_edit'),
-    re_path(r'^(?P<question_id>\d+)/delete/$', views.delete, name='questions_delete'),
+    path('', views.index, name='questions_index'),
+    path('all/', views.index_for_staff, name='questions_index_staff'),
+    path('add/', views.update, name='questions_add'),
+    path('<int:question_id>/', views.update, name='questions_edit'),
+    path('<int:question_id>/delete/', views.delete, name='questions_delete'),
 ]
