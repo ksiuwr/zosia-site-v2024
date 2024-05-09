@@ -8,7 +8,7 @@ ENV NODE_MAJOR=18
 
 # DJANGO settings
 ENV DJANGO_ENV=${DJANGO_ENV}
-ENV DJANGO_SETTINGS_MODULE="zosia16.settings.dev"
+ENV DJANGO_SETTINGS_MODULE="server.settings.dev"
 
 # install nodejs and npm
 RUN set -x \
@@ -31,3 +31,4 @@ COPY webpack.config.js ./
 COPY yarn.lock ./
 COPY static ./static
 COPY js ./js
+COPY manage.py ./

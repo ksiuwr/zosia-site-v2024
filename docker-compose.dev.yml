@@ -18,7 +18,7 @@ services:
     command: sleep infinity
     # docker volumes - Host:Container
     volumes:
-      - ./app/src:/code/src
+      - ./app/server:/code/server
       - ./app/js:/code/js
       - ./app/static:/code/static
     ports:

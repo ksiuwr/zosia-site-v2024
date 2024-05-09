@@ -57,7 +57,7 @@ def docker_shell(command: List[str]) -> None:
 
 
 def docker_python(command: List[str]) -> None:
-    docker_shell(["python", "src/manage.py"] + command)
+    docker_shell(["python", "manage.py"] + command)
 
 
 def docker_compose_run(command: List[str], with_project: bool = True) -> None:

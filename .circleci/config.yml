@@ -18,7 +18,7 @@ jobs:
             pip3 install flake8 coverage
       - run:
           name: Run run test with coverage check
-          command: cd app/src && coverage run --source='.' --omit='*/migrations/*,zosia16/*,*/tests.py,*/__init__.py'  manage.py test --settings=zosia16.settings.test
+          command: cd app/src && coverage run --source='.' --omit='*/migrations/*,zosia16/*,*/tests.py,*/__init__.py'  ../manage.py test --settings=zosia16.settings.test
       - run:
           name: Run syntax check
           command: flake8 --exclude=migrations --max-line-length=120 app/src || true
@@ -52,7 +52,7 @@ jobs:
           # we could prepare separate setting files for this without dependencies and with different STATIC_ROOT
           command: |
             python3 -m pip install --break-system-packages -r ./app/requirements.txt
-            cd ./app/src && python3 ./manage.py collectstatic --no-input && cp -r /static/. ../static/
+            cd ./app/src && python3 ../manage.py collectstatic --no-input && cp -r /static/. ../static/
 
       - run:
           name: Push image to App Engine
