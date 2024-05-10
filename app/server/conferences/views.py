@@ -13,6 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
+from .templates import MainPage
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -108,7 +109,13 @@ def index(request):
             'registration_open': zosia.is_user_registration_open(user)
         })
 
-    return render(request, 'conferences/index.html', context)
+    return MainPage(
+        zosia=context['zosia'],
+        sponsors=context['sponsors'],
+        gapi_place_src=context['gapi_place_src'],
+        zosia_url=context['zosia_url'],
+        registration_open=context['registration_open']
+    ).render(request)
 
 
 @require_http_methods(['GET'])

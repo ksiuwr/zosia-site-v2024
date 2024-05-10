@@ -81,7 +81,7 @@ def setup(is_no_cache: bool, display_remind: bool = False) -> None:
     docker_compose_run(["build"] + no_cache_opt, with_project=False)
     docker_compose_run(["up", "-d"])
     web_install()
-    web_build()
+    # web_build()
 
     if display_remind:
         remind_quit()
