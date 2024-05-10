@@ -69,11 +69,11 @@ def docker_compose_run(command: List[str], with_project: bool = True) -> None:
 
 
 def web_install() -> None:
-    docker_shell(["yarn", "install"])
+    docker_shell(["npm", "install"])
 
 
 def web_build() -> None:
-    docker_shell(["yarn", "build"])
+    docker_shell(["npm", "run", "build"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -304,6 +304,7 @@ def cli():
         elif args.action in ["build", "b"]:
             web_build()
         elif args.action in ["watch", "w"]:
+            # TODO: Should be removed
             docker_shell(["yarn", "watch"])
         else:
             web_parser.print_help()

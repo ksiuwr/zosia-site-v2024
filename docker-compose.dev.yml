@@ -19,6 +19,7 @@ services:
     # docker volumes - Host:Container
     volumes:
       - ./app/server:/code/server
+      - ./app/client:/code/client
       - ./app/js:/code/js
       - ./app/static:/code/static
     ports:

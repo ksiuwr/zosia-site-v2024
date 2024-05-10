@@ -19,11 +19,13 @@ from dotenv import load_dotenv
 from google.cloud import secretmanager
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+import django_stubs_ext
+
+# Required for reactivated
+django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-print(f"BASE_DIR: {BASE_DIR}")
 
 env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(env_file):
@@ -129,6 +131,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_recaptcha",
+    "reactivated",
 ]
 
 MIDDLEWARE = [
@@ -156,6 +159,19 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+        },
+    },
+    {
+        "BACKEND": "reactivated.backend.JSX",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.csrf",
+                "django.template.context_processors.request",
+                "django.template.context_processors.static",
+            ]
         },
     },
 ]

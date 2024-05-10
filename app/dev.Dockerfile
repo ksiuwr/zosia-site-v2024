@@ -27,8 +27,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY package.json ./
-COPY webpack.config.js ./
-COPY yarn.lock ./
+COPY package-lock.json ./
 COPY static ./static
 COPY js ./js
 COPY manage.py ./

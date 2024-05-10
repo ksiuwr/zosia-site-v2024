@@ -46,7 +46,7 @@ jobs:
       - run:
           name: Build frontend
           command: |
-            (cd ./app && yarn install && yarn build)
+            (cd ./app && npm install && npm run build)
       - run:
           name: Collect static files
           # we could prepare separate setting files for this without dependencies and with different STATIC_ROOT
