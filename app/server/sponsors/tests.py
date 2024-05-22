@@ -17,7 +17,7 @@ User = get_user_model()
 
 class SponsorTestCase(TestCase):
     def setUp(self):
-        img = open(os.path.join(settings.BASE_DIR, '..', '..', 'static/imgs/zosia.png'), 'rb')
+        img = open(os.path.join(settings.BASE_DIR, 'static/imgs/zosia.png'), 'rb')
         self.image = SimpleUploadedFile(name='up.png', content=img.read(), content_type='image/png')
 
 
