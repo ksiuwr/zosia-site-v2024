@@ -5,6 +5,8 @@ import { createRoot } from "react-dom/client";
 import { Provider, getTemplate, getServerData } from "@reactivated";
 import { HelmetProvider } from "react-helmet-async";
 
+import "./index.css";
+
 const { props, context } = getServerData();
 const Template = await getTemplate(context);
 

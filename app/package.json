@@ -16,22 +16,18 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.2",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "babel-loader": "^8.3.0",
     "chart.js": "^3.9.1",
     "jquery": "^3.6.1",
     "materialize-css": "^1.0.0",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",
-    "reactivated": "^0.41.0",
-    "styled-components": "^5.3.6"
+    "reactivated": "^0.41.0"
   },
   "devDependencies": {
-    "@types/react-dom": "^18.3.0"
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3"
   }
 }

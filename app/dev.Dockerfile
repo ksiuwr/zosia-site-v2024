@@ -31,3 +31,5 @@ COPY package-lock.json ./
 COPY static ./static
 COPY js ./js
 COPY manage.py ./
+COPY postcss.config.js ./
+COPY tailwind.config.js ./

@@ -110,11 +110,11 @@ def index(request):
         })
 
     return MainPage(
-        zosia=context['zosia'],
-        sponsors=context['sponsors'],
-        gapi_place_src=context['gapi_place_src'],
-        zosia_url=context['zosia_url'],
-        registration_open=context['registration_open']
+        zosia=context.get('zosia', None),
+        sponsors=context.get('sponsors', None),
+        gapi_place_src=context.get('gapi_place_src', ""),
+        zosia_url=context.get('zosia_url', ""),
+        registration_open=context.get('registration_open', False),
     ).render(request)
 
 
