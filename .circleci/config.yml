@@ -18,13 +18,13 @@ jobs:
             pip3 install flake8 coverage
       - run:
           name: Run run test with coverage check
-          command: cd server && coverage run --source='.' --omit='*/migrations/*,*/tests.py,*/__init__.py'  ../manage.py test --settings=server.settings.test
+          command: cd app/server && coverage run --source='.' --omit='*/migrations/*,*/tests.py,*/__init__.py'  ../manage.py test --settings=server.settings.test
       - run:
           name: Run syntax check
-          command: flake8 --exclude=migrations --max-line-length=120 server || true
+          command: flake8 --exclude=migrations --max-line-length=120 app/server || true
       - run:
           name: Show tests coverage report
-          command: cd server && coverage report -m
+          command: cd app/server && coverage report -m
 
   deploy:
     docker:
