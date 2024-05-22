@@ -33,3 +33,4 @@ COPY js ./js
 COPY manage.py ./
 COPY postcss.config.js ./
 COPY tailwind.config.js ./
+COPY .prettierrc ./
