@@ -17,8 +17,8 @@ jobs:
       - run:
           name: Install requirements
           command: |
-            pip3 install -r app/requirements.txt
-            pip3 install flake8 coverage
+            pip3 install --break-system-packages -r app/requirements.txt
+            pip3 install --break-system-packages flake8 coverage
       - run:
           name: Run run test with coverage check
           command: cd app/server && coverage run --source='.' --omit='*/migrations/*,*/tests.py,*/__init__.py'  ../manage.py test --settings=server.settings.test
