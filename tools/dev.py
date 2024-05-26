@@ -73,7 +73,9 @@ def web_install() -> None:
 
 
 def web_build() -> None:
-    docker_shell(["npm", "run", "build"])
+    # Builds Reactivated files for frontend
+    docker_shell(["python", "manage.py", "generate_client_assets"])
+    docker_shell(["python", "manage.py", "build"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -81,7 +83,7 @@ def setup(is_no_cache: bool, display_remind: bool = False) -> None:
     docker_compose_run(["build"] + no_cache_opt, with_project=False)
     docker_compose_run(["up", "-d"])
     web_install()
-    # web_build()
+    web_build()
 
     if display_remind:
         remind_quit()
