@@ -21,7 +21,7 @@ jobs:
             pip3 install --break-system-packages flake8 coverage
       - run:
           name: Build frontend
-          commmand: python3 manage.py generate_client_assets && python3 manage.py build
+          command: python3 manage.py generate_client_assets && python3 manage.py build
       - run:
           name: Run run test with coverage check
           command: cd app/server && coverage run --source='.' --omit='*/migrations/*,*/tests.py,*/__init__.py'  ../manage.py test --settings=server.settings.test
