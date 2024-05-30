@@ -87,14 +87,11 @@ def export_shirts(request):
 
 @require_http_methods(['GET'])
 def index(request):
-    user = request.user
+    user: User = request.user
     zosia = Zosia.objects.find_active()
     sponsors = Sponsor.objects.filter(is_active=True)
 
-    context = {
-        'zosia': zosia,
-        'sponsors': sponsors,
-    }
+    context = dict()
 
     if zosia is not None:
         query = {
@@ -110,8 +107,8 @@ def index(request):
         })
 
     return MainPage(
-        zosia=context.get('zosia', None),
-        sponsors=context.get('sponsors', None),
+        zosia=zosia,
+        sponsors=sponsors,
         gapi_place_src=context.get('gapi_place_src', ""),
         zosia_url=context.get('zosia_url', ""),
         registration_open=context.get('registration_open', False),

@@ -1,41 +1,42 @@
-import React from "react";
+import React, { PropsWithChildren, useContext } from "react";
 
 import { Context } from "@reactivated";
 import { Helmet } from "react-helmet-async";
+import { Navbar } from "./navbar/Navbar";
 
-interface Props {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const Layout = (props: Props) => {
-  const context = React.useContext(Context);
+export const Layout = ({ children }: PropsWithChildren) => {
+  const context = useContext(Context);
 
   return (
     <>
       <Helmet>
-        <meta charSet="utf-8" />
-        <title>{props.title}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Zimowy Obóz Studentów Informatyki A</title>
         <link
           rel="icon"
-          href={`${context.STATIC_URL}favicon.ico`}
-          type="image/x-icon"
+          href={`${context.STATIC_URL}imgs/favicon-16x16.png`}
+          sizes="16x16"
+          type="image/png"
         />
         <link
-          rel="stylesheet"
-          type="text/css"
-          href={`${context.STATIC_URL}admin/css/fonts.css`}
+          rel="icon"
+          href={`${context.STATIC_URL}imgs/favicon-32x32.png`}
+          sizes="32x32"
+          type="image/png"
+        />
+        <link
+          rel="icon"
+          href={`${context.STATIC_URL}imgs/favicon-96x96.png`}
+          sizes="96x96"
+          type="image/png"
         />
       </Helmet>
+      <Navbar />
       <header>
-        <a href="/" rel="noopener">
-          django reactivated
-        </a>
-        <p>This is URL {context.STATIC_URL}</p>
+        <h1 className="blue-color">Witaj na ZOSI! {}</h1>
       </header>
-      <main>{props.children}</main>
+      <main>{children}</main>
       <footer>This is the footer of template {context.template_name}</footer>
     </>
   );
