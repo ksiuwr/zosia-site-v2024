@@ -10,8 +10,10 @@ export const TopNavLink = ({
   children,
 }: PropsWithChildren<TopNavLinkProps>) => {
   return (
-    <a href={to} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-      {children}
-    </a>
+    <li>
+      <a href={to} className="btn btn-ghost h-full">
+        {children}
+      </a>
+    </li>
   );
 };

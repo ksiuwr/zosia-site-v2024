@@ -8,8 +8,8 @@ export const Navbar = () => {
   const context = useContext(Context);
 
   return (
-    <nav className="h-20 w-full bg-slate-300">
-      <div className="relative mx-auto flex h-full w-5/6 justify-center align-middle lg:w-4/6 lg:justify-between">
+    <nav className="bg-base-300 h-20 w-full">
+      <div className="relative mx-auto flex h-full w-5/6 items-center justify-center align-middle lg:w-4/6 lg:justify-between">
         <MobileMenu />
         <a href={reverse("index")} className="flex flex-col justify-center">
           <img

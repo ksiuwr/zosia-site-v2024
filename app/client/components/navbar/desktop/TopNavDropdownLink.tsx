@@ -1,20 +1,29 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { PropsWithChildren } from "react";
 
 interface TopNavDropdownLinkProps {
   to: string;
 }
 
-export const TopNavDropdownLink = ({
-  to,
-  children,
-}: PropsWithChildren<TopNavDropdownLinkProps>) => {
-  return (
-    <a
-      href={to}
-      className="block bg-white px-4 py-2 text-gray-700 hover:bg-gray-100"
-    >
-      {children}
-    </a>
-  );
-};
+type Props = TopNavDropdownLinkProps &
+  React.DetailedHTMLProps<
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    HTMLAnchorElement
+  >;
+
+export const TopNavDropdownLink = forwardRef<HTMLAnchorElement, Props>(
+  ({ to, children, ...props }: PropsWithChildren<Props>, ref) => {
+    return (
+      <li>
+        <a
+          href={to}
+          ref={ref}
+          {...props}
+          className="btn-ghost data-[active]:btn-active"
+        >
+          {children}
+        </a>
+      </li>
+    );
+  },
+);

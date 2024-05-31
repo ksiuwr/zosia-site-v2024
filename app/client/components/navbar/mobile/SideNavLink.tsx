@@ -10,10 +10,7 @@ export const SideNavLink = ({
   children,
 }: PropsWithChildren<SideNavLinkProps>) => {
   return (
-    <a
-      href={to}
-      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    >
+    <a href={to} className="btn btn-ghost btn-block justify-start gap-5">
       {children}
     </a>
   );
