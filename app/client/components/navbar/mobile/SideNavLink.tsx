@@ -10,7 +10,7 @@ export const SideNavLink = ({
   children,
 }: PropsWithChildren<SideNavLinkProps>) => {
   return (
-    <a href={to} className="btn btn-ghost btn-block justify-start gap-5">
+    <a href={to} className="btn btn-ghost flex justify-start gap-5 pr-32">
       {children}
     </a>
   );
