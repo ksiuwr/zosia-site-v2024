@@ -171,6 +171,7 @@ TEMPLATES = [
                 "django.template.context_processors.csrf",
                 "django.template.context_processors.request",
                 "django.template.context_processors.static",
+                "server.utils.context_processors.user_context",
             ]
         },
     },
