@@ -11,7 +11,7 @@ export const TopNavLink = ({
 }: PropsWithChildren<TopNavLinkProps>) => {
   return (
     <li>
-      <a href={to} className="btn btn-ghost h-full">
+      <a href={to} className="btn btn-ghost">
         {children}
       </a>
     </li>
