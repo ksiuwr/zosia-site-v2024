@@ -3,6 +3,7 @@ import React, { PropsWithChildren, useContext } from "react";
 import { Context } from "@reactivated";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "./navbar/Navbar";
+import { Footer } from "./Footer";
 
 export const Layout = ({ children }: PropsWithChildren) => {
   const context = useContext(Context);
@@ -33,12 +34,11 @@ export const Layout = ({ children }: PropsWithChildren) => {
           type="image/png"
         />
       </Helmet>
-      <Navbar />
-      <header>
-        <h1 className="blue-color">Witaj na ZOSI! {}</h1>
-      </header>
-      <main>{children}</main>
-      <footer>This is the footer of template {context.template_name}</footer>
+      <div className="flex h-dvh flex-col">
+        <Navbar />
+        <main className="grow">{children}</main>
+        <Footer />
+      </div>
     </>
   );
 };

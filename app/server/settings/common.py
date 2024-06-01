@@ -172,6 +172,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.template.context_processors.static",
                 "server.utils.context_processors.user_context",
+                "server.utils.context_processors.server_time_context",
             ]
         },
     },

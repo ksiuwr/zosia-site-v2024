@@ -1,4 +1,6 @@
 from django.http import HttpRequest
+from server.utils.constants import DEFAULT_TIME_FORMAT
+from server.utils.time_manager import now
 from server.users.models import User
 from typing import Dict, TypedDict
 
@@ -22,4 +24,15 @@ def user_context(request: HttpRequest) -> UserContext:
             context["last_name"] = user.last_name
 
 
+    return context
+
+
+class ServerTimeContext(TypedDict):
+    server_time: str
+    current_year: int
+
+def server_time_context(request: HttpRequest) -> ServerTimeContext:
+    context = ServerTimeContext()
+    context["server_time"] = now().strftime(DEFAULT_TIME_FORMAT)
+    context["current_year"] = now().year
     return context
