@@ -31,7 +31,7 @@ export const MobileMenu = () => {
 
   return (
     <Popover className="absolute left-0 lg:hidden">
-      <PopoverButton className="btn btn-ghost btn-circle">
+      <PopoverButton className="btn btn-circle btn-ghost">
         <Bars3Icon className="size-6" />
       </PopoverButton>
 
@@ -44,7 +44,7 @@ export const MobileMenu = () => {
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
       >
-        <PopoverPanel className="bg-base-100 fixed left-0 top-0 h-full overflow-scroll">
+        <PopoverPanel className="fixed left-0 top-0 h-full overflow-scroll bg-base-100">
           {context.is_authenticated ? (
             <>
               <SideNavLink to={reverse("accounts_profile")}>
