@@ -6,17 +6,16 @@ import {
   MenuSeparator,
 } from "@headlessui/react";
 import React, { useContext } from "react";
-import { Divider } from "../mobile/Divider";
 import { TopNavDropdownLink } from "./TopNavDropdownLink";
 import { TopNavLink } from "./TopNavLink";
 import { Context, reverse } from "@reactivated";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 
 export const DesktopMenu = () => {
   const context = useContext(Context);
 
   return (
-    <ul className="bg-base-300 hidden h-full items-center justify-end lg:flex">
+    <ul className="hidden h-full items-center justify-end bg-base-300 lg:flex">
       <TopNavLink to={reverse("blog_index")}>Blog</TopNavLink>
       <TopNavLink to={reverse("questions_index")}>Q&A</TopNavLink>
       <TopNavLink to={reverse("lectures_index")}>Lectures</TopNavLink>
@@ -24,14 +23,15 @@ export const DesktopMenu = () => {
       {context.is_authenticated ? (
         <li>
           <Menu>
-            <MenuButton className="btn btn-ghost">
+            <MenuButton className="group btn btn-ghost">
               {context.first_name} {context.last_name}{" "}
-              <ChevronDownIcon className="size-4 stroke-current [&>path]:stroke-[2]" />
+              <ChevronDownIcon className="inline size-4 stroke-current group-data-[active]:hidden [&>path]:stroke-[2]" />
+              <ChevronUpIcon className="hidden size-4 stroke-current group-data-[active]:inline [&>path]:stroke-[2]" />
             </MenuButton>
             <MenuItems
               anchor="bottom"
               as="ul"
-              className="menu bg-base-200 rounded-box w-52"
+              className="menu w-52 rounded-box bg-base-200"
             >
               <MenuItem>
                 <TopNavDropdownLink to={reverse("accounts_profile")}>

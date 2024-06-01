@@ -19,7 +19,7 @@ export const TopNavDropdownLink = forwardRef<HTMLAnchorElement, Props>(
           href={to}
           ref={ref}
           {...props}
-          className="btn-ghost data-[active]:btn-active"
+          className="btn-ghost data-[focus]:btn-active"
         >
           {children}
         </a>
