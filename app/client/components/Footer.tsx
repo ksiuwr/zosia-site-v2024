@@ -8,7 +8,7 @@ export const Footer = () => {
   return (
     <footer className="w-full bg-neutral py-5 text-neutral-content">
       <div className="mx-auto w-5/6 lg:w-4/6">
-        <div className="footer max-lg:footer-center">
+        <div className="footer max-lg:footer-center lg:justify-between">
           <aside>
             <h6 className="footer-title">Koło Studentów Informatyki</h6>
             <p>
@@ -83,15 +83,15 @@ export const Footer = () => {
             </div>
           </nav>
         </div>
-        <div className="footer pt-10 max-lg:footer-center">
-          <aside>
-            <p className="text-xs">
-              © 2016-{context.current_year}, Koło Studentów Informatyki
-            </p>
-          </aside>
+        <div className="footer pt-10 max-lg:footer-center lg:justify-between">
           <aside className="lg:justify-self-end">
             <p className="text-right text-xs">
               Server time: {context.server_time}
+            </p>
+          </aside>
+          <aside>
+            <p className="text-xs">
+              © 2016-{context.current_year}, Koło Studentów Informatyki
             </p>
           </aside>
         </div>
