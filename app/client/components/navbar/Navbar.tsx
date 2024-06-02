@@ -15,7 +15,7 @@ export const Navbar = () => {
           <img
             src={`${context.STATIC_URL}imgs/zosia.svg`}
             alt="ZOSIA"
-            className="h-12"
+            className="h-10 lg:h-12"
           />
         </a>
         <DesktopMenu />

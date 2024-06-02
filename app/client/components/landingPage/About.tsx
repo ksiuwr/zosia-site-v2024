@@ -3,7 +3,7 @@ import React from "react";
 export const About = () => {
   return (
     <div className="card mx-auto my-14 w-5/6 bg-base-300 lg:w-1/2">
-      <div className="card-body text-lg text-base-content">
+      <div className="card-body text-base-content lg:text-lg">
         <p>
           <b>ZOSIA</b> ("Zimowy Obóz Studentów Informatyki A", roughly
           translated as "The Best Computer Science Students' Winter Camp") is

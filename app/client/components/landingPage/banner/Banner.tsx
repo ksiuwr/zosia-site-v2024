@@ -72,7 +72,7 @@ export const Banner = ({
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div>
-          <h1 className="mb-10 text-8xl font-bold">
+          <h1 className="mb-10 text-5xl font-bold lg:text-6xl">
             Zimowy Obóz Studentów Informatyki A
           </h1>
           {registrationStatus}
