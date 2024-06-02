@@ -30,10 +30,8 @@ def user_context(request: HttpRequest) -> UserContext:
 
 class ServerTimeContext(TypedDict):
     server_time: str
-    current_year: int
 
 def server_time_context(request: HttpRequest) -> ServerTimeContext:
     context = ServerTimeContext()
     context["server_time"] = format_in_zone(timezone.now(), 'UTC', "%Y-%m-%dT%H:%M:%SZ")
-    context["current_year"] = now().year
     return context
