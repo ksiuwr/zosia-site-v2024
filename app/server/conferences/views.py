@@ -100,18 +100,18 @@ def index(request):
         }
         context.update({
             'gapi_place_src': settings.GAPI_PLACE_BASE_URL + '?' + urlencode(query),
-            # FIXME: Make sure this url starts with http.
-            #  Django WILL try to make it relative otherwise
-            'zosia_url': zosia.place.url,
-            'registration_open': zosia.is_user_registration_open(user)
+            'place': zosia.place,
+            'registration_open': zosia.is_user_registration_open(user),
+            'end_date': zosia.end_date
         })
 
     return MainPage(
         zosia=zosia,
         sponsors=sponsors,
+        place=context.get('place', None),
         gapi_place_src=context.get('gapi_place_src', ""),
-        zosia_url=context.get('zosia_url', ""),
         registration_open=context.get('registration_open', False),
+        zosia_end_date=context.get('end_date', "")
     ).render(request)
 
 

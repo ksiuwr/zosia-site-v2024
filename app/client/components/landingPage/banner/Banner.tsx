@@ -6,12 +6,14 @@ interface BannerProps {
   registration_start: string;
   registration_end: string;
   registration_suspended: boolean;
+  isRegistrationOpen: boolean;
 }
 
 export const Banner = ({
   registration_start,
   registration_end,
   registration_suspended,
+  isRegistrationOpen,
 }: BannerProps) => {
   const context = useContext(Context);
   const [countDownFinished, setCountdownFinished] = useState(false);
@@ -25,9 +27,6 @@ export const Banner = ({
   const currentServerTime = new Date(context.server_time);
 
   const isRegistrationOver = currentServerTime > registrationEndDate;
-  const isRegistrationOpen =
-    currentServerTime > registrationStartDate &&
-    currentServerTime < registrationEndDate;
 
   let registrationStatus = <></>;
 
@@ -73,7 +72,7 @@ export const Banner = ({
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div>
-          <h1 className="mb-10 text-6xl font-bold">
+          <h1 className="mb-10 text-8xl font-bold">
             Zimowy Obóz Studentów Informatyki A
           </h1>
           {registrationStatus}
