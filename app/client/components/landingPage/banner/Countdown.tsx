@@ -2,13 +2,14 @@ import React, { CSSProperties, useEffect } from "react";
 
 interface CountdownProps {
   endDate: Date;
+  onCountdownFinish: () => void;
 }
 
 interface CountdownSpanCSS extends CSSProperties {
   "--value": number;
 }
 
-export const Countdown = ({ endDate }: CountdownProps) => {
+export const Countdown = ({ endDate, onCountdownFinish }: CountdownProps) => {
   const calculateTimeLeft = () => {
     const currentDate = new Date();
     const milisDifference = +endDate - +currentDate;
@@ -30,6 +31,8 @@ export const Countdown = ({ endDate }: CountdownProps) => {
       timeLeft.hours = hours % 24;
       timeLeft.minutes = minutes % 60;
       timeLeft.seconds = seconds % 60;
+    } else {
+      onCountdownFinish();
     }
 
     return timeLeft;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Context, reverse } from "@reactivated";
 import { Countdown } from "./Countdown";
 
@@ -13,7 +13,12 @@ export const Banner = ({
   registration_end,
   registration_suspended,
 }: BannerProps) => {
-  const context = React.useContext(Context);
+  const context = useContext(Context);
+  const [countDownFinished, setCountdownFinished] = useState(false);
+
+  const onCountdownFinish = () => {
+    setCountdownFinished(true);
+  };
 
   const registrationStartDate = new Date(registration_start);
   const registrationEndDate = new Date(registration_end);
@@ -36,7 +41,8 @@ export const Banner = ({
         Registration is suspended, please wait for further information
       </h2>
     );
-  } else if (isRegistrationOpen) {
+  } else if (isRegistrationOpen || countDownFinished) {
+    // If countdown has finished, show the registration button immediately, even if user didn't refresh the page
     registrationStatus = (
       <a
         className="btn btn-primary btn-lg btn-wide text-3xl"
@@ -49,7 +55,10 @@ export const Banner = ({
     registrationStatus = (
       <>
         <h2 className="mb-6 text-3xl font-bold">Registration starts in</h2>
-        <Countdown endDate={registrationStartDate} />
+        <Countdown
+          endDate={registrationStartDate}
+          onCountdownFinish={onCountdownFinish}
+        />
       </>
     );
   }
