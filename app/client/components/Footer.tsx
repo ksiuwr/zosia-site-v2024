@@ -12,7 +12,9 @@ export const Footer = () => {
       <div className="mx-auto w-5/6 lg:w-4/6">
         <div className="footer max-lg:footer-center max-lg:gap-6 lg:justify-between">
           <aside>
-            <h6 className="footer-title">Koło Studentów Informatyki</h6>
+            <h6 className="footer-title max-lg:mb-0">
+              Koło Studentów Informatyki
+            </h6>
             <p>
               Room 24A
               <br />
@@ -31,7 +33,7 @@ export const Footer = () => {
             </p>
           </aside>
           <nav>
-            <h6 className="footer-title">Info</h6>
+            <h6 className="footer-title max-lg:mb-0">Info</h6>
             <a
               className="link-hover link"
               href={reverse("terms_and_conditions")}
@@ -46,7 +48,7 @@ export const Footer = () => {
             </a>
           </nav>
           <nav>
-            <h6 className="footer-title">Social</h6>
+            <h6 className="footer-title max-lg:mb-0">Social</h6>
             <div className="flex justify-between gap-2">
               <a
                 className="link text-neutral-content hover:mix-blend-difference"
