@@ -5,6 +5,8 @@ import { EnvelopeIcon } from "@heroicons/react/24/outline";
 export const Footer = () => {
   const context = useContext(Context);
 
+  const serverTime = new Date(context.server_time);
+
   return (
     <footer className="w-full bg-neutral py-5 text-neutral-content">
       <div className="mx-auto w-5/6 lg:w-4/6">
@@ -86,12 +88,12 @@ export const Footer = () => {
         <div className="footer pt-10 max-lg:footer-center lg:justify-between">
           <aside className="lg:justify-self-end">
             <p className="text-right text-xs">
-              Server time: {context.server_time}
+              Server time: {serverTime.toUTCString()}
             </p>
           </aside>
           <aside>
             <p className="text-xs">
-              © 2016-{context.current_year}, Koło Studentów Informatyki
+              © 2016-{serverTime.getUTCFullYear()}, Koło Studentów Informatyki
             </p>
           </aside>
         </div>

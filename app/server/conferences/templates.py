@@ -8,7 +8,7 @@ from server.sponsors.models import Sponsor
 
 @template
 class MainPage(NamedTuple):
-    zosia: Pick[Zosia, Literal['start_date']]
+    zosia: Pick[Zosia, Literal['start_date', 'registration_start', 'registration_end', 'registration_suspended']]
     sponsors: Pick[Sponsor, Literal['name', 'is_active', 'url', 'path_to_logo', 'sponsor_type']]
     gapi_place_src: str
     zosia_url: str

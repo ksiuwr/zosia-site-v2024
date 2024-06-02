@@ -1,8 +1,9 @@
+from django.utils import timezone
 from django.http import HttpRequest
 from server.utils.constants import DEFAULT_TIME_FORMAT
-from server.utils.time_manager import now
+from server.utils.time_manager import format_in_zone, now
 from server.users.models import User
-from typing import Dict, TypedDict
+from typing import TypedDict
 
 class UserContext(TypedDict):
     is_authenticated: bool = False
@@ -33,6 +34,6 @@ class ServerTimeContext(TypedDict):
 
 def server_time_context(request: HttpRequest) -> ServerTimeContext:
     context = ServerTimeContext()
-    context["server_time"] = now().strftime(DEFAULT_TIME_FORMAT)
+    context["server_time"] = format_in_zone(timezone.now(), 'UTC', "%Y-%m-%dT%H:%M:%SZ")
     context["current_year"] = now().year
     return context
