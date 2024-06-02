@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Layout } from "@client/components/Layout";
-import { templates } from "@reactivated";
-import { Banner } from "@client/components/banner/Banner";
+import { templates, Context } from "@reactivated";
+import { Banner } from "@client/components/landingPage/banner/Banner";
+import { About } from "@client/components/landingPage/About";
 
 export const Template = (props: templates.MainPage) => {
+  const context = useContext(Context);
+
   return (
     <Layout>
       <Banner
@@ -11,6 +14,7 @@ export const Template = (props: templates.MainPage) => {
         registration_end={props.zosia.registration_end}
         registration_suspended={props.zosia.registration_suspended}
       />
+      <About />
     </Layout>
   );
 };
