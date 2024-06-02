@@ -44,7 +44,7 @@ export const MobileMenu = () => {
         leaveFrom="translate-x-0"
         leaveTo="-translate-x-full"
       >
-        <PopoverPanel className="fixed left-0 top-0 h-full overflow-scroll bg-base-100">
+        <PopoverPanel className="fixed left-0 top-0 z-50 h-full overflow-scroll bg-base-100">
           {context.is_authenticated ? (
             <>
               <SideNavLink to={reverse("accounts_profile")}>
