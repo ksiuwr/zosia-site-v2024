@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Layout } from "@client/components/Layout";
-import { templates, Context } from "@reactivated";
+import { templates } from "@reactivated";
 import { Banner } from "@client/components/landingPage/banner/Banner";
 import { About } from "@client/components/landingPage/About";
 import { ConferenceInfo } from "@client/components/landingPage/conferenceInfo/ConferenceInfo";
+import { GoogleMap } from "@client/components/landingPage/GoogleMap";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 export const Template = (props: templates.MainPage) => {
-  const context = useContext(Context);
-
   return (
     <Layout>
       <Banner
@@ -34,6 +34,9 @@ export const Template = (props: templates.MainPage) => {
         placeAddress={props.place.address}
         placeUrl={props.place.url}
       />
+      <APIProvider apiKey={props.gapi_key}>
+        <GoogleMap address={props.place.address} />
+      </APIProvider>
     </Layout>
   );
 };

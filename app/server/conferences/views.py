@@ -94,12 +94,7 @@ def index(request):
     context = dict()
 
     if zosia is not None:
-        query = {
-            'key': settings.GAPI_KEY,
-            'q': zosia.place.address,
-        }
         context.update({
-            'gapi_place_src': settings.GAPI_PLACE_BASE_URL + '?' + urlencode(query),
             'place': zosia.place,
             'registration_open': zosia.is_user_registration_open(user),
             'end_date': zosia.end_date
@@ -109,7 +104,7 @@ def index(request):
         zosia=zosia,
         sponsors=sponsors,
         place=context.get('place', None),
-        gapi_place_src=context.get('gapi_place_src', ""),
+        gapi_key=settings.GAPI_KEY,
         registration_open=context.get('registration_open', False),
         zosia_end_date=context.get('end_date', "")
     ).render(request)
