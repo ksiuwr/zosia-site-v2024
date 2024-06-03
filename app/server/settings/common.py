@@ -41,8 +41,6 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 # Google API key
 GAPI_KEY = os.environ.get("GAPI_KEY")
 
-GAPI_PLACE_BASE_URL = "https://www.google.com/maps/embed/v1/place"
-
 ENV = os.environ.get("DJANGO_ENV", "dev")
 
 # https://security.stackexchange.com/a/175540
