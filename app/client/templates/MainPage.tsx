@@ -7,8 +7,17 @@ import { ConferenceInfo } from "@client/components/landingPage/conferenceInfo/Co
 import { GoogleMap } from "@client/components/landingPage/GoogleMap";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { Organizers } from "@client/components/landingPage/Organizers";
+import { Sponsors } from "@client/components/landingPage/Sponsors";
 
 export const Template = (props: templates.MainPage) => {
+  const sponsors = props.sponsors.map((sponsor) => {
+    return {
+      name: sponsor.name,
+      logoPath: sponsor.path_to_logo,
+      url: sponsor.url,
+    };
+  });
+
   return (
     <Layout>
       <Banner
@@ -39,6 +48,7 @@ export const Template = (props: templates.MainPage) => {
         <GoogleMap address={props.place.address} />
       </APIProvider>
       <Organizers />
+      <Sponsors sponsorsData={sponsors} />
     </Layout>
   );
 };

@@ -3,6 +3,7 @@ import random
 from django.core.management.base import BaseCommand
 from django.utils import lorem_ipsum
 
+from server.sponsors.models import Sponsor
 from server.blog.models import BlogPost
 from server.conferences.models import Place, Transport, Zosia
 from server.lectures.models import Lecture
@@ -10,7 +11,7 @@ from server.organizers.models import OrganizerContact
 from server.questions.models import QA
 from server.rooms.models import Room
 from server.users.models import Organization, User, UserPreferences
-from server.utils.constants import FULL_DURATION_CHOICES, LECTURE_TYPE, MAX_BONUS_MINUTES, UserInternals
+from server.utils.constants import FULL_DURATION_CHOICES, LECTURE_TYPE, MAX_BONUS_MINUTES, SponsorInternals, UserInternals
 from server.utils.time_manager import now, time_point, timedelta_since, timedelta_since_now
 
 FIRST_NAMES = ['Kasia', 'Marta', 'Julia', 'Ola', 'Natalia', 'Ania', 'Ewa', 'Alicja', 'Beata',
@@ -231,6 +232,24 @@ def create_room(number):
     return Room.objects.create(**data)
 
 
+def create_sponsor(number):
+    sponsor_type = random.choice(
+        [SponsorInternals.TYPE_BRONZE,
+         SponsorInternals.TYPE_SILVER,
+         SponsorInternals.TYPE_GOLD])
+    
+    logo_path = 'https://s3.amazonaws.com/freebiesupply/large/2x/google-logo-transparent.png' if random.random() < 0.5 else None
+
+    data = {
+        'name': f"Sponsor {number}",
+        'is_active': True,
+        'url': 'http://google.com',
+        'path_to_logo': logo_path,
+        'sponsor_type': sponsor_type,
+    }
+    return Sponsor.objects.create(**data)
+
+
 class Command(BaseCommand):
     help = 'Create custom data in database'
 
@@ -284,5 +303,10 @@ class Command(BaseCommand):
         for i in range(1, room_num + 1):
             create_room(i)
             self.stdout.write(f"Created room #{i}")
+
+        sponsor_num = random.randint(5, 10)
+        for i in range(1, sponsor_num + 1):
+            create_sponsor(i)
+            self.stdout.write(f"Created sponsor #{i}")
 
         self.stdout.write(self.style.SUCCESS('Database has been filled with some data!'))
