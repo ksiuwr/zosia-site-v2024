@@ -6,6 +6,7 @@ import { About } from "@client/components/landingPage/About";
 import { ConferenceInfo } from "@client/components/landingPage/conferenceInfo/ConferenceInfo";
 import { GoogleMap } from "@client/components/landingPage/GoogleMap";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import { Organizers } from "@client/components/landingPage/Organizers";
 
 export const Template = (props: templates.MainPage) => {
   return (
@@ -37,6 +38,7 @@ export const Template = (props: templates.MainPage) => {
       <APIProvider apiKey={props.gapi_key}>
         <GoogleMap address={props.place.address} />
       </APIProvider>
+      <Organizers />
     </Layout>
   );
 };
