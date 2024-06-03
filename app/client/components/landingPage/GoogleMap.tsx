@@ -43,7 +43,7 @@ export const GoogleMap = ({ address }: GoogleMapProps) => {
   }, [placesService]);
 
   return (
-    <div className="mx-auto h-[500px] w-full lg:w-4/6">
+    <div className="mx-auto h-[600px] w-full lg:w-4/6">
       <Map
         // By default the map is centered on Wrocław
         defaultCenter={{ lat: 51.1108914, lng: 17.0505023 }}
