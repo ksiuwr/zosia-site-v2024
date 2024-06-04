@@ -13,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import MainPage
+from .templates import HomePage
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -100,7 +100,7 @@ def index(request):
             'end_date': zosia.end_date
         })
 
-    return MainPage(
+    return HomePage(
         zosia=zosia,
         sponsors=sponsors,
         place=context.get('place', None),
