@@ -229,9 +229,6 @@ def cli():
     web_subparsers.add_parser(
         "build", aliases=["b"], add_help=False,
         help=f"build web app {FILE_SYSTEM_NOTE}")
-    web_subparsers.add_parser(
-        "watch", aliases=["w"], add_help=False,
-        help=f"rebuild web app on file change {FILE_SYSTEM_NOTE}")
 
     python_parser = subparsers.add_parser(
         "python", aliases=["py"],
@@ -305,9 +302,6 @@ def cli():
             web_install()
         elif args.action in ["build", "b"]:
             web_build()
-        elif args.action in ["watch", "w"]:
-            # TODO: Should be removed
-            docker_shell(["yarn", "watch"])
         else:
             web_parser.print_help()
 
