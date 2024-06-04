@@ -5,7 +5,7 @@ DEBUG = True
 # SECRET_KEY = '...'
 
 # Get you Google API key at https://developers.google.com/maps/documentation/embed/guide
-# GAPI_KEY = '...'
+# GAPI_KEY = 'AIzaSyD6zjOyS1Dz0ZeB1zcAmQ7qT3gD6KRWXHk'
 
 # Send emails to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
