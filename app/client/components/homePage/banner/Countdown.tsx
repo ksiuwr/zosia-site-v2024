@@ -63,7 +63,7 @@ export const Countdown = ({ endDate, onCountdownFinish }: CountdownProps) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [endDate, onCountdownFinish]);
 
   return (
     <div className="flex justify-center gap-6 text-center">
