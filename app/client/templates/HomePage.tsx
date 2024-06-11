@@ -22,9 +22,9 @@ export const Template = (props: templates.HomePage) => {
     <Layout>
       <Banner
         isRegistrationOpen={props.registration_open}
-        registration_start={props.zosia.registration_start}
-        registration_end={props.zosia.registration_end}
-        registration_suspended={props.zosia.registration_suspended}
+        registrationStart={props.zosia.registration_start}
+        registrationEnd={props.zosia.registration_end}
+        registrationSuspended={props.zosia.registration_suspended}
       />
       <About />
       <ConferenceInfo
