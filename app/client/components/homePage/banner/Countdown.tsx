@@ -51,7 +51,7 @@ export const Countdown = ({ endDate, onCountdownFinish }: CountdownProps) => {
   return (
     <div className="flex justify-center gap-6 text-center">
       {Object.entries(timeLeft).map(([key, value]) => (
-        <div className="flex flex-col">
+        <div key={key} className="flex flex-col">
           <span className="countdown font-mono text-5xl">
             <span style={{ "--value": value } as CountdownSpanCSS}></span>
           </span>
