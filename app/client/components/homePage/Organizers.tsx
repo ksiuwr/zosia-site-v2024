@@ -25,6 +25,7 @@ export const Organizers = () => {
         {organizers.map((organizer) => (
           <Logo
             name={organizer.name}
+            key={organizer.name}
             logoPath={organizer.logoPath}
             url={organizer.url}
           />

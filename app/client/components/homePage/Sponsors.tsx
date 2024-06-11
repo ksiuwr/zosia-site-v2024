@@ -18,6 +18,7 @@ export const Sponsors = ({ sponsorsData }: SponsorsProps) => {
       {sponsorsData.map((sponsor) => (
         <Logo
           name={sponsor.name}
+          key={sponsor.name}
           logoPath={sponsor.logoPath}
           url={sponsor.url}
         />
