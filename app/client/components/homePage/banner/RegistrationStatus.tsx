@@ -25,21 +25,19 @@ export const RegistrationStatus = ({
 
   const isRegistrationOver = currentServerTime > registrationEnd;
 
-  let registrationStatus = <></>;
-
   if (isRegistrationOver) {
-    registrationStatus = (
+    return (
       <h2 className="text-3xl font-bold text-error">Registration closed</h2>
     );
   } else if (registrationSuspended) {
-    registrationStatus = (
+    return (
       <h2 className="text-3xl font-bold text-warning">
         Registration is suspended, please wait for further information
       </h2>
     );
   } else if (isRegistrationOpen || countDownFinished) {
     // If countdown has finished, show the registration button immediately, even if user didn't refresh the page
-    registrationStatus = (
+    return (
       <a
         className="btn btn-primary btn-lg btn-wide text-3xl"
         href={reverse("user_zosia_register")}
@@ -48,7 +46,7 @@ export const RegistrationStatus = ({
       </a>
     );
   } else {
-    registrationStatus = (
+    return (
       <>
         <h2 className="mb-6 text-3xl font-bold">Registration starts in</h2>
         <Countdown
@@ -58,6 +56,4 @@ export const RegistrationStatus = ({
       </>
     );
   }
-
-  return registrationStatus;
 };
