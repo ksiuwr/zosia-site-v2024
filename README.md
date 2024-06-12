@@ -66,9 +66,11 @@ web application.
 We mount some local folders so as to let you develop application without rebuilding docker every
 time:
 
-- `./app/src` as `/code/src`
+- `./app/server` as `/code/server`
+- `./app/client` as `/code/client`
 - `./app/js` as `/code/js`
 - `./app/static` as `/code/static`
+- `./app/node_modules` as `/code/node_modules`
 
 Thanks to this, all changes you make in the code will be visible immediately inside the container.
 **Remember that this works in both directions!** Every change you'll make in the container
@@ -82,10 +84,9 @@ because they were created inside docker. You don't have to worry about them, we 
 
 Files created in directory `/code/static` are output from the webpack build system (these are JS
 and CSS files). They will be created in your local filesystem and fortunately will be ignored by
-version control. Moreover, NodeJS module required by our application are installed. They will
-exist inside docker container only, so they won't be copied into your local filesystem. If you'd
-like your JS file to be rebuilt after editing them, run command `./dev.py javascript watch`
-in new terminal.
+version control.
+
+`/code/node_modules` contains all installed NodeJS modules required by our application. Node modules installed inside the container need to be visible in host for local development, IDEs etc. Especially the `_reactivated` module which is generated on `./dev.py server` and contains types for Typescript.
 
 Next, we run migrations on database and, finally, start the web server. In terminal you will
 see output/logs from django (e.g. queries to the database).
@@ -123,6 +124,7 @@ In case of any other problems it is recommended to rebuild the container with `-
 ## Hosting
 
 ### 2019-2020
+
 We hosted ZOSIA registration site on AWS. We used an ECS cluster based on EC2 instances
 to run the containers and ECR as a docker registry. All secrets (like database credentials,
 different APIs keys, etc) were stored in the Parameter Store and loaded to the environment variables
@@ -131,5 +133,6 @@ branch.
 All deployment scripts used for that are placed in the `.ecs` directory.
 
 ### 2022-2023
+
 We hosted the ZOSIA site on GCP App Engine with GCP SQL as Postgres managed database. Deployments
 were still done using CircleCI pipelines.

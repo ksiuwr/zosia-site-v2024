@@ -23,7 +23,7 @@ services:
       - ./app/js:/code/js
       - ./app/static:/code/static
       # Node modules installed in container need to be visible in host for local development, IDEs etc.
-      # Especially the _reactivated module witch is generated on `python manage.py runserver` and contains types for Typescript
+      # Especially the _reactivated module which is generated on `python manage.py runserver` and contains types for Typescript
       - ./app/node_modules:/code/node_modules
     ports:
       - "8000:8000"
