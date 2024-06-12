@@ -12,7 +12,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
     <>
       <Helmet>
         <html data-theme="light" />
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <meta content="text/html; charset=UTF-8" httpEquiv="Content-Type" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>Zimowy Obóz Studentów Informatyki A</title>
         <link
