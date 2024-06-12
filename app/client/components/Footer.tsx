@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { Context, reverse } from "@reactivated";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { Context, reverse } from "@reactivated";
+import React, { useContext } from "react";
 
 export const Footer = () => {
   const context = useContext(Context);

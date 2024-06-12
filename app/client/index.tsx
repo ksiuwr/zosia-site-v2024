@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createRoot } from "react-dom/client";
 
-import { Provider, getTemplate, getServerData } from "@reactivated";
+import { Provider, getServerData, getTemplate } from "@reactivated";
 import { HelmetProvider } from "react-helmet-async";
 
 import "./index.css";

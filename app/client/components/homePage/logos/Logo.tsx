@@ -12,6 +12,7 @@ export const Logo = ({ name, logoPath, url }: LogoProps) => {
       href={url}
       target="_blank"
       className="flex items-center justify-center no-underline hover:mix-blend-luminosity"
+      rel="noreferrer"
     >
       {logoPath ? (
         <img src={logoPath} alt={`${name} logo`} className="h-24 lg:h-40" />

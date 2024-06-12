@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { reverse } from "@reactivated";
+import React, { useState } from "react";
 import { Countdown } from "./Countdown";
 
 interface RegistrationStatusProps {

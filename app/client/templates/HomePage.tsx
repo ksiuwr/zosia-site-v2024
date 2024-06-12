@@ -1,13 +1,13 @@
-import React from "react";
 import { Layout } from "@client/components/Layout";
-import { templates } from "@reactivated";
-import { Banner } from "@client/components/homePage/banner/Banner";
 import { About } from "@client/components/homePage/About";
-import { ConferenceInfo } from "@client/components/homePage/conferenceInfo/ConferenceInfo";
 import { GoogleMap } from "@client/components/homePage/GoogleMap";
-import { APIProvider } from "@vis.gl/react-google-maps";
 import { Organizers } from "@client/components/homePage/Organizers";
 import { Sponsors } from "@client/components/homePage/Sponsors";
+import { Banner } from "@client/components/homePage/banner/Banner";
+import { ConferenceInfo } from "@client/components/homePage/conferenceInfo/ConferenceInfo";
+import { templates } from "@reactivated";
+import { APIProvider } from "@vis.gl/react-google-maps";
+import React from "react";
 
 export const Template = (props: templates.HomePage) => {
   const sponsors = props.sponsors.map((sponsor) => {

@@ -2,8 +2,8 @@ import React, { PropsWithChildren, useContext } from "react";
 
 import { Context } from "@reactivated";
 import { Helmet } from "react-helmet-async";
-import { Navbar } from "./navbar/Navbar";
 import { Footer } from "./Footer";
+import { Navbar } from "./navbar/Navbar";
 
 export const Layout = ({ children }: PropsWithChildren) => {
   const context = useContext(Context);

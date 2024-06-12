@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { Map, Marker, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
+import React, { useEffect, useState } from "react";
 
 interface GoogleMapProps {
   address: string;

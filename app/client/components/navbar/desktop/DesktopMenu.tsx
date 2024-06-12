@@ -1,15 +1,15 @@
 import {
   Menu,
   MenuButton,
-  MenuItems,
   MenuItem,
+  MenuItems,
   MenuSeparator,
 } from "@headlessui/react";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
 import { TopNavDropdownLink } from "./TopNavDropdownLink";
 import { TopNavLink } from "./TopNavLink";
-import { Context, reverse } from "@reactivated";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 
 export const DesktopMenu = () => {
   const context = useContext(Context);

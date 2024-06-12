@@ -5,24 +5,24 @@ import {
   PopoverPanel,
   Transition,
 } from "@headlessui/react";
+import {
+  ArrowRightEndOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
+  Bars3Icon,
+  BookOpenIcon,
+  ClockIcon,
+  HomeModernIcon,
+  InformationCircleIcon,
+  LockClosedIcon,
+  PuzzlePieceIcon,
+  QuestionMarkCircleIcon,
+  UserCircleIcon,
+  UserPlusIcon,
+} from "@heroicons/react/24/outline";
+import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
 import { Divider } from "./Divider";
 import { SideNavLink } from "./SideNavLink";
-import { Context, reverse } from "@reactivated";
-import {
-  Bars3Icon,
-  ArrowRightEndOnRectangleIcon,
-  UserPlusIcon,
-  InformationCircleIcon,
-  QuestionMarkCircleIcon,
-  BookOpenIcon,
-  ClockIcon,
-  UserCircleIcon,
-  ArrowRightStartOnRectangleIcon,
-  LockClosedIcon,
-  PuzzlePieceIcon,
-  HomeModernIcon,
-} from "@heroicons/react/24/outline";
 
 const ICON_SIZE = 6;
 

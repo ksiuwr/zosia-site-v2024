@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
 import { Context } from "@reactivated";
+import React, { useContext } from "react";
 import { RegistrationStatus } from "./RegistrationStatus";
 
 interface BannerProps {
