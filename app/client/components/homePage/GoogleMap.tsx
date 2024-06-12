@@ -9,20 +9,15 @@ export const GoogleMap = ({ address }: GoogleMapProps) => {
   const map = useMap();
   const placesLib = useMapsLibrary("places");
 
-  const [placesService, setPlacesService] = useState<
-    google.maps.places.PlacesService | undefined
-  >(undefined);
-
-  const [markerPosition, setMarkerPosition] = useState({ lat: 0, lng: 0 });
-  const [isMarkerReady, setIsMarkerReady] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState<{
+    lat: number;
+    lng: number;
+  } | null>();
 
   useEffect(() => {
     if (!placesLib || !map) return;
-    setPlacesService(new placesLib.PlacesService(map));
-  }, [placesLib, map]);
 
-  useEffect(() => {
-    if (!placesService) return;
+    const placesService = new placesLib.PlacesService(map);
 
     placesService.findPlaceFromQuery(
       { query: address, fields: ["geometry"] },
@@ -34,13 +29,12 @@ export const GoogleMap = ({ address }: GoogleMapProps) => {
               lng: results[0].geometry?.location?.lng() as number,
             };
             setMarkerPosition(newPos);
-            setIsMarkerReady(true);
             map?.setCenter(newPos);
           }
         }
       },
     );
-  }, [placesService]);
+  }, [address, map, placesLib]);
 
   return (
     <div className="mx-auto h-[600px] w-full lg:w-4/6">
@@ -51,7 +45,7 @@ export const GoogleMap = ({ address }: GoogleMapProps) => {
         gestureHandling="cooperative"
         disableDefaultUI={true}
       >
-        {isMarkerReady && <Marker position={markerPosition} />}
+        {markerPosition && <Marker position={markerPosition} />}
       </Map>
     </div>
   );
