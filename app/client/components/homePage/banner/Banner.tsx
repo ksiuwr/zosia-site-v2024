@@ -1,19 +1,16 @@
 import { Context } from "@reactivated";
 import React, { useContext } from "react";
-import { RegistrationStatus } from "./RegistrationStatus";
+import {
+  RegistrationStatus,
+  RegistrationStatusProps,
+} from "./RegistrationStatus";
 
 interface BannerProps {
-  registrationStart: string;
-  registrationEnd: string;
-  registrationSuspended: boolean;
-  isRegistrationOpen: boolean;
+  registrationStatusProps?: RegistrationStatusProps;
 }
 
 export const Banner = ({
-  registrationStart,
-  registrationEnd,
-  registrationSuspended,
-  isRegistrationOpen,
+  registrationStatusProps: registrationStatus,
 }: BannerProps) => {
   const context = useContext(Context);
 
@@ -30,13 +27,7 @@ export const Banner = ({
           <h1 className="mb-10 text-5xl font-bold lg:text-6xl">
             Zimowy Obóz Studentów Informatyki A
           </h1>
-          <RegistrationStatus
-            registrationStart={new Date(registrationStart)}
-            registrationEnd={new Date(registrationEnd)}
-            isRegistrationOpen={isRegistrationOpen}
-            registrationSuspended={registrationSuspended}
-            currentServerTime={new Date(context.server_time)}
-          />
+          {registrationStatus && <RegistrationStatus {...registrationStatus} />}
         </div>
       </div>
     </div>

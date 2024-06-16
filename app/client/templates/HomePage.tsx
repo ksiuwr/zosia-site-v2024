@@ -20,33 +20,44 @@ export const Template = (props: templates.HomePage) => {
 
   return (
     <Layout>
-      <Banner
-        isRegistrationOpen={props.registration_open}
-        registrationStart={props.zosia.registration_start}
-        registrationEnd={props.zosia.registration_end}
-        registrationSuspended={props.zosia.registration_suspended}
-      />
+      {props.zosia ? (
+        <Banner
+          registrationStatusProps={{
+            isRegistrationOpen: props.registration_open,
+            registrationStart: new Date(props.zosia.registration_start),
+            registrationEnd: new Date(props.zosia.registration_end),
+            registrationSuspended: props.zosia.registration_suspended,
+          }}
+        />
+      ) : (
+        <Banner />
+      )}
       <About />
-      <ConferenceInfo
-        conferenceStartDate={new Date(props.zosia.start_date)}
-        conferenceEndDate={new Date(props.zosia_end_date)}
-        registrationStartDate={new Date(props.zosia.registration_start)}
-        registrationEndDate={new Date(props.zosia.registration_end)}
-        lectureRegistrationStartDate={
-          new Date(props.zosia.lecture_registration_start)
-        }
-        lectureRegistrationEndDate={
-          new Date(props.zosia.lecture_registration_end)
-        }
-        roomingStartDate={new Date(props.zosia.rooming_start)}
-        roomingEndDate={new Date(props.zosia.rooming_end)}
-        placeName={props.place.name}
-        placeAddress={props.place.address}
-        placeUrl={props.place.url}
-      />
-      <APIProvider apiKey={props.gapi_key}>
-        <GoogleMap address={props.place.address} />
-      </APIProvider>
+      {props.zosia && (
+        <>
+          <ConferenceInfo
+            conferenceStartDate={new Date(props.zosia.start_date)}
+            conferenceEndDate={new Date(props.zosia_end_date)}
+            registrationStartDate={new Date(props.zosia.registration_start)}
+            registrationEndDate={new Date(props.zosia.registration_end)}
+            lectureRegistrationStartDate={
+              new Date(props.zosia.lecture_registration_start)
+            }
+            lectureRegistrationEndDate={
+              new Date(props.zosia.lecture_registration_end)
+            }
+            roomingStartDate={new Date(props.zosia.rooming_start)}
+            roomingEndDate={new Date(props.zosia.rooming_end)}
+            placeName={props.place.name}
+            placeAddress={props.place.address}
+            placeUrl={props.place.url}
+          />
+
+          <APIProvider apiKey={props.gapi_key}>
+            <GoogleMap address={props.place.address} />
+          </APIProvider>
+        </>
+      )}
       <Organizers />
       <Sponsors sponsorsData={sponsors} />
     </Layout>

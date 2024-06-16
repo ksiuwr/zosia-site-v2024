@@ -1,13 +1,12 @@
-import { reverse } from "@reactivated";
-import React, { useState } from "react";
+import { Context, reverse } from "@reactivated";
+import React, { useContext, useState } from "react";
 import { Countdown } from "./Countdown";
 
-interface RegistrationStatusProps {
+export interface RegistrationStatusProps {
   registrationStart: Date;
   registrationEnd: Date;
   registrationSuspended: boolean;
   isRegistrationOpen: boolean;
-  currentServerTime: Date;
 }
 
 export const RegistrationStatus = ({
@@ -15,9 +14,11 @@ export const RegistrationStatus = ({
   registrationEnd,
   registrationSuspended,
   isRegistrationOpen,
-  currentServerTime,
 }: RegistrationStatusProps) => {
+  const context = useContext(Context);
   const [countDownFinished, setCountdownFinished] = useState(false);
+
+  const currentServerTime = new Date(context.server_time);
 
   const onCountdownFinish = () => {
     setCountdownFinished(true);
