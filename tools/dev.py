@@ -57,7 +57,7 @@ def docker_shell(command: List[str]) -> None:
 
 
 def docker_python(command: List[str]) -> None:
-    docker_shell(["python", "src/manage.py"] + command)
+    docker_shell(["python", "manage.py"] + command)
 
 
 def docker_compose_run(command: List[str], with_project: bool = True) -> None:
@@ -69,11 +69,13 @@ def docker_compose_run(command: List[str], with_project: bool = True) -> None:
 
 
 def web_install() -> None:
-    docker_shell(["yarn", "install"])
+    docker_shell(["npm", "install"])
 
 
 def web_build() -> None:
-    docker_shell(["yarn", "build"])
+    # Builds Reactivated files for frontend
+    docker_shell(["python", "manage.py", "generate_client_assets"])
+    docker_shell(["python", "manage.py", "build"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -227,9 +229,6 @@ def cli():
     web_subparsers.add_parser(
         "build", aliases=["b"], add_help=False,
         help=f"build web app {FILE_SYSTEM_NOTE}")
-    web_subparsers.add_parser(
-        "watch", aliases=["w"], add_help=False,
-        help=f"rebuild web app on file change {FILE_SYSTEM_NOTE}")
 
     python_parser = subparsers.add_parser(
         "python", aliases=["py"],
@@ -303,8 +302,6 @@ def cli():
             web_install()
         elif args.action in ["build", "b"]:
             web_build()
-        elif args.action in ["watch", "w"]:
-            docker_shell(["yarn", "watch"])
         else:
             web_parser.print_help()
 

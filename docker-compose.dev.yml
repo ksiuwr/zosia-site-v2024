@@ -18,9 +18,13 @@ services:
     command: sleep infinity
     # docker volumes - Host:Container
     volumes:
-      - ./app/src:/code/src
+      - ./app/server:/code/server
+      - ./app/client:/code/client
       - ./app/js:/code/js
       - ./app/static:/code/static
+      # Node modules installed in container need to be visible in host for local development, IDEs etc.
+      # Especially the _reactivated module which is generated on `python manage.py runserver` and contains types for Typescript
+      - ./app/node_modules:/code/node_modules
     ports:
       - "8000:8000"
     depends_on:
