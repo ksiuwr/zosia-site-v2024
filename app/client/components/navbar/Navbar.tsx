@@ -1,8 +1,7 @@
+import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
-import { reverse } from "@reactivated";
-import { Context } from "@reactivated";
-import { MobileMenu } from "./mobile/MobileMenu";
 import { DesktopMenu } from "./desktop/DesktopMenu";
+import { MobileMenu } from "./mobile/MobileMenu";
 
 export const Navbar = () => {
   const context = useContext(Context);

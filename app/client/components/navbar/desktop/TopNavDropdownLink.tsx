@@ -1,18 +1,20 @@
-import React, { forwardRef } from "react";
-import { PropsWithChildren } from "react";
+import React, {
+  ComponentPropsWithoutRef,
+  PropsWithChildren,
+  forwardRef,
+} from "react";
 
 interface TopNavDropdownLinkProps {
   to: string;
 }
 
-type Props = TopNavDropdownLinkProps &
-  React.DetailedHTMLProps<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
-  >;
+type Props = TopNavDropdownLinkProps & ComponentPropsWithoutRef<"a">;
 
 export const TopNavDropdownLink = forwardRef<HTMLAnchorElement, Props>(
-  ({ to, children, ...props }: PropsWithChildren<Props>, ref) => {
+  function TopNavDropdownLink(
+    { to, children, ...props }: PropsWithChildren<Props>,
+    ref,
+  ) {
     return (
       <li>
         <a

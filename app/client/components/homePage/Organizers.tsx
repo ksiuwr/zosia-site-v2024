@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
 import { Context } from "@reactivated";
+import React, { useContext } from "react";
 import { Logo } from "./logos/Logo";
 import { LogosCard } from "./logos/LogosCard";
 
@@ -25,6 +25,7 @@ export const Organizers = () => {
         {organizers.map((organizer) => (
           <Logo
             name={organizer.name}
+            key={organizer.name}
             logoPath={organizer.logoPath}
             url={organizer.url}
           />

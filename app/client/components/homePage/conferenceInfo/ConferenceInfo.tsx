@@ -1,4 +1,4 @@
-import { getLocalDate, getLocalDateTime } from "@client/utils/time";
+import { getLocalDate } from "@client/utils/time";
 import React from "react";
 import { EventDates } from "./EventDates";
 
@@ -44,17 +44,17 @@ export const ConferenceInfo = ({
             <EventDates
               startDate={registrationStartDate}
               endDate={registrationEndDate}
-              title="Registration:"
+              title="Registration"
             />
             <EventDates
               startDate={lectureRegistrationStartDate}
               endDate={lectureRegistrationEndDate}
-              title="Call for papers:"
+              title="Call for papers"
             />
             <EventDates
               startDate={roomingStartDate}
               endDate={roomingEndDate}
-              title="Rooms enrollment:"
+              title="Rooms enrollment"
             />
           </div>
           <div>
@@ -62,6 +62,7 @@ export const ConferenceInfo = ({
               href={placeUrl}
               target="_blank"
               className="link-hover link font-bold"
+              rel="noreferrer"
             >
               {placeName}
             </a>

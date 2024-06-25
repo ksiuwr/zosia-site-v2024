@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { Context, reverse } from "@reactivated";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { Context, reverse } from "@reactivated";
+import React, { useContext } from "react";
 
 export const Footer = () => {
   const context = useContext(Context);
@@ -26,6 +26,7 @@ export const Footer = () => {
                 className="link-hover link"
                 href="mailto:ksi@cs.uni.wroc.pl"
                 target="_blank"
+                rel="noreferrer"
               >
                 <EnvelopeIcon className="mr-1 inline size-5" />
                 ksi@cs.uni.wroc.pl
@@ -54,6 +55,7 @@ export const Footer = () => {
                 className="link text-neutral-content hover:mix-blend-difference"
                 href="https://www.facebook.com/ZOSIA.KSI"
                 target="_blank"
+                rel="noreferrer"
               >
                 <svg
                   className="h-8 w-8"
@@ -71,6 +73,7 @@ export const Footer = () => {
                 className="link text-neutral-content hover:mix-blend-difference"
                 href="https://github.com/ksiuwr"
                 target="_blank"
+                rel="noreferrer"
               >
                 <svg
                   className="h-8 w-8"
