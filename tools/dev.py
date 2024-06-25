@@ -53,7 +53,7 @@ def docker_exec(command: List[str], container: str) -> None:
 
 
 def docker_shell(command: List[str]) -> None:
-    docker_exec(["/bin/bash", "-c", subp.list2cmdline(command)], WEB_CONTAINER_NAME)
+    docker_exec(["/bin/sh", "-c", subp.list2cmdline(command)], WEB_CONTAINER_NAME)
 
 
 def docker_python(command: List[str]) -> None:

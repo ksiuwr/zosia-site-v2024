@@ -1,10 +1,7 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs18-alpine
+FROM nikolaik/python-nodejs:python3.10-nodejs18-alpine AS base
 
 # Env variables
 ENV PYTHONUNBUFFERED=1
-ENV DJANGO_ENV="prod"
-ENV DJANGO_SETTINGS_MODULE="server.settings.prod"
-ENV NODE_ENV="production"
 
 WORKDIR /code
 
@@ -13,27 +10,45 @@ COPY requirements.txt ./
 RUN apk add --no-cache --virtual build-dependencies libpq-dev build-base \
     && pip install --no-cache-dir -r requirements.txt
 
-# Install node dependencies
+# Copy node configuration
 COPY package.json ./
 COPY package-lock.json ./
-COPY manage.py ./
 COPY postcss.config.js ./
 COPY tailwind.config.js ./
 COPY .prettierrc ./
 COPY tsconfig.json ./
 
-RUN npm install
-
-# Copy code and static files
-COPY server ./server
-COPY client ./client
+# Copy static files
 COPY static ./static
 COPY js ./js
+COPY manage.py ./
+
+
+FROM base as dev
+
+ENV DJANGO_ENV="dev"
+ENV DJANGO_SETTINGS_MODULE="server.settings.dev"
+ENV NODE_ENV="development"
+
+RUN npm install
+
+COPY requirements.dev.txt ./
+RUN pip install --no-cache-dir -r requirements.dev.txt
+
+
+FROM base as prod
+
+ENV DJANGO_ENV="prod"
+ENV DJANGO_SETTINGS_MODULE="server.settings.prod"
+ENV NODE_ENV="production"
+
+RUN npm install
+
+# Copy code 
+COPY server ./server
+COPY client ./client
 
 # Build the client
 RUN python manage.py generate_client_assets
 RUN python manage.py build
 RUN python manage.py collectstatic --no-input
-
-# Run the server
-# CMD "./run.sh"
