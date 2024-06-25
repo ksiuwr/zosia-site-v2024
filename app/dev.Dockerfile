@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED 1
 # NODE settings
 ENV NODE_PATH=/node_modules
 ENV NODE_MAJOR=18
-ENV NODE_ENV="production"
+ENV NODE_ENV="development"
 
 # DJANGO settings
 ENV DJANGO_ENV=${DJANGO_ENV}
