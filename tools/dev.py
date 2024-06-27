@@ -155,7 +155,7 @@ def cli():
         help="keep containers running after exiting server")
     run_app_parser.add_argument(
         "-p", "--prod-frontend", action="store_true",
-        help="Run frontend in production mode"
+        help="run frontend in production mode"
     )
 
     start_parser = subparsers.add_parser(
