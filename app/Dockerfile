@@ -49,10 +49,6 @@ COPY server ./server
 COPY client ./client
 COPY scripts ./scripts
 
-# Build the client
+# Build frontend
 RUN python manage.py generate_client_assets
 RUN python manage.py build
-RUN python manage.py collectstatic --no-input
-
-# Copy static files to /static for production server
-RUN cp -r /code/static/* /static
