@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-PROJECT_ID=zosia-cloudrun-test
+PROJECT_ID="<put Google Cloud Project ID here>"
 REPO_NAME=zosia-repo
 REGION=europe-central2
 REPO_HOSTNAME=$REGION-docker.pkg.dev
