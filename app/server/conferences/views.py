@@ -13,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import HomePage
+from .templates import HomePage, TermsAndConditions
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -91,30 +91,26 @@ def index(request):
     zosia = Zosia.objects.find_active()
     sponsors = Sponsor.objects.filter(is_active=True)
 
-    context = dict()
-
-    if zosia is not None:
-        context.update({
-            'place': zosia.place,
-            'registration_open': zosia.is_user_registration_open(user),
-            'end_date': zosia.end_date
-        })
-
     return HomePage(
         zosia=zosia,
         sponsors=sponsors,
-        place=context.get('place', None),
+        place=zosia.place if zosia is not None else None,
         gapi_key=settings.GAPI_KEY,
-        registration_open=context.get('registration_open', False),
-        zosia_end_date=context.get('end_date', "")
+        registration_open=zosia.is_user_registration_open(user) if zosia is not None else False,
+        zosia_end_date=zosia.end_date if zosia is not None else ""
     ).render(request)
 
 
 @require_http_methods(['GET'])
 def terms_and_conditions(request):
     zosia = Zosia.objects.find_active()
-    ctx = {'zosia': zosia}
-    return render(request, 'conferences/terms_and_conditions.html', ctx)
+
+    return TermsAndConditions(
+        zosia=zosia,
+        zosia_end_date=zosia.end_date if zosia is not None else "",
+        zosia_title=str(zosia) if zosia is not None else "",
+        place=zosia.place if zosia is not None else None
+    ).render(request)
 
 
 @require_http_methods(['GET'])

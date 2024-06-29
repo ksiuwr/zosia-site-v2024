@@ -15,3 +15,10 @@ class HomePage(NamedTuple):
     gapi_key: str
     registration_open: bool
     zosia_end_date: str
+
+@template
+class TermsAndConditions(NamedTuple):
+    zosia: Pick[Zosia, Literal['start_date']]
+    zosia_end_date: str
+    zosia_title: str
+    place: Pick[Place, Literal['town']]
