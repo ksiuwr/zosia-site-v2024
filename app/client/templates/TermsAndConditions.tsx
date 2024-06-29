@@ -14,7 +14,7 @@ export const Template = (props: templates.TermsAndConditions) => {
 
   return (
     <Layout>
-      <article className="lg:prose-lg prose mx-auto my-10">
+      <article className="prose mx-auto my-10">
         <h1 className="text-center">
           Regulamin Zimowego Obozu Studentów Informatyki A
         </h1>

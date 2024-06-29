@@ -4,7 +4,7 @@ import React from "react";
 export const Template = () => {
   return (
     <Layout>
-      <article className="lg:prose-lg prose mx-auto my-10">
+      <article className="prose mx-auto my-10">
         <h1 className="text-center">
           Polityka Prywatności Zimowego Obozu Studentów Informatyki A
         </h1>
