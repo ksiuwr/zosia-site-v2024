@@ -35,7 +35,7 @@ export const ConferenceInfo = ({
 }: ConferenceInfoProps) => {
   return (
     <div className="bg-neutral text-neutral-content">
-      <div className="mx-auto w-2/3 py-10 lg:w-1/2 2xl:w-1/3">
+      <div className="container mx-auto w-2/3 py-10 lg:w-1/2 2xl:w-1/3">
         <h2 className="mb-8 text-center text-xl font-bold lg:text-4xl">
           {`${getLocalDate(conferenceStartDate)} - ${getLocalDate(conferenceEndDate)}`}
         </h2>

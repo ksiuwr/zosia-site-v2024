@@ -8,7 +8,7 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full bg-base-300 py-2">
-      <div className="relative mx-auto flex h-full w-5/6 items-center justify-center align-middle lg:w-4/6 lg:justify-between">
+      <div className="container relative mx-auto flex h-full w-5/6 items-center justify-center align-middle lg:w-4/6 lg:justify-between">
         <MobileMenu />
         <a href={reverse("index")} className="flex flex-col justify-center">
           <img

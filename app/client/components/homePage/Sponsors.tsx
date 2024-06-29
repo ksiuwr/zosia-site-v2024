@@ -14,15 +14,17 @@ interface SponsorsProps {
 
 export const Sponsors = ({ sponsorsData }: SponsorsProps) => {
   return (
-    <LogosCard header="Sponsors">
-      {sponsorsData.map((sponsor) => (
-        <Logo
-          name={sponsor.name}
-          key={sponsor.name}
-          logoPath={sponsor.logoPath}
-          url={sponsor.url}
-        />
-      ))}
-    </LogosCard>
+    <div className="container mx-auto">
+      <LogosCard header="Sponsors">
+        {sponsorsData.map((sponsor) => (
+          <Logo
+            name={sponsor.name}
+            key={sponsor.name}
+            logoPath={sponsor.logoPath}
+            url={sponsor.url}
+          />
+        ))}
+      </LogosCard>
+    </div>
   );
 };
