@@ -53,7 +53,7 @@ def docker_exec(command: List[str], container: str) -> None:
 
 
 def docker_shell(command: List[str]) -> None:
-    docker_exec(["/bin/bash", "-c", subp.list2cmdline(command)], WEB_CONTAINER_NAME)
+    docker_exec(["/bin/sh", "-c", subp.list2cmdline(command)], WEB_CONTAINER_NAME)
 
 
 def docker_python(command: List[str]) -> None:
@@ -76,6 +76,7 @@ def web_build() -> None:
     # Builds Reactivated files for frontend
     docker_shell(["python", "manage.py", "generate_client_assets"])
     docker_shell(["python", "manage.py", "build"])
+    docker_shell(["python", "manage.py", "collectstatic", "--noinput"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -83,7 +84,6 @@ def setup(is_no_cache: bool, display_remind: bool = False) -> None:
     docker_compose_run(["build"] + no_cache_opt, with_project=False)
     docker_compose_run(["up", "-d"])
     web_install()
-    web_build()
 
     if display_remind:
         remind_quit()
@@ -93,8 +93,12 @@ def shutdown():
     docker_compose_run(["down"])
 
 
-def run_server(display_remind: bool = False) -> None:
-    docker_python(["runserver", "0.0.0.0:8000"])
+def run_server(display_remind: bool = False, run_frontend_in_production_mode: bool = False) -> None:
+    if run_frontend_in_production_mode:
+        web_build()
+        docker_shell(["NODE_ENV=production", "gunicorn", "--bind", ":8000", "server.wsgi:application"])
+    else:
+        docker_python(["runserver", "0.0.0.0:8000"])
     print(f"{Colour.PURPLE}-- Exiting server --{Colour.NORMAL}")
 
     if display_remind:
@@ -149,6 +153,10 @@ def cli():
     run_app_parser.add_argument(
         "-k", "--keep-alive", action="store_true",
         help="keep containers running after exiting server")
+    run_app_parser.add_argument(
+        "-p", "--prod-frontend", action="store_true",
+        help="run frontend in production mode"
+    )
 
     start_parser = subparsers.add_parser(
         "start", aliases=["setup", "s"],
@@ -215,6 +223,9 @@ def cli():
         "serve", aliases=["server", "sv"],
         help="run Django development server inside the container "
              "(localhost, port 8000, http://localhost:8000/)")
+    serve_parser.add_argument(
+        "-p", "--prod-frontend", action="store_true",
+        help="Run frontend in production mode")
 
     web_parser = subparsers.add_parser(
         "web", aliases=["javascript", "js"],
@@ -257,7 +268,7 @@ def cli():
         print(f"{Colour.BLUE}-- Run migrations --{Colour.NORMAL}")
         migrate(args.create_admin, args.create_data)
         print(f"{Colour.BLUE}-- Run webserver --{Colour.NORMAL}")
-        run_server(args.keep_alive)
+        run_server(args.keep_alive, args.prod_frontend)
 
         if not args.keep_alive:
             print(f"{Colour.BLUE}-- Quit containers --{Colour.NORMAL}")
@@ -295,7 +306,7 @@ def cli():
             migrations_parser.print_help()
 
     elif args.command in ["server", "serve", "sv"]:
-        run_server(True)
+        run_server(True, args.prod_frontend)
 
     elif args.command in ["web", "javascript", "js"]:
         if args.action in ["install", "i"]:

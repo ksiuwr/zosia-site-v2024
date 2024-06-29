@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "storages",
     "django_recaptcha",
     "reactivated",
 ]
@@ -242,6 +243,6 @@ TIME_FORMAT = "H:i"
 DATETIME_INPUT_FORMATS += ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M"]
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_URL = "/static/"
 STATIC_ROOT = "/static"
+STATICFILES_DIRS = ['/code/static']

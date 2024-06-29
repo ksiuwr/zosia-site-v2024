@@ -54,5 +54,3 @@ DATABASES['default']['PASSWORD'] = 'zosia'
 # Especially room.js makes heavy use of it
 INTERNAL_IPS = ['127.0.0.1']
 ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost']
-
-STATICFILES_DIRS = ('/code/static',)

@@ -12,7 +12,8 @@ services:
   web:
     build:
       context: ./app
-      dockerfile: dev.Dockerfile
+      dockerfile: Dockerfile
+      target: dev
     image: zosia_dev
     # Main process in container
     command: sleep infinity

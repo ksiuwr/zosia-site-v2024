@@ -8,8 +8,8 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 # Django reCaptcha config
-RECAPTCHA_PUBLIC_KEY = os.environ.get("CAPTCHA_PUBLIC")
-RECAPTCHA_PRIVATE_KEY = os.environ.get("CAPTCHA_PRIVATE")
+RECAPTCHA_PUBLIC_KEY = os.environ.get("CAPTCHA_PUBLIC", "")
+RECAPTCHA_PRIVATE_KEY = os.environ.get("CAPTCHA_PRIVATE", "")
 
 # Logs SQL queries. Should be enough, since we can check docker logs
 LOGGING = {
@@ -67,3 +67,22 @@ REST_FRAMEWORK = {
 # Our current implementation of the email module can generate quite a lot
 # parameters and thus exceed the limit (default 1000).
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
+
+# Upload generated static files to Google Cloud Storage bucket
+bucket_name = os.environ.get("GCS_BUCKET_NAME", "")
+STATIC_URL = "https://storage.googleapis.com/" + bucket_name + "/"
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": bucket_name,
+        
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": bucket_name,
+        },
+    },
+}
