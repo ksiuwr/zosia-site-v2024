@@ -36,7 +36,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
       </Helmet>
       <div className="flex h-dvh flex-col">
         <Navbar />
-        <main className="grow">{children}</main>
+        <main className="grow bg-base-100">{children}</main>
         <Footer />
       </div>
     </>
