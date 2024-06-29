@@ -13,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import HomePage, TermsAndConditions
+from .templates import HomePage, TermsAndConditions, PrivacyPolicy
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -115,7 +115,7 @@ def terms_and_conditions(request):
 
 @require_http_methods(['GET'])
 def privacy_policy(request):
-    return render(request, 'conferences/privacy_policy.html')
+    return PrivacyPolicy().render(request)
 
 
 @require_http_methods(['GET'])

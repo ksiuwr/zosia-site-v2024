@@ -22,3 +22,7 @@ class TermsAndConditions(NamedTuple):
     zosia_end_date: str
     zosia_title: str
     place: Pick[Place, Literal['town']]
+
+@template
+class PrivacyPolicy(NamedTuple):
+    pass
