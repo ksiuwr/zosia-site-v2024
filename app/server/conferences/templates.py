@@ -26,3 +26,7 @@ class TermsAndConditions(NamedTuple):
 @template
 class PrivacyPolicy(NamedTuple):
     pass
+
+@template
+class SignupRules(NamedTuple):
+    pass
