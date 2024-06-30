@@ -72,11 +72,15 @@ def web_install() -> None:
     docker_shell(["npm", "install"])
 
 
-def web_build() -> None:
+def web_build(with_collect_static: bool = True) -> None:
     # Builds Reactivated files for frontend
+    print(f"{Colour.PURPLE}-- Building frontend --{Colour.NORMAL}")
+
     docker_shell(["python", "manage.py", "generate_client_assets"])
     docker_shell(["python", "manage.py", "build"])
-    docker_shell(["python", "manage.py", "collectstatic", "--noinput"])
+
+    if with_collect_static:
+        docker_shell(["python", "manage.py", "collectstatic", "--noinput"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -105,7 +109,7 @@ def run_server(display_remind: bool = False, run_frontend_in_production_mode: bo
         remind_quit()
 
 
-def run_tests(modules: Optional[List[str]], is_verbose: bool):
+def run_tests(modules: Optional[List[str]], is_verbose: bool, build_frontend: bool = True) -> None:
     command = ["test"]
 
     if modules:
@@ -113,6 +117,15 @@ def run_tests(modules: Optional[List[str]], is_verbose: bool):
 
     if is_verbose:
         command += ["-v", "2"]
+
+    if build_frontend:
+        print(
+            f"{Colour.YELLOW}In order to run tests frontend is automatically built.",
+            f"You can run tests without building frontend by running: `dev.py test --no-build-frontend` "
+            f"if you built it earlier with `dev.py web build`{Colour.NORMAL}",
+            sep="\n",
+        )
+        web_build(False)
 
     docker_python(command)
 
@@ -174,6 +187,10 @@ def cli():
     test_parser.add_argument(
         "-M", "--module", action="append",
         help="module or directory to run tests from [option can be repeated]")
+    test_parser.add_argument(
+        "-n", "--no-build-frontend", action="store_false",
+        help="do not build frontend before running tests"
+    )
     test_parser.add_argument(
         "-v", "--verbose", action="store_true",
         help="add verbose option to test command")
@@ -289,7 +306,7 @@ def cli():
         shutdown()
 
     elif args.command in ["test", "t"]:
-        run_tests(args.module, args.verbose)
+        run_tests(args.module, args.verbose, args.no_build_frontend)
 
     elif args.command in ["bash", "shell", "sh"]:
         docker_exec(["/bin/bash"], WEB_CONTAINER_NAME)

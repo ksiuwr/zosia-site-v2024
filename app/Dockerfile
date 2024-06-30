@@ -29,6 +29,7 @@ FROM base as dev
 ENV DJANGO_ENV="dev"
 ENV DJANGO_SETTINGS_MODULE="server.settings.dev"
 ENV NODE_ENV="development"
+ENV DB_HOST_FOR_TEST_DB="db"
 
 RUN npm install
 
