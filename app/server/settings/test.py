@@ -1,4 +1,4 @@
 from .common import *
 
 DATABASES['default']['USER'] = 'zosia'
-DATABASES['default']['HOST'] = 'db'
+DATABASES['default']['HOST'] = '0.0.0.0'
