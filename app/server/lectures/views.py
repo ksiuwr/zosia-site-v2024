@@ -7,6 +7,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
+from .templates import Lectures
 from server.conferences.models import Zosia
 from .forms import LectureAdminForm, LectureForm, ScheduleForm
 from .models import Lecture, Schedule
@@ -22,8 +23,12 @@ def index(request):
     zosia = Zosia.objects.find_active()
     lectures = Lecture.objects.select_related('author').prefetch_related('supporting_authors') \
         .filter(zosia=zosia, accepted=True)
-    ctx = {'objects': lectures}
-    return render(request, 'lectures/index.html', ctx)
+
+    authors_names_with_lecture_id = map(
+        lambda lecture: {'lecture_id': lecture.id, 'authors_names': lecture.all_authors_names}, lectures
+    )
+
+    return Lectures(lectures=lectures, all_authors_names=authors_names_with_lecture_id).render(request)
 
 
 @staff_member_required()

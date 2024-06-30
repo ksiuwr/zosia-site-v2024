@@ -15,9 +15,7 @@ export const Template = (props: templates.Blog) => {
             key={post.id}
             title={post.title}
             content={post.content}
-            authors={[
-              `${post.author?.first_name ?? ""} ${post.author?.last_name ?? ""}`,
-            ]}
+            authors={`${post.author?.first_name ?? ""} ${post.author?.last_name ?? ""}`}
             description={getLocalDateTime(new Date(post.publication))}
           />
         ))}
