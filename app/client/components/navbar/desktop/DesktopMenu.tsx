@@ -5,7 +5,7 @@ import {
   MenuItems,
   MenuSeparator,
 } from "@headlessui/react";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
 import { TopNavDropdownLink } from "./TopNavDropdownLink";
@@ -25,8 +25,7 @@ export const DesktopMenu = () => {
           <Menu>
             <MenuButton className="group btn btn-ghost">
               {context.first_name} {context.last_name}{" "}
-              <ChevronDownIcon className="inline size-4 stroke-current group-data-[active]:hidden [&>path]:stroke-[2]" />
-              <ChevronUpIcon className="hidden size-4 stroke-current group-data-[active]:inline [&>path]:stroke-[2]" />
+              <ChevronDownIcon className="inline size-4 stroke-current group-data-[active]:rotate-180 [&>path]:stroke-[2]" />
             </MenuButton>
             <MenuItems
               anchor="bottom"
