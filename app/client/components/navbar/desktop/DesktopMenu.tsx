@@ -20,11 +20,11 @@ export const DesktopMenu = () => {
       <TopNavLink to={reverse("questions_index")}>Q&A</TopNavLink>
       <TopNavLink to={reverse("lectures_index")}>Lectures</TopNavLink>
       <TopNavLink to={reverse("lectures_schedule")}>Schedule</TopNavLink>
-      {context.is_authenticated ? (
+      {context.user.is_authenticated ? (
         <li>
           <Menu>
             <MenuButton className="group btn btn-ghost">
-              {context.first_name} {context.last_name}{" "}
+              {context.user.first_name} {context.user.last_name}{" "}
               <ChevronDownIcon className="inline size-4 stroke-current group-data-[active]:rotate-180 [&>path]:stroke-[2]" />
             </MenuButton>
             <MenuItems
@@ -47,7 +47,7 @@ export const DesktopMenu = () => {
                   Rooms
                 </TopNavDropdownLink>
               </MenuItem>
-              {context.is_staff && (
+              {context.user.is_staff && (
                 <>
                   <MenuSeparator className="divider m-0" />
                   <MenuItem>
