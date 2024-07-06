@@ -1,4 +1,5 @@
 import React from "react";
+import { CenteredContentContainer } from "./containers/CenteredContentContainer";
 
 interface CardProps {
   title: string;
@@ -9,8 +10,8 @@ interface CardProps {
 
 export const Card = ({ title, content, authors, description }: CardProps) => {
   return (
-    <div className="mx-auto w-full 2xl:container">
-      <div className="card card-compact mx-auto mb-8 w-5/6 bg-base-300 lg:card-normal lg:w-7/12">
+    <CenteredContentContainer>
+      <div className="card card-compact mb-8 bg-base-300 lg:card-normal">
         <div className="card-body">
           <h2 className="card-title text-lg lg:text-xl">{title}</h2>
           <p className="whitespace-pre-wrap">{content}</p>
@@ -21,6 +22,6 @@ export const Card = ({ title, content, authors, description }: CardProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </CenteredContentContainer>
   );
 };

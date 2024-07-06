@@ -1,4 +1,5 @@
 import React from "react";
+import { CenteredContainer } from "../containers/CenteredContainer";
 import { Logo } from "./logos/Logo";
 import { LogosCard } from "./logos/LogosCard";
 
@@ -14,7 +15,7 @@ interface SponsorsProps {
 
 export const Sponsors = ({ sponsorsData }: SponsorsProps) => {
   return (
-    <div className="container mx-auto">
+    <CenteredContainer>
       <LogosCard header="Sponsors">
         {sponsorsData.map((sponsor) => (
           <Logo
@@ -25,6 +26,6 @@ export const Sponsors = ({ sponsorsData }: SponsorsProps) => {
           />
         ))}
       </LogosCard>
-    </div>
+    </CenteredContainer>
   );
 };

@@ -1,5 +1,6 @@
 import { Context } from "@reactivated";
 import React, { useContext } from "react";
+import { CenteredContainer } from "../containers/CenteredContainer";
 import { Logo } from "./logos/Logo";
 import { LogosCard } from "./logos/LogosCard";
 
@@ -21,7 +22,7 @@ export const Organizers = () => {
 
   return (
     <div className="bg-base-200 text-base-content">
-      <div className="container mx-auto">
+      <CenteredContainer>
         <LogosCard header="Organizers">
           {organizers.map((organizer) => (
             <Logo
@@ -32,7 +33,7 @@ export const Organizers = () => {
             />
           ))}
         </LogosCard>
-      </div>
+      </CenteredContainer>
     </div>
   );
 };

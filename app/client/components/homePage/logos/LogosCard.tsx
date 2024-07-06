@@ -13,7 +13,7 @@ export const LogosCard = ({
       <h2 className="mb-6 text-center text-xl font-bold lg:text-4xl">
         {header}
       </h2>
-      <div className="mx-auto flex w-5/6 flex-col flex-wrap justify-center gap-4 lg:w-4/6 lg:flex-row lg:gap-10">
+      <div className="mx-auto flex w-full flex-col flex-wrap justify-center gap-4 lg:flex-row lg:gap-10">
         {children}
       </div>
     </div>

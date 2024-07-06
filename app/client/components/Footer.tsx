@@ -1,6 +1,7 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
+import { CenteredContainer } from "./containers/CenteredContainer";
 
 export const Footer = () => {
   const context = useContext(Context);
@@ -9,7 +10,7 @@ export const Footer = () => {
 
   return (
     <footer className="w-full bg-neutral py-5 text-neutral-content">
-      <div className="container mx-auto w-5/6 lg:w-4/6">
+      <CenteredContainer>
         <div className="footer max-lg:footer-center max-lg:gap-6 lg:justify-between">
           <aside>
             <h6 className="footer-title max-lg:mb-0">
@@ -102,7 +103,7 @@ export const Footer = () => {
             </p>
           </aside>
         </div>
-      </div>
+      </CenteredContainer>
     </footer>
   );
 };
