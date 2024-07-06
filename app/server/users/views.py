@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.views import LoginView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -10,6 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
+from .templates import Login
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -21,6 +23,16 @@ from server.utils.constants import ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS, 
     MIN_BONUS_MINUTES, PAYMENT_GROUPS, UserInternals
 from server.utils.forms import errors_format
 from server.utils.views import csv_response
+
+
+class ReactLoginView(LoginView):
+    def render_to_response(self, context, **response_kwargs):
+        is_redirected = context.get('next', '') != ''
+
+        return Login(
+            form=self.get_form(),
+            is_redirected_from_another_page=is_redirected
+        ).render(self.request)
 
 
 @login_required

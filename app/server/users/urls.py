@@ -13,9 +13,7 @@ urlpatterns = [
     re_path(
         r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,40})/$',
         views.activate, name='accounts_activate'),
-    path('login/',
-            anonymous_required(LoginView.as_view(template_name='registration/login.html')),
-            name='login'),
+    path('login/', anonymous_required(views.ReactLoginView.as_view()), name='login'),
     path('organizations/', views.organizations, name='organizations'),
     path('organizations/accept/', views.toggle_organization, name='toggle_organization'),
     path('organizations/add/', views.update_organization, name='organization_add'),
