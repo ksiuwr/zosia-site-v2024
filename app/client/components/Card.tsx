@@ -15,7 +15,7 @@ export const Card = ({ title, content, authors, description }: CardProps) => {
         <div className="card-body">
           <h2 className="card-title text-lg lg:text-xl">{title}</h2>
           <p className="whitespace-pre-wrap">{content}</p>
-          <div className="divider my-1 before:bg-accent after:bg-accent"></div>
+          <div className="divider divider-accent my-1"></div>
           <div className="card-actions flex-wrap justify-between gap-y-1">
             <span className="font-bold">{authors}</span>
             <span>{description}</span>
