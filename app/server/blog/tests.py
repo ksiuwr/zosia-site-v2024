@@ -1,19 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.test import TestCase
 from django.urls import reverse
 
+from .templates import Blog
 from .forms import BlogPostForm
 from .models import BlogPost
-from server.utils.test_helpers import create_user, login_as_user
+from server.utils.test_helpers import TestCaseWithReact, create_user, login_as_user
 
 User = get_user_model()
 
 
-class BlogTests(TestCase):
+class BlogTests(TestCaseWithReact):
     def setUp(self):
         self.normal = create_user(0)
-        self.staff = create_user(1, is_staff = True)
+        self.staff = create_user(1, is_staff=True)
 
 
 class ModelTestCase(BlogTests):
@@ -61,10 +61,8 @@ class ViewTestCase(BlogTests):
 
     def test_index(self):
         response = self.client.get(reverse('blog_index'), follow=True)
-        context = response.context[-1]
-        self.assertEqual(set(context['posts']), set(BlogPost.objects.all()))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'blog/index.html')
+        self.assertReactTemplateUsed(response, Blog)
 
     def test_create_get_no_user(self):
         response = self.client.get(reverse('blog_create'), follow=True)

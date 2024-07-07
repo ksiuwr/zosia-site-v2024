@@ -6,12 +6,12 @@ from django.utils.translation import gettext_lazy as _
 
 from .forms import BlogPostForm
 from .models import BlogPost
+from .templates import Blog
 
 
 @require_http_methods(['GET'])
 def index(request):
-    ctx = {'posts': BlogPost.objects.select_related('author').all()}
-    return render(request, 'blog/index.html', ctx)
+    return Blog(posts=BlogPost.objects.select_related("author").all()).render(request)
 
 
 @staff_member_required

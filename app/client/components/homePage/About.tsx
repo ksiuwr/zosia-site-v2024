@@ -2,7 +2,7 @@ import React from "react";
 
 export const About = () => {
   return (
-    <div className="card mx-auto my-14 w-5/6 bg-base-300 lg:w-1/2">
+    <div className="container card mx-auto my-14 w-5/6 bg-base-300 lg:w-1/2">
       <div className="card-body text-base-content lg:text-lg">
         <p>
           <b>ZOSIA</b>{" "}

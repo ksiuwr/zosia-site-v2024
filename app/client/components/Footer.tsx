@@ -9,7 +9,7 @@ export const Footer = () => {
 
   return (
     <footer className="w-full bg-neutral py-5 text-neutral-content">
-      <div className="mx-auto w-5/6 lg:w-4/6">
+      <div className="container mx-auto w-5/6 lg:w-4/6">
         <div className="footer max-lg:footer-center max-lg:gap-6 lg:justify-between">
           <aside>
             <h6 className="footer-title max-lg:mb-0">

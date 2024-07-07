@@ -3,19 +3,19 @@ from django.db import transaction
 from django.db.utils import IntegrityError
 from django.forms import ValidationError
 from django.shortcuts import reverse
-from django.test import TestCase
 
 from .forms import LectureAdminForm, LectureForm
 from .models import Lecture
+from .templates import Lectures
 from server.utils.constants import LECTURE_NORMAL_MAX_DURATION, LECTURE_SPONSOR_MAX_DURATION, \
     LectureInternals, UserInternals, WORKSHOP_MIN_DURATION
-from server.utils.test_helpers import create_user, create_zosia, login_as_user
+from server.utils.test_helpers import TestCaseWithReact, create_user, create_zosia, login_as_user
 from server.utils.time_manager import now, timedelta_since_now
 
 User = get_user_model()
 
 
-class LectureTestCase(TestCase):
+class LectureTestCase(TestCaseWithReact):
     def setUp(self):
         time = now()
         self.zosia = create_zosia(
@@ -355,9 +355,7 @@ class ViewsTestCase(LectureTestCase):
     def test_index_get(self):
         response = self.client.get(reverse('lectures_index'), follow=True)
         self.assertEqual(response.status_code, 200)
-        lectures = Lecture.objects.filter(zosia=self.zosia, accepted=True)
-        self.assertEqual(set(response.context['objects']), set(lectures))
-        self.assertTemplateUsed('lectures/index.html')
+        self.assertReactTemplateUsed(response, Lectures)
 
     def test_display_all_no_user(self):
         response = self.client.get(reverse('lectures_all_staff'), follow=True)

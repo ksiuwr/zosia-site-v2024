@@ -5,6 +5,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_cookie
 
+from .templates import QuestionsAndAnswers
 from .forms import QAForm
 from .models import QA
 from server.utils.forms import errors_format
@@ -15,8 +16,7 @@ from server.utils.forms import errors_format
 @require_http_methods(['GET'])
 def index(request):
     qas = QA.objects.all().order_by('-priority')
-    ctx = {'questions': qas}
-    return render(request, 'questions/index.html', ctx)
+    return QuestionsAndAnswers(questions_and_answers=qas).render(request)
 
 
 @require_http_methods(['GET'])

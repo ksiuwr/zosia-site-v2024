@@ -21,16 +21,18 @@ export const Organizers = () => {
 
   return (
     <div className="bg-base-200 text-base-content">
-      <LogosCard header="Organizers">
-        {organizers.map((organizer) => (
-          <Logo
-            name={organizer.name}
-            key={organizer.name}
-            logoPath={organizer.logoPath}
-            url={organizer.url}
-          />
-        ))}
-      </LogosCard>
+      <div className="container mx-auto">
+        <LogosCard header="Organizers">
+          {organizers.map((organizer) => (
+            <Logo
+              name={organizer.name}
+              key={organizer.name}
+              logoPath={organizer.logoPath}
+              url={organizer.url}
+            />
+          ))}
+        </LogosCard>
+      </div>
     </div>
   );
 };

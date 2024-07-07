@@ -292,7 +292,10 @@ class Command(BaseCommand):
             create_lecture(zosia, author)
             self.stdout.write(f"Created lecture #{i}")
 
-        create_blogpost(sample_staff_user)
+        blogposts_num = 5
+        for i in range(1, blogposts_num + 1):
+            create_blogpost(sample_staff_user)
+            self.stdout.write(f"Created blogpost #{i}")
 
         question_num = random.randint(3, 10)
         for i in range(1, question_num + 1):

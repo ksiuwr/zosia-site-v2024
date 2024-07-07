@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from typing import NamedTuple, Type
+from django.test import TestCase
 from server.conferences.models import Place, Transport, Zosia
 from server.users.models import Organization, User, UserPreferences
 from .constants import UserInternals
 from .time_manager import now, timedelta_since_now
+from reactivated.templates import LazySerializationResponse
 
 # NOTE: Using powers of 2 makes it easier to test if sums are precise
 PRICE_ACCOMMODATION = 1 << 1
@@ -85,3 +88,19 @@ def create_transport(zosia, **kwargs):
     }
     defaults.update(kwargs)
     return Transport.objects.create(zosia=zosia, **defaults)
+
+
+class TestCaseWithReact(TestCase):
+    def assertReactTemplateUsed(self, response: LazySerializationResponse, template_cls: Type[NamedTuple]):
+        # We can't simply use self.assertIsInstance() because the template uses a decorator to wrap the class,
+        # so comparison would fail. That's why we need to compare the full class path.
+
+        actual_class = response.template.__module__ + "." + response.template.__qualname__
+        expected_class = template_cls.__module__ + "." + template_cls.__qualname__
+
+        self.assertEqual(
+            actual_class,
+            expected_class,
+            f"Template {expected_class} was not a template used to render"
+            f" the response. Actual template used: {actual_class}",
+        )
