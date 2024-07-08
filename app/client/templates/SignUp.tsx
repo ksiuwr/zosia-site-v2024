@@ -1,5 +1,6 @@
 import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
+import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { CenteredFormContainer } from "@client/components/containers/CenteredFormContainer";
 import { BasicForm } from "@client/components/forms/BasicForm";
 import { templates, useForm } from "@reactivated";
@@ -26,11 +27,13 @@ export const Template = (props: templates.SignUp) => {
         Sign Up {props.is_signup_successful ? "Successful" : ""}
       </PageTitle>
       {props.is_signup_successful ? (
-        <article className="prose mx-auto">
-          <Markdown>
-            {successfulSignUpMessageMarkdown(form.fields.email.value ?? "")}
-          </Markdown>
-        </article>
+        <CenteredContainer>
+          <article className="prose mx-auto">
+            <Markdown>
+              {successfulSignUpMessageMarkdown(form.fields.email.value ?? "")}
+            </Markdown>
+          </article>
+        </CenteredContainer>
       ) : (
         <CenteredFormContainer>
           <BasicForm form={form} submitButtonLabel="Register" />

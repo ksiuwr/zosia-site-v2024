@@ -1,3 +1,4 @@
+import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Layout } from "@client/components/Layout";
 import React from "react";
 import Markdown from "react-markdown";
@@ -38,12 +39,14 @@ mailową. Dziękujemy.
 export const Template = () => {
   return (
     <Layout>
-      <article className="prose mx-auto my-10">
-        <h1 className="text-center">
-          Zapisy dla Zaproszonych na Zimowy Obóz Studentów Informatyki A
-        </h1>
-        <Markdown>{signupRulesMarkdown}</Markdown>
-      </article>
+      <CenteredContainer>
+        <article className="prose mx-auto my-10">
+          <h1 className="text-center">
+            Zapisy dla Zaproszonych na Zimowy Obóz Studentów Informatyki A
+          </h1>
+          <Markdown>{signupRulesMarkdown}</Markdown>
+        </article>
+      </CenteredContainer>
     </Layout>
   );
 };

@@ -1,3 +1,4 @@
+import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Layout } from "@client/components/Layout";
 import { getLocalDate } from "@client/utils/time";
 import { templates } from "@reactivated";
@@ -114,23 +115,25 @@ export const Template = (props: templates.TermsAndConditions) => {
 
   return (
     <Layout>
-      <article className="prose mx-auto my-10">
-        <h1 className="text-center">
-          Regulamin Zimowego Obozu Studentów Informatyki A
-        </h1>
-        {props.zosia ? (
-          <Markdown>
-            {privacyPolicyMarkdown(
-              props.zosia_title,
-              props.place.town,
-              startDate,
-              endDate,
-            )}
-          </Markdown>
-        ) : (
-          <h2 className="text-center">W przygotowaniu...</h2>
-        )}
-      </article>
+      <CenteredContainer>
+        <article className="prose mx-auto my-10">
+          <h1 className="text-center">
+            Regulamin Zimowego Obozu Studentów Informatyki A
+          </h1>
+          {props.zosia ? (
+            <Markdown>
+              {privacyPolicyMarkdown(
+                props.zosia_title,
+                props.place.town,
+                startDate,
+                endDate,
+              )}
+            </Markdown>
+          ) : (
+            <h2 className="text-center">W przygotowaniu...</h2>
+          )}
+        </article>
+      </CenteredContainer>
     </Layout>
   );
 };

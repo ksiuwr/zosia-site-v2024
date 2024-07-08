@@ -1,3 +1,4 @@
+import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Layout } from "@client/components/Layout";
 import React from "react";
 import Markdown from "react-markdown";
@@ -151,12 +152,14 @@ później jednak niż w ciągu 7 dni.
 export const Template = () => {
   return (
     <Layout>
-      <article className="prose mx-auto my-10">
-        <h1 className="text-center">
-          Polityka Prywatności Zimowego Obozu Studentów Informatyki A
-        </h1>
-        <Markdown>{privacyPolicyMarkdown}</Markdown>
-      </article>
+      <CenteredContainer>
+        <article className="prose mx-auto my-10">
+          <h1 className="text-center">
+            Polityka Prywatności Zimowego Obozu Studentów Informatyki A
+          </h1>
+          <Markdown>{privacyPolicyMarkdown}</Markdown>
+        </article>
+      </CenteredContainer>
     </Layout>
   );
 };
