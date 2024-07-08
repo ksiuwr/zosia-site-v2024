@@ -71,14 +71,11 @@ def profile(request):
 @require_http_methods(['GET', 'POST'])
 def signup(request):
     form = forms.UserForm(request.POST or None)
-    ctx = {
-        'form': form,
-    }
 
     if request.method == 'POST':
         if form.is_valid():
             form.save(request)
-            return render(request, 'users/signup_done.html', ctx)
+            return SignUp(form=form, is_signup_successful=True).render(request)
 
     return SignUp(form=form).render(request)
 

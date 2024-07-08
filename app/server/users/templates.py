@@ -14,3 +14,4 @@ class Login(NamedTuple):
 @template
 class SignUp(NamedTuple):
     form: UserForm
+    is_signup_successful: bool = False
