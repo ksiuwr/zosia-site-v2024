@@ -48,7 +48,7 @@ export const Alert = React.forwardRef<
       className={`alert my-3 w-full grid-flow-col ${alertCSS}`}
     >
       {icon}
-      <span>{children}</span>
+      <div>{children}</div>
     </div>
   );
 });
