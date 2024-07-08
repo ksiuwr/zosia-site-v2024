@@ -5,8 +5,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
 from server.conferences.models import Transport, Zosia
 from .actions import SendActivationEmail, SendEmailToAll
@@ -97,7 +95,6 @@ class UserAuthenticationForm(AuthenticationForm):
 
 class UserForm(UserCreationForm):
     privacy_consent = forms.BooleanField(required=True)
-    # captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
         model = User
