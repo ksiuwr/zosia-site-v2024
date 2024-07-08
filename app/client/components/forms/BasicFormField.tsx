@@ -1,4 +1,4 @@
-import { Description, Field, Input, Label } from "@headlessui/react";
+import { Checkbox, Description, Field, Input, Label } from "@headlessui/react";
 import { FieldHandler, Widget } from "@reactivated";
 import parse from "html-react-parser";
 import React from "react";
@@ -27,11 +27,9 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
       break;
     case "django.forms.widgets.CheckboxInput":
       widget = (
-        <input
-          type={field.widget.type}
+        <Checkbox
           name={field.name}
-          className="checkbox checkbox-lg order-first my-2 checked:checkbox-success"
-          required={field.widget.required}
+          className="checkbox order-first my-2 size-8 data-[checked]:checkbox-success"
           disabled={field.disabled}
           defaultChecked={field.value ?? false}
         />
@@ -56,12 +54,14 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
     );
 
   return (
-    <Field className="mb-3 flex flex-wrap items-center gap-x-2">
-      <Label className="label inline-block font-semibold">
-        {parse(field.label)}
-        {field.widget.required && <span className="mx-1 text-error">*</span>}
-      </Label>
-      {widget}
+    <Field className="mb-4 flex flex-col">
+      <div className="flex flex-wrap items-center gap-x-2">
+        <Label className="label inline-block font-semibold">
+          {field.label}
+          {field.widget.required && <span className="mx-1 text-error">*</span>}
+        </Label>
+        {widget}
+      </div>
       {description}
     </Field>
   );

@@ -102,8 +102,10 @@ class UserForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        label = f'I agree to the <a href="{reverse("privacy_policy")}" class="link">Privacy Policy</a>'
+        label = 'I agree to the Privacy Policy'
+        help_text = f'<a href="{reverse("privacy_policy")}" target="_blank" class="link">Read full Privacy Policy</a>'
         self.fields['privacy_consent'].label = mark_safe(label)
+        self.fields['privacy_consent'].help_text = mark_safe(help_text)
 
     def save(self, request):
         user = super().save(commit=False)
