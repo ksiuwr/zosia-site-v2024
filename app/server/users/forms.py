@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -91,9 +91,13 @@ class MailForm(forms.Form):
         print(users)
 
 
+class UserAuthenticationForm(AuthenticationForm):
+    username = UsernameField(widget=forms.EmailInput(attrs={"autofocus": True}))
+
+
 class UserForm(UserCreationForm):
     privacy_consent = forms.BooleanField(required=True)
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
+    # captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
         model = User
@@ -101,9 +105,8 @@ class UserForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        label = f'I agree to the <a href="{reverse("privacy_policy")}">Privacy Policy</a>'
+        label = f'I agree to the <a href="{reverse("privacy_policy")}" class="link">Privacy Policy</a>'
         self.fields['privacy_consent'].label = mark_safe(label)
-        print('Captcha', self.fields['captcha'].label)
 
     def save(self, request):
         user = super().save(commit=False)

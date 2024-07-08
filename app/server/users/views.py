@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Login
+from .templates import Login, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -26,6 +26,8 @@ from server.utils.views import csv_response
 
 
 class ReactLoginView(LoginView):
+    authentication_form = forms.UserAuthenticationForm
+
     def render_to_response(self, context, **response_kwargs):
         is_redirected = context.get('next', '') != ''
 
@@ -78,7 +80,7 @@ def signup(request):
             form.save(request)
             return render(request, 'users/signup_done.html', ctx)
 
-    return render(request, 'users/signup.html', ctx)
+    return SignUp(form=form).render(request)
 
 
 @login_required
