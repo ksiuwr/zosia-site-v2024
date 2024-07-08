@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Login, SignUp
+from .templates import Login, Register, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -300,7 +300,7 @@ def register(request):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'users/register.html', ctx)
+    return Register(form=form).render(request)
 
 
 @staff_member_required

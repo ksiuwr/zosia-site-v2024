@@ -2,7 +2,7 @@ from typing import NamedTuple
 from reactivated import template
 from django.contrib.auth.forms import AuthenticationForm
 
-from .forms import UserForm
+from .forms import UserForm, UserPreferencesForm
 
 
 @template
@@ -15,3 +15,8 @@ class Login(NamedTuple):
 class SignUp(NamedTuple):
     form: UserForm
     is_signup_successful: bool = False
+
+
+@template
+class Register(NamedTuple):
+    form: UserPreferencesForm

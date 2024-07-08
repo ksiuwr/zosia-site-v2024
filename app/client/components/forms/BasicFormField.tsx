@@ -1,4 +1,12 @@
-import { Checkbox, Description, Field, Input, Label } from "@headlessui/react";
+import {
+  Checkbox,
+  Description,
+  Field,
+  Input,
+  Label,
+  Select,
+  Textarea,
+} from "@headlessui/react";
 import { FieldHandler, Widget } from "@reactivated";
 import parse from "html-react-parser";
 import React from "react";
@@ -20,7 +28,6 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
           name={field.name}
           className="input input-bordered w-full"
           required={field.widget.required}
-          disabled={field.disabled}
           defaultValue={field.value ?? ""}
         />
       );
@@ -29,10 +36,40 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
       widget = (
         <Checkbox
           name={field.name}
-          className="checkbox order-first my-2 size-8 data-[checked]:checkbox-success"
-          disabled={field.disabled}
+          className={`checkbox order-first my-2 size-8 data-[checked]:checkbox-success data-[disabled]:cursor-not-allowed data-[disabled]:border-transparent data-[disabled]:bg-base-content/40 data-[disabled]:opacity-20`}
           defaultChecked={field.value ?? false}
         />
+      );
+      break;
+    case "django.forms.widgets.Textarea":
+      widget = (
+        <Textarea
+          name={field.name}
+          className="textarea textarea-bordered w-full"
+          required={field.widget.required}
+          defaultValue={field.value ?? ""}
+        />
+      );
+      break;
+    case "django.forms.widgets.Select":
+      widget = (
+        <Select
+          name={field.name}
+          className="select select-bordered w-full"
+          required={field.widget.required}
+          defaultValue={field.value ?? ""}
+        >
+          {field.widget.optgroups.map((optgroup) => {
+            const currentOption = optgroup[1][0];
+            const optgroupValue = (currentOption.value ?? "").toString();
+
+            return (
+              <option key={optgroupValue} value={optgroupValue}>
+                {currentOption.label}
+              </option>
+            );
+          })}
+        </Select>
       );
       break;
     default:
@@ -54,9 +91,9 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
     );
 
   return (
-    <Field className="mb-4 flex flex-col">
+    <Field className="mb-4 flex flex-col" disabled={field.disabled}>
       <div className="flex flex-wrap items-center gap-x-2">
-        <Label className="label inline-block font-semibold">
+        <Label className="label inline-block text-base font-semibold">
           {field.label}
           {field.widget.required && <span className="mx-1 text-error">*</span>}
         </Label>

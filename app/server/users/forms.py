@@ -182,14 +182,14 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
         super().__init__(*args, **kwargs)
         self.user = user
         self.fields['is_student'].label = "I am a student under 25 and I have a valid Student ID card."
-        self.fields['is_student'].help_text = "<br/>"  # Just for some space
 
         self.fields['transport_baggage'].label = "I want to have my baggage transferred."
-        self.fields['transport_baggage'].help_text = "<br/>"
 
-        terms_label = f'I agree to <a href="{reverse("terms_and_conditions")}"> Terms & Conditions</a> of ZOSIA.'
+        terms_label = 'I agree to Terms & Conditions of ZOSIA.'
+        terms_help_text = f'<a href="{reverse("terms_and_conditions")}" class="link">Read full Terms & Conditions here</a>.'
         self.fields["terms_accepted"].required = True
         self.fields["terms_accepted"].label = mark_safe(terms_label)
+        self.fields["terms_accepted"].help_text = mark_safe(terms_help_text)
         self.fields["terms_accepted"].error_messages = \
             {'required': "You have to accept Terms & Conditions."}
 

@@ -144,7 +144,8 @@ class UserPreferences(models.Model):
     user = models.ForeignKey(User, related_name="preferences", on_delete=models.CASCADE)
     zosia = models.ForeignKey(Zosia, related_name="registrations", on_delete=models.CASCADE)
     is_student = models.BooleanField(default=False)
-    student_number = models.TextField(
+    student_number = models.CharField(
+        max_length=10,
         default='',
         blank=True,
         help_text=_(
