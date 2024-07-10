@@ -13,9 +13,17 @@ import React from "react";
 
 interface BasicFormFieldProps {
   field: FieldHandler;
+  disabled?: boolean;
+  checked?: boolean;
+  onCheckboxChange?: (field: FieldHandler, value: boolean) => void;
 }
 
-export const BasicFormField = ({ field }: BasicFormFieldProps) => {
+export const BasicFormField = ({
+  field,
+  disabled = undefined,
+  checked = undefined,
+  onCheckboxChange = undefined,
+}: BasicFormFieldProps) => {
   let widget;
 
   switch (field.tag) {
@@ -28,7 +36,8 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
           name={field.name}
           className="input input-bordered w-full"
           required={field.widget.required}
-          defaultValue={field.value ?? ""}
+          value={field.value ?? ""}
+          onChange={(e) => field.handler(e.target.value)}
         />
       );
       break;
@@ -37,7 +46,12 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
         <Checkbox
           name={field.name}
           className={`checkbox order-first my-2 size-8 data-[checked]:checkbox-success data-[disabled]:cursor-not-allowed data-[disabled]:border-transparent data-[disabled]:bg-base-content/40 data-[disabled]:opacity-20`}
-          defaultChecked={field.value ?? false}
+          checked={checked === undefined ? field.value : checked}
+          onChange={(checked) => {
+            onCheckboxChange === undefined
+              ? field.handler(checked)
+              : onCheckboxChange(field, checked);
+          }}
         />
       );
       break;
@@ -47,7 +61,8 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
           name={field.name}
           className="textarea textarea-bordered w-full"
           required={field.widget.required}
-          defaultValue={field.value ?? ""}
+          value={field.value ?? ""}
+          onChange={(e) => field.handler(e.target.value)}
         />
       );
       break;
@@ -57,7 +72,8 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
           name={field.name}
           className="select select-bordered w-full"
           required={field.widget.required}
-          defaultValue={field.value ?? ""}
+          value={field.value ?? ""}
+          onChange={(e) => field.handler(e.target.value)}
         >
           {field.widget.optgroups.map((optgroup) => {
             const currentOption = optgroup[1][0];
@@ -90,15 +106,39 @@ export const BasicFormField = ({ field }: BasicFormFieldProps) => {
       <></>
     );
 
+  const label = (
+    <Label className="label inline-block text-wrap text-base font-semibold">
+      {field.label}
+      {field.widget.required && <span className="mx-1 text-error">*</span>}
+    </Label>
+  );
+
+  let widgetWithLabel;
+
+  switch (field.tag) {
+    case "django.forms.widgets.CheckboxInput":
+      widgetWithLabel = (
+        <div className="flex items-center gap-x-2">
+          {label}
+          {widget}
+        </div>
+      );
+      break;
+    default:
+      widgetWithLabel = (
+        <div className="flex flex-col">
+          {label}
+          {widget}
+        </div>
+      );
+  }
+
   return (
-    <Field className="mb-4 flex flex-col" disabled={field.disabled}>
-      <div className="flex flex-wrap items-center gap-x-2">
-        <Label className="label inline-block text-base font-semibold">
-          {field.label}
-          {field.widget.required && <span className="mx-1 text-error">*</span>}
-        </Label>
-        {widget}
-      </div>
+    <Field
+      className="mb-4 flex flex-col"
+      disabled={disabled === undefined ? field.disabled : disabled}
+    >
+      {widgetWithLabel}
       {description}
     </Field>
   );

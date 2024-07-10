@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, TypedDict
 from reactivated import template
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -20,3 +20,4 @@ class SignUp(NamedTuple):
 @template
 class Register(NamedTuple):
     form: UserPreferencesForm
+    paid: bool

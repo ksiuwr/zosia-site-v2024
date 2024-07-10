@@ -265,7 +265,7 @@ def register(request):
         
         first_call = True
 
-    ctx = {'field_dependencies': PAYMENT_GROUPS, 'payed': False, 'zosia': zosia}
+    ctx = {'zosia': zosia}
     ctx['first_call'] = first_call
     form_args = {}
 
@@ -282,13 +282,13 @@ def register(request):
         ctx['before_discounts'] = zosia.first_discount_limit == 0
 
     form = UserPreferencesForm(request.user, request.POST or None, **form_args)
-    ctx['form'] = form
 
     if user_prefs:
         form.fields['is_student'].disabled = True
 
+    paid = False
     if user_prefs and user_prefs.payment_accepted:
-        ctx['payed'] = True
+        paid = True
         form.disable()
 
     if request.method == 'POST':
@@ -300,7 +300,7 @@ def register(request):
         else:
             messages.error(request, errors_format(form))
 
-    return Register(form=form).render(request)
+    return Register(form=form, paid=paid).render(request)
 
 
 @staff_member_required

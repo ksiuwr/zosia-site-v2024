@@ -1,9 +1,9 @@
 import React from "react";
 
-import { CSRFToken, FieldHandler, FormHandler } from "@reactivated";
+import { FieldHandler, FormHandler } from "@reactivated";
 import { FieldMap } from "reactivated/dist/forms";
-import { Alert } from "../Alert";
 import { BasicFormField } from "./BasicFormField";
+import { BasicFormWithCustomFields } from "./BasicFormWithCustomFields";
 
 interface BasicFormProps<T extends FieldMap> {
   form: FormHandler<T>;
@@ -15,13 +15,10 @@ export const BasicForm = <T extends FieldMap>({
   submitButtonLabel,
 }: BasicFormProps<T>) => {
   return (
-    <form method="POST">
-      <CSRFToken />
-      {form.nonFieldErrors?.map((error) => (
-        <Alert key={error} type="error">
-          {error}
-        </Alert>
-      ))}
+    <BasicFormWithCustomFields
+      form={form}
+      submitButtonLabel={submitButtonLabel}
+    >
       {form.visibleFields.map((field) => (
         <BasicFormField
           key={field.name}
@@ -30,9 +27,6 @@ export const BasicForm = <T extends FieldMap>({
           field={field as FieldHandler}
         />
       ))}
-      <button type="submit" className="btn btn-primary btn-lg my-4 w-full">
-        {submitButtonLabel}
-      </button>
-    </form>
+    </BasicFormWithCustomFields>
   );
 };
