@@ -34,7 +34,7 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.transport} />
           <BasicFormField field={form.fields.transport_baggage} />
 
-          <div className="divider divider-accent"></div>
+          <div className="divider divider-accent" />
 
           <AccomodationFieldGroup
             dinnerField={form.fields.dinner_day_1}
@@ -53,6 +53,15 @@ export const Template = (props: templates.Register) => {
             accomodationField={form.fields.accommodation_day_3}
             breakfastField={form.fields.breakfast_day_4}
           />
+
+          <div className="divider divider-accent" />
+
+          <BasicFormField field={form.fields.contact} />
+          <BasicFormField field={form.fields.information} />
+          <BasicFormField field={form.fields.vegetarian} />
+          <BasicFormField field={form.fields.shirt_size} />
+          <BasicFormField field={form.fields.shirt_type} />
+          <BasicFormField field={form.fields.terms_accepted} />
         </BasicFormWithCustomFields>
       </CenteredFormContainer>
     </Layout>

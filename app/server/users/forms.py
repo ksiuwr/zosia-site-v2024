@@ -146,6 +146,8 @@ class UserPreferencesWithTransportForm(forms.ModelForm):
 
 
 class UserPreferencesForm(UserPreferencesWithTransportForm):
+    terms_accepted = forms.BooleanField(required=True)
+
     use_required_attribute = False
 
     # NOTE: In hindsight, this sucks.
@@ -185,10 +187,8 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
 
         self.fields['transport_baggage'].label = "I want to have my baggage transferred."
 
-        terms_label = 'I agree to Terms & Conditions of ZOSIA.'
         terms_help_text = f'<a href="{reverse("terms_and_conditions")}" class="link">Read full Terms & Conditions here</a>.'
-        self.fields["terms_accepted"].required = True
-        self.fields["terms_accepted"].label = mark_safe(terms_label)
+        self.fields["terms_accepted"].label = 'I agree to Terms & Conditions of ZOSIA.'
         self.fields["terms_accepted"].help_text = mark_safe(terms_help_text)
         self.fields["terms_accepted"].error_messages = \
             {'required': "You have to accept Terms & Conditions."}
