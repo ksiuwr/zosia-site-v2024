@@ -36,7 +36,7 @@ export const Template = (props: templates.SignUp) => {
         </CenteredContainer>
       ) : (
         <CenteredFormContainer>
-          <BasicForm form={form} submitButtonLabel="Register" />
+          <BasicForm form={form} submitButtonLabel="Sign up" />
         </CenteredFormContainer>
       )}
     </Layout>

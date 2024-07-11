@@ -12,6 +12,10 @@ import React from "react";
 export const Template = (props: templates.Register) => {
   const form = useForm({ form: props.form });
 
+  const pageTitle = props.is_user_already_registered
+    ? "Update preferences"
+    : "Register";
+
   const accomodationCheckboxesGroups = [
     {
       dinner: form.fields.dinner_day_1,
@@ -97,9 +101,7 @@ export const Template = (props: templates.Register) => {
 
   return (
     <Layout>
-      <PageTitle>
-        {props.is_user_already_registered ? "Update preferences" : "Register"}
-      </PageTitle>
+      <PageTitle>{pageTitle}</PageTitle>
 
       <CenteredFormContainer>
         {props.before_discounts && (
@@ -116,7 +118,7 @@ export const Template = (props: templates.Register) => {
           </Alert>
         )}
 
-        <BasicFormWithCustomFields form={form} submitButtonLabel="Register">
+        <BasicFormWithCustomFields form={form} submitButtonLabel={pageTitle}>
           <BasicFormField field={form.fields.is_student} />
           {form.values.is_student && (
             <div className="mx-6">
