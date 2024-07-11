@@ -252,7 +252,7 @@ def register(request):
     user = request.user
     zosia: Zosia = Zosia.objects.find_active_or_404()
     user_prefs = UserPreferences.objects.filter(zosia=zosia, user=user).first()
-    first_call = False
+    is_user_already_registered = user_prefs is not None
 
     if user_prefs is None:
         if not zosia.is_user_registration_open(user):
@@ -262,24 +262,20 @@ def register(request):
         if zosia.is_registration_over:
             messages.error(request, _('You missed registration for ZOSIA'))
             return redirect(reverse('index'))
-        
-        first_call = True
 
-    ctx = {'zosia': zosia}
-    ctx['first_call'] = first_call
     form_args = {}
-
+    before_discounts = False
+    discount = None
     if user_prefs is not None:
-        ctx['object'] = user_prefs
         form_args['instance'] = user_prefs
-        ctx['discount'] = zosia.get_discount_for_round(
+        discount = zosia.get_discount_for_round(
             user_prefs.discount_round
         )
     else:
-        ctx['discount'] = zosia.get_discount_for_round(
+        discount = zosia.get_discount_for_round(
             UserPreferences.get_current_discount_round(zosia)
         )
-        ctx['before_discounts'] = zosia.first_discount_limit == 0
+        before_discounts = zosia.first_discount_limit == 0
 
     form = UserPreferencesForm(request.user, request.POST or None, **form_args)
 
@@ -293,14 +289,21 @@ def register(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.call(zosia, first_call)
+            form.call(zosia, not is_user_already_registered)
             messages.success(request, _("Preferences saved!"))
 
             return redirect(reverse('accounts_profile') + '#zosia')
         else:
             messages.error(request, errors_format(form))
 
-    return Register(form=form, paid=paid).render(request)
+    return Register(
+        form=form,
+        zosia=zosia,
+        is_user_already_registered=is_user_already_registered,
+        paid=paid,
+        discount=discount,
+        before_discounts=before_discounts
+    ).render(request)
 
 
 @staff_member_required

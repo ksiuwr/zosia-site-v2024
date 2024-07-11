@@ -8,14 +8,35 @@ interface AccomodationFieldGroupProps {
   dinnerField: WidgetHandler<DjangoFormsWidgetsCheckboxInput>;
   accomodationField: WidgetHandler<DjangoFormsWidgetsCheckboxInput>;
   breakfastField: WidgetHandler<DjangoFormsWidgetsCheckboxInput>;
+
+  onCostChange: (
+    breakfast: boolean,
+    dinner: boolean,
+    accomodation: boolean,
+  ) => void;
+}
+
+interface GroupState {
+  accomodation: {
+    checked: boolean;
+  };
+  breakfast: {
+    disabled: boolean;
+    checked: boolean;
+  };
+  dinner: {
+    disabled: boolean;
+    checked: boolean;
+  };
 }
 
 export const AccomodationFieldGroup = ({
   dinnerField,
   accomodationField,
   breakfastField,
+  onCostChange,
 }: AccomodationFieldGroupProps) => {
-  const [groupState, setGroupState] = useState({
+  const [groupState, setGroupState] = useState<GroupState>({
     accomodation: {
       checked: accomodationField.value,
     },
@@ -31,21 +52,20 @@ export const AccomodationFieldGroup = ({
 
   const onAccomodationChecked = (field: FieldHandler, value: boolean) => {
     const accomodationName = field?.name;
+    let groupNewState = groupState;
 
     switch (accomodationName) {
       case dinnerField.name:
-        setGroupState((prevState) => {
-          return {
-            ...prevState,
-            dinner: {
-              ...prevState.dinner,
-              checked: value,
-            },
-          };
-        });
+        groupNewState = {
+          ...groupState,
+          dinner: {
+            ...groupState.dinner,
+            checked: value,
+          },
+        };
         break;
       case accomodationField.name:
-        setGroupState({
+        groupNewState = {
           accomodation: {
             checked: value,
           },
@@ -57,20 +77,25 @@ export const AccomodationFieldGroup = ({
             disabled: !value,
             checked: value,
           },
-        });
+        };
         break;
       case breakfastField.name:
-        setGroupState((prevState) => {
-          return {
-            ...prevState,
-            breakfast: {
-              ...prevState.breakfast,
-              checked: value,
-            },
-          };
-        });
+        groupNewState = {
+          ...groupState,
+          breakfast: {
+            ...groupState.breakfast,
+            checked: value,
+          },
+        };
         break;
     }
+
+    setGroupState(groupNewState);
+    onCostChange(
+      groupNewState.breakfast.checked,
+      groupNewState.dinner.checked,
+      groupNewState.accomodation.checked,
+    );
   };
 
   return (

@@ -5,17 +5,117 @@ import { CenteredFormContainer } from "@client/components/containers/CenteredFor
 import { BasicFormField } from "@client/components/forms/BasicFormField";
 import { BasicFormWithCustomFields } from "@client/components/forms/BasicFormWithCustomFields";
 import { AccomodationFieldGroup } from "@client/components/register/AccomodationFieldGroup";
-import { templates, useForm } from "@reactivated";
+import { CostSummary } from "@client/components/register/PriceSummary";
+import { reverse, templates, useForm } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.Register) => {
   const form = useForm({ form: props.form });
 
+  const accomodationCheckboxesGroups = [
+    {
+      dinner: form.fields.dinner_day_1,
+      accomodation: form.fields.accommodation_day_1,
+      breakfast: form.fields.breakfast_day_2,
+    },
+    {
+      dinner: form.fields.dinner_day_2,
+      accomodation: form.fields.accommodation_day_2,
+      breakfast: form.fields.breakfast_day_3,
+    },
+    {
+      dinner: form.fields.dinner_day_3,
+      accomodation: form.fields.accommodation_day_3,
+      breakfast: form.fields.breakfast_day_4,
+    },
+  ];
+
+  const calculateAccomodationDayCost = (
+    breakfast: boolean,
+    dinner: boolean,
+    accomodation: boolean,
+  ) => {
+    if (!accomodation && !dinner && !breakfast) {
+      return 0;
+    }
+
+    if (dinner && breakfast) {
+      return props.zosia.price_whole_day;
+    }
+
+    if (dinner && !breakfast) {
+      return props.zosia.price_accommodation_dinner;
+    }
+
+    if (!dinner && breakfast) {
+      return props.zosia.price_accommodation_breakfast;
+    }
+
+    return props.zosia.price_accommodation;
+  };
+
+  const calculateDiscountForGroup = (accomodation: boolean) => {
+    return accomodation ? props.discount : 0;
+  };
+
+  const [accomodationCostPerGroup, setAccomodationCostPerGroup] =
+    React.useState(
+      accomodationCheckboxesGroups.map(({ dinner, accomodation, breakfast }) =>
+        calculateAccomodationDayCost(
+          breakfast.value,
+          dinner.value,
+          accomodation.value,
+        ),
+      ),
+    );
+
+  const [discountPerGroup, setDiscountPerGroup] = React.useState(
+    accomodationCheckboxesGroups.map(({ accomodation }) =>
+      calculateDiscountForGroup(accomodation.value),
+    ),
+  );
+
+  const generateAccomodationGroupCostCallback = (groupNumber: number) => {
+    return (breakfast: boolean, dinner: boolean, accomodation: boolean) => {
+      setAccomodationCostPerGroup((prev) => {
+        return prev.map((cost, index) =>
+          index === groupNumber
+            ? calculateAccomodationDayCost(breakfast, dinner, accomodation)
+            : cost,
+        );
+      });
+
+      setDiscountPerGroup((prev) => {
+        return prev.map((discount, index) =>
+          index === groupNumber
+            ? calculateDiscountForGroup(accomodation)
+            : discount,
+        );
+      });
+    };
+  };
+
   return (
     <Layout>
-      <PageTitle>Register</PageTitle>
+      <PageTitle>
+        {props.is_user_already_registered ? "Update preferences" : "Register"}
+      </PageTitle>
 
       <CenteredFormContainer>
+        {props.before_discounts && (
+          <Alert type="info">
+            <span>
+              The first round of funding starts <b>18.12.2023</b>, registering
+              before this date, you will not get a discount - see the{" "}
+              <a href={reverse("questions_index")} className="link font-bold">
+                Q&A
+              </a>{" "}
+              for more information. At this point, you can still register to get
+              bonus time for rooms enrollment.
+            </span>
+          </Alert>
+        )}
+
         <BasicFormWithCustomFields form={form} submitButtonLabel="Register">
           <BasicFormField field={form.fields.is_student} />
           {form.values.is_student && (
@@ -36,23 +136,15 @@ export const Template = (props: templates.Register) => {
 
           <div className="divider divider-accent" />
 
-          <AccomodationFieldGroup
-            dinnerField={form.fields.dinner_day_1}
-            accomodationField={form.fields.accommodation_day_1}
-            breakfastField={form.fields.breakfast_day_2}
-          />
-
-          <AccomodationFieldGroup
-            dinnerField={form.fields.dinner_day_2}
-            accomodationField={form.fields.accommodation_day_2}
-            breakfastField={form.fields.breakfast_day_3}
-          />
-
-          <AccomodationFieldGroup
-            dinnerField={form.fields.dinner_day_3}
-            accomodationField={form.fields.accommodation_day_3}
-            breakfastField={form.fields.breakfast_day_4}
-          />
+          {accomodationCheckboxesGroups.map((group, index) => (
+            <AccomodationFieldGroup
+              key={group.accomodation.name}
+              dinnerField={group.dinner}
+              accomodationField={group.accomodation}
+              breakfastField={group.breakfast}
+              onCostChange={generateAccomodationGroupCostCallback(index)}
+            />
+          ))}
 
           <div className="divider divider-accent" />
 
@@ -62,6 +154,38 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.shirt_size} />
           <BasicFormField field={form.fields.shirt_type} />
           <BasicFormField field={form.fields.terms_accepted} />
+
+          <div className="divider divider-accent" />
+
+          <CostSummary
+            priceAccommodation={props.zosia.price_accommodation}
+            priceAccomodationWithBreakfast={
+              props.zosia.price_accommodation_breakfast
+            }
+            priceAccomodationWithDinner={props.zosia.price_accommodation_dinner}
+            priceAccomodationWithDinnerAndBreakfast={
+              props.zosia.price_whole_day
+            }
+            priceBase={props.zosia.price_base}
+            priceTransport={props.zosia.price_transport}
+            priceTransportWithDiscount={
+              props.zosia.price_transport_with_discount
+            }
+            priceTransferBaggage={props.zosia.price_transfer_baggage}
+            discountPerDay={props.discount}
+            isStudent={form.values.is_student}
+            isTransportSelected={form.values.transport !== ""}
+            isTransferBaggageSelected={form.values.transport_baggage}
+            calculatedAccomodationCost={accomodationCostPerGroup.reduce(
+              (prev, current) => prev + current,
+              0,
+            )}
+            calculatedDiscount={
+              form.values.is_student
+                ? discountPerGroup.reduce((prev, current) => prev + current, 0)
+                : 0
+            }
+          />
         </BasicFormWithCustomFields>
       </CenteredFormContainer>
     </Layout>
