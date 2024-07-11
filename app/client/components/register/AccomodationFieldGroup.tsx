@@ -41,11 +41,11 @@ export const AccomodationFieldGroup = ({
       checked: accomodationField.value,
     },
     breakfast: {
-      disabled: !accomodationField.value,
+      disabled: breakfastField.disabled || !accomodationField.value,
       checked: breakfastField.value,
     },
     dinner: {
-      disabled: !accomodationField.value,
+      disabled: dinnerField.disabled || !accomodationField.value,
       checked: dinnerField.value,
     },
   });
