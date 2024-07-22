@@ -2,7 +2,7 @@ import React from "react";
 
 import { CSRFToken, FieldHandler, FormHandler } from "@reactivated";
 import { FieldMap } from "reactivated/dist/forms";
-import { Alert } from "../Alert";
+import { Alert } from "../alert/Alert";
 import { BasicFormField } from "./BasicFormField";
 
 interface BasicFormProps<T extends FieldMap> {
