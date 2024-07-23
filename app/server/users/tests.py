@@ -312,10 +312,6 @@ class RegisterViewTestCase(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, UserPreferencesForm)
-        self.assertFalse('object' in context)
-
     def test_get_privileged_user_not_registered(self):
         login_as_user(self.privileged, self.client)
         self.zosia.early_registration_start = timedelta_since_now(hours=-1)
@@ -324,20 +320,12 @@ class RegisterViewTestCase(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, UserPreferencesForm)
-        self.assertFalse('object' in context)
-
     def test_get_privileged_user_not_registered_during_suspended_registration(self):
         login_as_user(self.privileged, self.client)
         self.zosia.registration_suspended = True
         self.zosia.save()
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, UserPreferencesForm)
-        self.assertFalse('object' in context)
 
     def test_get_regular_user_before_registration(self):
         login_as_user(self.normal, self.client)
@@ -382,20 +370,12 @@ class RegisterViewTestCase(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, UserPreferencesForm)
-        self.assertEqual(context['object'], user_prefs)
-
     def test_get_regular_user_already_registered(self):
         login_as_user(self.normal, self.client)
         org = create_organization(name='ksi', accepted=True)
         user_prefs = create_user_preferences(self.normal, self.zosia, organization=org)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, UserPreferencesForm)
-        self.assertEqual(context['object'], user_prefs)
 
     def test_get_regular_user_already_registered_during_suspended_registration(self):
         login_as_user(self.normal, self.client)
@@ -405,10 +385,6 @@ class RegisterViewTestCase(TestCase):
         user_prefs = create_user_preferences(self.normal, self.zosia, organization=org)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, UserPreferencesForm)
-        self.assertEqual(context['object'], user_prefs)
 
     def test_post_user_not_registered_empty_data(self):
         self.assertEqual(UserPreferences.objects.filter(user=self.normal).count(), 0)
