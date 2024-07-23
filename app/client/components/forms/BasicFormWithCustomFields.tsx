@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 
 import { CSRFToken, FormHandler } from "@reactivated";
 import { FieldMap } from "reactivated/dist/forms";
-import { Alert } from "../Alert";
+import { Alert } from "../alert/Alert";
 
 interface BasicFormWithCustomFieldsProps<T extends FieldMap> {
   form: FormHandler<T>;
