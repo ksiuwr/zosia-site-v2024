@@ -1,12 +1,12 @@
 import { Transition } from "@headlessui/react";
 import parse from "html-react-parser";
 import React from "react";
-import { Alert } from "./Alert";
+import { Alert, AlertType } from "./alert/Alert";
 
 interface CustomToastProps {
   isToastVisible: boolean;
   message: string;
-  levelTag: "error" | "warning" | "info" | "success" | "debug";
+  levelTag: AlertType;
 }
 
 export const CustomToast = ({

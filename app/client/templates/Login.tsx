@@ -1,6 +1,6 @@
-import { Alert } from "@client/components/Alert";
 import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
+import { Alert } from "@client/components/alert/Alert";
 import { CenteredFormContainer } from "@client/components/containers/CenteredFormContainer";
 import { BasicForm } from "@client/components/forms/BasicForm";
 import { reverse, templates, useForm } from "@reactivated";
