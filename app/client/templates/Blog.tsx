@@ -9,17 +9,15 @@ export const Template = (props: templates.Blog) => {
   return (
     <Layout>
       <PageTitle>Blog</PageTitle>
-      <div>
-        {props.posts.map((post) => (
-          <Card
-            key={post.id}
-            title={post.title}
-            content={post.content}
-            authors={`${post.author?.first_name ?? ""} ${post.author?.last_name ?? ""}`}
-            description={getLocalDateTime(new Date(post.publication))}
-          />
-        ))}
-      </div>
+      {props.posts.map((post) => (
+        <Card
+          key={post.id}
+          title={post.title}
+          content={post.content}
+          authors={`${post.author?.first_name ?? ""} ${post.author?.last_name ?? ""}`}
+          description={getLocalDateTime(new Date(post.publication))}
+        />
+      ))}
     </Layout>
   );
 };

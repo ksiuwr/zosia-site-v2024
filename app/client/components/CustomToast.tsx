@@ -1,0 +1,32 @@
+import { Transition } from "@headlessui/react";
+import React from "react";
+import { Alert, AlertType } from "./alert/Alert";
+
+interface CustomToastProps {
+  isToastVisible: boolean;
+  message: string;
+  levelTag: AlertType;
+}
+
+export const CustomToast = ({
+  isToastVisible,
+  message,
+  levelTag,
+}: CustomToastProps) => {
+  return (
+    <Transition
+      appear
+      show={isToastVisible}
+      enter="transition-all duration-200"
+      enterFrom="opacity-0 scale-50"
+      enterTo="opacity-100 scale-100"
+      leave="transition-all duration-200"
+      leaveFrom="opacity-100 scale-100"
+      leaveTo="opacity-0 scale-50"
+    >
+      <div className="w-fit">
+        <Alert type={levelTag}>{message}</Alert>
+      </div>
+    </Transition>
+  );
+};

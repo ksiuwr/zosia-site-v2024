@@ -1,5 +1,6 @@
 import { Map, Marker, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import React, { useEffect, useState } from "react";
+import { CenteredContainer } from "../containers/CenteredContainer";
 
 interface GoogleMapProps {
   address: string;
@@ -37,16 +38,18 @@ export const GoogleMap = ({ address }: GoogleMapProps) => {
   }, [address, map, placesLib]);
 
   return (
-    <div className="container mx-auto h-[600px] w-full lg:w-4/6">
-      <Map
-        // By default the map is centered on Wrocław
-        defaultCenter={{ lat: 51.1108914, lng: 17.0505023 }}
-        defaultZoom={12}
-        gestureHandling="cooperative"
-        disableDefaultUI={true}
-      >
-        {markerPosition && <Marker position={markerPosition} />}
-      </Map>
-    </div>
+    <CenteredContainer>
+      <div className="h-[600px] w-full">
+        <Map
+          // By default the map is centered on Wrocław
+          defaultCenter={{ lat: 51.1108914, lng: 17.0505023 }}
+          defaultZoom={12}
+          gestureHandling="cooperative"
+          disableDefaultUI={true}
+        >
+          {markerPosition && <Marker position={markerPosition} />}
+        </Map>
+      </div>
+    </CenteredContainer>
   );
 };

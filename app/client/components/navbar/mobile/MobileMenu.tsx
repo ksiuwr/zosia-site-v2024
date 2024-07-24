@@ -45,11 +45,11 @@ export const MobileMenu = () => {
         leaveTo="-translate-x-full"
       >
         <PopoverPanel className="fixed left-0 top-0 z-50 h-full overflow-scroll bg-base-100">
-          {context.is_authenticated ? (
+          {context.user.is_authenticated ? (
             <>
               <SideNavLink to={reverse("accounts_profile")}>
                 <UserCircleIcon className={`size-${ICON_SIZE}`} />
-                {context.first_name} {context.last_name}
+                {context.user.first_name} {context.user.last_name}
               </SideNavLink>
               <SideNavLink to={reverse("logout")}>
                 <ArrowRightStartOnRectangleIcon
@@ -71,7 +71,7 @@ export const MobileMenu = () => {
             </>
           )}
           <Divider />
-          {context.is_staff && (
+          {context.user.is_staff && (
             <>
               <SideNavLink to={reverse("admin")}>
                 <LockClosedIcon className={`size-${ICON_SIZE}`} />
@@ -80,7 +80,7 @@ export const MobileMenu = () => {
               <Divider />
             </>
           )}
-          {context.is_authenticated && (
+          {context.user.is_authenticated && (
             <>
               <SideNavLink to={reverse("rooms_index")}>
                 <HomeModernIcon className={`size-${ICON_SIZE}`} />

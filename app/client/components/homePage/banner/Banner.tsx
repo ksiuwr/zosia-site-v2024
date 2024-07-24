@@ -1,3 +1,4 @@
+import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Context } from "@reactivated";
 import React, { useContext } from "react";
 import {
@@ -22,13 +23,13 @@ export const Banner = ({
       }}
     >
       <div className="hero-overlay bg-opacity-60"></div>
-      <div className="hero-content text-center text-neutral-content">
-        <div>
-          <h1 className="mb-10 text-5xl font-bold lg:text-6xl">
+      <div className="hero-content p-0 text-center text-neutral-content">
+        <CenteredContainer>
+          <h1 className="mb-10 text-4xl font-bold lg:text-6xl">
             Zimowy Obóz Studentów Informatyki A
           </h1>
           {registrationStatus && <RegistrationStatus {...registrationStatus} />}
-        </div>
+        </CenteredContainer>
       </div>
     </div>
   );

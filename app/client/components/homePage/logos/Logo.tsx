@@ -15,7 +15,7 @@ export const Logo = ({ name, logoPath, url }: LogoProps) => {
       rel="noreferrer"
     >
       {logoPath ? (
-        <img src={logoPath} alt={`${name} logo`} className="h-24 lg:h-40" />
+        <img src={logoPath} alt={`${name} logo`} className="h-20 lg:h-28" />
       ) : (
         <span className="btn-ghost rounded-lg p-5 text-center text-lg font-bold italic lg:p-10 lg:text-4xl">
           {name}
