@@ -7,21 +7,14 @@ interface AlertProps {
   type: AlertType;
 }
 
-const getAlertCSS = (type: AlertType) => {
-  switch (type) {
-    // All these class names need to be written as full strings,
-    // because Tailwind does not support dynamic class names.
-    case "error":
-      return "alert-error";
-    case "warning":
-      return "alert-warning";
-    case "success":
-      return "alert-success";
-    case "info":
-      return "alert-info";
-    default:
-      return "";
-  }
+const alertCSSMap: Record<AlertType, string> = {
+  // All these class names need to be written as full strings,
+  // because Tailwind does not support dynamic class names.
+  error: "alert-error",
+  warning: "alert-warning",
+  success: "alert-success",
+  info: "alert-info",
+  debug: "",
 };
 
 export const Alert = React.forwardRef<
@@ -32,7 +25,7 @@ export const Alert = React.forwardRef<
     <div
       ref={ref}
       role="alert"
-      className={`alert my-3 w-full grid-flow-col ${getAlertCSS(type)}`}
+      className={`alert my-3 w-full grid-flow-col ${alertCSSMap[type]}`}
     >
       <AlertIcon type={type} />
       <span>{children}</span>
