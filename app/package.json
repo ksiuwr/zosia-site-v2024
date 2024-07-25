@@ -24,6 +24,7 @@
     "@vis.gl/react-google-maps": "^1.0.2",
     "autoprefixer": "^10.4.19",
     "chart.js": "^3.9.1",
+    "clsx": "^2.1.1",
     "daisyui": "^4.11.1",
     "html-react-parser": "^5.1.10",
     "jquery": "^3.6.1",
