@@ -2,6 +2,8 @@ import { Field } from "@headlessui/react";
 import { FieldHandler } from "@reactivated";
 import clsx from "clsx";
 import React from "react";
+import { WidgetHandler } from "reactivated/dist/forms";
+import { DjangoFormsWidgetsCheckboxInput } from "reactivated/dist/generated";
 import { BasicDescription } from "./BasicDescription";
 import { BasicLabel } from "./BasicLabel";
 import { BasicWidget } from "./BasicWidget";
@@ -10,7 +12,10 @@ interface BasicFormFieldProps {
   field: FieldHandler;
   disabled?: boolean;
   checked?: boolean;
-  onCheckboxChange?: (field: FieldHandler, value: boolean) => void;
+  onCheckboxChange?: (
+    field: WidgetHandler<DjangoFormsWidgetsCheckboxInput>,
+    value: boolean,
+  ) => void;
 }
 
 export const BasicFormField = ({

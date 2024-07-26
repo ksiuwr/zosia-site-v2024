@@ -1,5 +1,4 @@
-import { FieldHandler } from "@reactivated";
-import React, { useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
 import { DjangoFormsWidgetsCheckboxInput } from "reactivated/dist/generated";
 import { BasicFormField } from "../forms/BasicFormField";
@@ -8,12 +7,6 @@ interface AccomodationFieldGroupProps {
   dinnerField: WidgetHandler<DjangoFormsWidgetsCheckboxInput>;
   accomodationField: WidgetHandler<DjangoFormsWidgetsCheckboxInput>;
   breakfastField: WidgetHandler<DjangoFormsWidgetsCheckboxInput>;
-
-  onCostChange: (
-    breakfast: boolean,
-    dinner: boolean,
-    accomodation: boolean,
-  ) => void;
 }
 
 interface GroupState {
@@ -30,13 +23,58 @@ interface GroupState {
   };
 }
 
+interface GroupAction {
+  fieldName: string;
+  newValue: boolean;
+}
+
 export const AccomodationFieldGroup = ({
   dinnerField,
   accomodationField,
   breakfastField,
-  onCostChange,
 }: AccomodationFieldGroupProps) => {
-  const [groupState, setGroupState] = useState<GroupState>({
+  const reducer = (state: GroupState, action: GroupAction): GroupState => {
+    const { fieldName, newValue } = action;
+
+    switch (fieldName) {
+      case dinnerField.name:
+        return {
+          ...state,
+          dinner: {
+            ...state.dinner,
+            checked: newValue,
+          },
+        };
+
+      case accomodationField.name:
+        return {
+          accomodation: {
+            checked: newValue,
+          },
+          breakfast: {
+            disabled: !newValue,
+            checked: newValue,
+          },
+          dinner: {
+            disabled: !newValue,
+            checked: newValue,
+          },
+        };
+
+      case breakfastField.name:
+        return {
+          ...state,
+          breakfast: {
+            ...state.breakfast,
+            checked: newValue,
+          },
+        };
+      default:
+        return state;
+    }
+  };
+
+  const [groupState, dispatch] = useReducer(reducer, {
     accomodation: {
       checked: accomodationField.value,
     },
@@ -50,52 +88,20 @@ export const AccomodationFieldGroup = ({
     },
   });
 
-  const onAccomodationChecked = (field: FieldHandler, value: boolean) => {
-    const accomodationName = field?.name;
-    let groupNewState = groupState;
+  useEffect(() => {
+    // Synchronize checkboxes managed by this component
+    // with Reactivated's form state, so that the form state
+    // is visible in parent component correctly.
+    dinnerField.handler(groupState.dinner.checked);
+    accomodationField.handler(groupState.accomodation.checked);
+    breakfastField.handler(groupState.breakfast.checked);
+  }, [groupState]);
 
-    switch (accomodationName) {
-      case dinnerField.name:
-        groupNewState = {
-          ...groupState,
-          dinner: {
-            ...groupState.dinner,
-            checked: value,
-          },
-        };
-        break;
-      case accomodationField.name:
-        groupNewState = {
-          accomodation: {
-            checked: value,
-          },
-          breakfast: {
-            disabled: !value,
-            checked: value,
-          },
-          dinner: {
-            disabled: !value,
-            checked: value,
-          },
-        };
-        break;
-      case breakfastField.name:
-        groupNewState = {
-          ...groupState,
-          breakfast: {
-            ...groupState.breakfast,
-            checked: value,
-          },
-        };
-        break;
-    }
-
-    setGroupState(groupNewState);
-    onCostChange(
-      groupNewState.breakfast.checked,
-      groupNewState.dinner.checked,
-      groupNewState.accomodation.checked,
-    );
+  const onCheckboxChange = (
+    field: WidgetHandler<DjangoFormsWidgetsCheckboxInput>,
+    value: boolean,
+  ) => {
+    dispatch({ fieldName: field.name, newValue: value });
   };
 
   return (
@@ -104,18 +110,18 @@ export const AccomodationFieldGroup = ({
         field={dinnerField}
         disabled={groupState.dinner.disabled}
         checked={groupState.dinner.checked}
-        onCheckboxChange={onAccomodationChecked}
+        onCheckboxChange={onCheckboxChange}
       />
       <BasicFormField
         field={accomodationField}
         checked={groupState.accomodation.checked}
-        onCheckboxChange={onAccomodationChecked}
+        onCheckboxChange={onCheckboxChange}
       />
       <BasicFormField
         field={breakfastField}
         disabled={groupState.breakfast.disabled}
         checked={groupState.breakfast.checked}
-        onCheckboxChange={onAccomodationChecked}
+        onCheckboxChange={onCheckboxChange}
       />
     </>
   );

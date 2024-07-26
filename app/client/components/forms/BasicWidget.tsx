@@ -1,11 +1,16 @@
 import { Checkbox, Input, Select, Textarea } from "@headlessui/react";
 import { FieldHandler, Widget } from "@reactivated";
 import React from "react";
+import { WidgetHandler } from "reactivated/dist/forms";
+import { DjangoFormsWidgetsCheckboxInput } from "reactivated/dist/generated";
 
 interface BasicWidgetProps {
   field: FieldHandler;
   checked?: boolean;
-  onCheckboxChange?: (field: FieldHandler, value: boolean) => void;
+  onCheckboxChange?: (
+    field: WidgetHandler<DjangoFormsWidgetsCheckboxInput>,
+    value: boolean,
+  ) => void;
 }
 
 export const BasicWidget = ({

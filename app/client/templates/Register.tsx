@@ -62,42 +62,18 @@ export const Template = (props: templates.Register) => {
     return accomodation ? props.discount : 0;
   };
 
-  const [accomodationCostPerGroup, setAccomodationCostPerGroup] =
-    React.useState(
-      accomodationCheckboxesGroups.map(({ dinner, accomodation, breakfast }) =>
-        calculateAccomodationDayCost(
-          breakfast.value,
-          dinner.value,
-          accomodation.value,
-        ),
+  const accomodationCostPerGroup = accomodationCheckboxesGroups.map(
+    ({ dinner, accomodation, breakfast }) =>
+      calculateAccomodationDayCost(
+        breakfast.value,
+        dinner.value,
+        accomodation.value,
       ),
-    );
-
-  const [discountPerGroup, setDiscountPerGroup] = React.useState(
-    accomodationCheckboxesGroups.map(({ accomodation }) =>
-      calculateDiscountForGroup(accomodation.value),
-    ),
   );
 
-  const generateAccomodationGroupCostCallback = (groupNumber: number) => {
-    return (breakfast: boolean, dinner: boolean, accomodation: boolean) => {
-      setAccomodationCostPerGroup((prev) => {
-        return prev.map((cost, index) =>
-          index === groupNumber
-            ? calculateAccomodationDayCost(breakfast, dinner, accomodation)
-            : cost,
-        );
-      });
-
-      setDiscountPerGroup((prev) => {
-        return prev.map((discount, index) =>
-          index === groupNumber
-            ? calculateDiscountForGroup(accomodation)
-            : discount,
-        );
-      });
-    };
-  };
+  const discountPerGroup = accomodationCheckboxesGroups.map(
+    ({ accomodation }) => calculateDiscountForGroup(accomodation.value),
+  );
 
   return (
     <Layout>
@@ -144,7 +120,6 @@ export const Template = (props: templates.Register) => {
               dinnerField={group.dinner}
               accomodationField={group.accomodation}
               breakfastField={group.breakfast}
-              onCostChange={generateAccomodationGroupCostCallback(index)}
             />
           ))}
 
