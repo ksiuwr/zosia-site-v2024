@@ -1,11 +1,8 @@
-import { Field } from "@headlessui/react";
 import { FieldHandler } from "@reactivated";
-import clsx from "clsx";
 import React from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
 import { DjangoFormsWidgetsCheckboxInput } from "reactivated/dist/generated";
-import { BasicDescription } from "./BasicDescription";
-import { BasicLabel } from "./BasicLabel";
+import { BasicFormFieldWithCustomWidget } from "./BasicFormFieldWithCustomWidget";
 import { BasicWidget } from "./BasicWidget";
 
 interface BasicFormFieldProps {
@@ -24,28 +21,13 @@ export const BasicFormField = ({
   checked = undefined,
   onCheckboxChange = undefined,
 }: BasicFormFieldProps) => {
-  const isCheckbox = field.tag === "django.forms.widgets.CheckboxInput";
-
   return (
-    <Field
-      className="mb-4 flex flex-col"
-      disabled={disabled === undefined ? field.disabled : disabled}
-    >
-      <div
-        className={clsx(
-          "flex",
-          isCheckbox && "flex-row items-center gap-x-2",
-          !isCheckbox && "flex-col",
-        )}
-      >
-        <BasicLabel field={field} />
-        <BasicWidget
-          field={field}
-          checked={checked}
-          onCheckboxChange={onCheckboxChange}
-        />
-      </div>
-      <BasicDescription field={field} />
-    </Field>
+    <BasicFormFieldWithCustomWidget field={field} disabled={disabled}>
+      <BasicWidget
+        field={field}
+        checked={checked}
+        onCheckboxChange={onCheckboxChange}
+      />
+    </BasicFormFieldWithCustomWidget>
   );
 };
