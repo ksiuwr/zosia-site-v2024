@@ -26,6 +26,9 @@ services:
       # Node modules installed in container need to be visible in host for local development, IDEs etc.
       # Especially the _reactivated module which is generated on `python manage.py runserver` and contains types for Typescript
       - ./app/node_modules:/code/node_modules
+      # Package.json and lock file are mounted to allow installing node modules from within the container for conveniance
+      - ./app/package.json:/code/package.json
+      - ./app/package-lock.json:/code/package-lock.json
     ports:
       - "8000:8000"
     depends_on:
