@@ -1,4 +1,5 @@
 import { Transition } from "@headlessui/react";
+import parse from "html-react-parser";
 import React from "react";
 import { Alert, AlertType } from "./alert/Alert";
 
@@ -25,7 +26,7 @@ export const CustomToast = ({
       leaveTo="opacity-0 scale-50"
     >
       <div className="w-fit">
-        <Alert type={levelTag}>{message}</Alert>
+        <Alert type={levelTag}>{parse(message)}</Alert>
       </div>
     </Transition>
   );

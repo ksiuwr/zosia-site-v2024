@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 from django.urls import include, re_path
 
@@ -14,6 +14,7 @@ urlpatterns = [
         r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,40})/$',
         views.activate, name='accounts_activate'),
     path('login/', anonymous_required(views.ReactLoginView.as_view()), name='login'),
+    path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
     path('organizations/', views.organizations, name='organizations'),
     path('organizations/accept/', views.toggle_organization, name='toggle_organization'),
     path('organizations/add/', views.update_organization, name='organization_add'),
@@ -33,7 +34,6 @@ urlpatterns = [
     path('register/', views.register, name='user_zosia_register'),
     path('', include('django.contrib.auth.urls')),
     # NOTE: it adds following URLs:
-    # ^logout/$ [name='logout']
     # ^password_change/$ [name='password_change']
     # ^password_change/done/$ [name='password_change_done']
     # ^password_reset/$ [name='password_reset']

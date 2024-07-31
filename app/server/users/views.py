@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Login
+from .templates import Login, Register, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -26,6 +26,8 @@ from server.utils.views import csv_response
 
 
 class ReactLoginView(LoginView):
+    authentication_form = forms.UserAuthenticationForm
+
     def render_to_response(self, context, **response_kwargs):
         is_redirected = context.get('next', '') != ''
 
@@ -69,16 +71,13 @@ def profile(request):
 @require_http_methods(['GET', 'POST'])
 def signup(request):
     form = forms.UserForm(request.POST or None)
-    ctx = {
-        'form': form,
-    }
 
     if request.method == 'POST':
         if form.is_valid():
             form.save(request)
-            return render(request, 'users/signup_done.html', ctx)
+            return SignUp(form=form, is_signup_successful=True).render(request)
 
-    return render(request, 'users/signup.html', ctx)
+    return SignUp(form=form).render(request)
 
 
 @login_required
@@ -253,7 +252,7 @@ def register(request):
     user = request.user
     zosia: Zosia = Zosia.objects.find_active_or_404()
     user_prefs = UserPreferences.objects.filter(zosia=zosia, user=user).first()
-    first_call = False
+    is_user_already_registered = user_prefs is not None
 
     if user_prefs is None:
         if not zosia.is_user_registration_open(user):
@@ -263,45 +262,48 @@ def register(request):
         if zosia.is_registration_over:
             messages.error(request, _('You missed registration for ZOSIA'))
             return redirect(reverse('index'))
-        
-        first_call = True
 
-    ctx = {'field_dependencies': PAYMENT_GROUPS, 'payed': False, 'zosia': zosia}
-    ctx['first_call'] = first_call
     form_args = {}
-
+    before_discounts = False
+    discount = None
     if user_prefs is not None:
-        ctx['object'] = user_prefs
         form_args['instance'] = user_prefs
-        ctx['discount'] = zosia.get_discount_for_round(
+        discount = zosia.get_discount_for_round(
             user_prefs.discount_round
         )
     else:
-        ctx['discount'] = zosia.get_discount_for_round(
+        discount = zosia.get_discount_for_round(
             UserPreferences.get_current_discount_round(zosia)
         )
-        ctx['before_discounts'] = zosia.first_discount_limit == 0
+        before_discounts = zosia.first_discount_limit == 0
 
     form = UserPreferencesForm(request.user, request.POST or None, **form_args)
-    ctx['form'] = form
 
     if user_prefs:
         form.fields['is_student'].disabled = True
 
+    paid = False
     if user_prefs and user_prefs.payment_accepted:
-        ctx['payed'] = True
+        paid = True
         form.disable()
 
     if request.method == 'POST':
         if form.is_valid():
-            form.call(zosia, first_call)
+            form.call(zosia, not is_user_already_registered)
             messages.success(request, _("Preferences saved!"))
 
             return redirect(reverse('accounts_profile') + '#zosia')
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'users/register.html', ctx)
+    return Register(
+        form=form,
+        zosia=zosia,
+        is_user_already_registered=is_user_already_registered,
+        paid=paid,
+        discount=discount,
+        before_discounts=before_discounts
+    ).render(request)
 
 
 @staff_member_required

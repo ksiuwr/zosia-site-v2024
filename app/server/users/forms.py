@@ -1,12 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
 from server.conferences.models import Transport, Zosia
 from .actions import SendActivationEmail, SendEmailToAll
@@ -91,9 +89,12 @@ class MailForm(forms.Form):
         print(users)
 
 
+class UserAuthenticationForm(AuthenticationForm):
+    username = UsernameField(widget=forms.EmailInput(attrs={"autofocus": True}))
+
+
 class UserForm(UserCreationForm):
     privacy_consent = forms.BooleanField(required=True)
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     class Meta:
         model = User
@@ -101,9 +102,10 @@ class UserForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        label = f'I agree to the <a href="{reverse("privacy_policy")}">Privacy Policy</a>'
+        label = 'I agree to the Privacy Policy'
+        help_text = f'<a href="{reverse("privacy_policy")}" target="_blank" class="link">Read full Privacy Policy</a>'
         self.fields['privacy_consent'].label = mark_safe(label)
-        print('Captcha', self.fields['captcha'].label)
+        self.fields['privacy_consent'].help_text = mark_safe(help_text)
 
     def save(self, request):
         user = super().save(commit=False)
@@ -144,6 +146,8 @@ class UserPreferencesWithTransportForm(forms.ModelForm):
 
 
 class UserPreferencesForm(UserPreferencesWithTransportForm):
+    terms_accepted = forms.BooleanField(required=True)
+
     use_required_attribute = False
 
     # NOTE: In hindsight, this sucks.
@@ -180,14 +184,12 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
         super().__init__(*args, **kwargs)
         self.user = user
         self.fields['is_student'].label = "I am a student under 25 and I have a valid Student ID card."
-        self.fields['is_student'].help_text = "<br/>"  # Just for some space
 
         self.fields['transport_baggage'].label = "I want to have my baggage transferred."
-        self.fields['transport_baggage'].help_text = "<br/>"
 
-        terms_label = f'I agree to <a href="{reverse("terms_and_conditions")}"> Terms & Conditions</a> of ZOSIA.'
-        self.fields["terms_accepted"].required = True
-        self.fields["terms_accepted"].label = mark_safe(terms_label)
+        terms_help_text = f'<a href="{reverse("terms_and_conditions")}" class="link">Read full Terms & Conditions here</a>.'
+        self.fields["terms_accepted"].label = 'I agree to Terms & Conditions of ZOSIA.'
+        self.fields["terms_accepted"].help_text = mark_safe(terms_help_text)
         self.fields["terms_accepted"].error_messages = \
             {'required': "You have to accept Terms & Conditions."}
 
