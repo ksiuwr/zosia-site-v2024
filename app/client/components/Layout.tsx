@@ -1,6 +1,5 @@
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React, {
   PropsWithChildren,
   useContext,
@@ -69,7 +68,6 @@ export const Layout = ({ children }: PropsWithChildren) => {
           <main className="grow bg-base-100">{children}</main>
           <Footer />
         </div>
-        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );
