@@ -22,7 +22,7 @@ export const OrganizationSelector = ({ field }: OrganizationSelectorProps) => {
       <BasicFormFieldWithCustomWidget field={field}>
         <OrganizationSelectorSelect field={field} />
         <button
-          className="btn btn-block mt-2"
+          className="btn btn-outline btn-block mt-2"
           type="button"
           onClick={openDialog}
           disabled={field.disabled}
