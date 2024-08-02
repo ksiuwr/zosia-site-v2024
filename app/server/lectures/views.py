@@ -65,7 +65,7 @@ def lecture_add(request):
     zosia = Zosia.objects.find_active()
     if not zosia.is_lectures_open:
         messages.error(request, _("Call for paper is not open right now!"))
-        return redirect(reverse('index'))
+        return redirect(reverse('accounts_profile'))
 
     form = LectureForm(request.POST or None)
     ctx = {'form': form}
