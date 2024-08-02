@@ -1,7 +1,7 @@
 import {
   Popover,
+  PopoverBackdrop,
   PopoverButton,
-  PopoverOverlay,
   PopoverPanel,
   Transition,
 } from "@headlessui/react";
@@ -35,7 +35,7 @@ export const MobileMenu = () => {
         <Bars3Icon className="size-6" />
       </PopoverButton>
 
-      <PopoverOverlay className="fixed inset-0 z-40 bg-black/50" />
+      <PopoverBackdrop className="fixed inset-0 z-40 bg-black/50" />
       <Transition
         enter="transition ease-in-out duration-200"
         enterFrom="-translate-x-full"
