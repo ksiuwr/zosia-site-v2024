@@ -17,13 +17,15 @@ export const ProfileAccountSection = () => {
       </p>
 
       {user.is_staff && (
-        <Alert type="warning">
-          Your account has admin access! Check out the{" "}
-          <a className="link" href={reverse("admin")}>
-            admin panel
-          </a>
-          .
-        </Alert>
+        <div className="mt-3">
+          <Alert type="success">
+            Your account has admin access! Check out the{" "}
+            <a className="link" href={reverse("admin")}>
+              admin panel
+            </a>
+            .
+          </Alert>
+        </div>
       )}
       <a className="btn btn-outline" href={reverse("accounts_edit")}>
         Edit name

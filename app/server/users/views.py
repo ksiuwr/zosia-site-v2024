@@ -41,10 +41,14 @@ class ReactLoginView(LoginView):
 @require_http_methods(['GET'])
 def profile(request):
     user = request.user
-    current_zosia = Zosia.objects.find_active()
-    user_preferences = UserPreferences.objects.select_related('transport', 'zosia').filter(user=user)
+    current_zosia: Zosia = Zosia.objects.find_active()
 
+    user_preferences = UserPreferences.objects.select_related('transport', 'zosia').filter(user=user)
     current_prefs = user_preferences.filter(zosia=current_zosia).first()
+
+    registration_open = False
+    registration_start = None
+    enable_preferences = False
 
     if current_zosia:
         registration_open = current_zosia.is_user_registration_open(user)
@@ -53,20 +57,35 @@ def profile(request):
             registration_open and not current_zosia.is_registration_over or \
             current_prefs and (current_zosia.is_registration_over or
                                current_zosia.registration_suspended)
-    else:
-        registration_open = False
-        registration_start = None
-        enable_preferences = False
+     
+    price = None
+    transfer_title = None
+    room = None
+    roommate = None
+    rooming_start_time = None
 
-    ctx = {
-        'zosia': current_zosia,
-        'current_prefs': current_prefs,
-        'registration_open': registration_open,
-        'registration_start': registration_start,
-        'enable_preferences': enable_preferences
-    }
-    # return render(request, 'users/profile.html', ctx)
-    return Profile().render(request)
+    if current_prefs:
+        price = current_prefs.price
+        transfer_title = current_prefs.transfer_title
+        room = current_prefs.room
+        roommate = current_prefs.roommate if room else None
+        rooming_start_time = current_prefs.rooming_start_time
+
+    return Profile(
+        zosia=current_zosia,
+        preferences=current_prefs,
+
+        price=price,
+        transfer_title=transfer_title,
+
+        room=room,
+        roommate=roommate,
+        rooming_start_time=rooming_start_time,
+
+        registration_open=registration_open,
+        registration_start=registration_start,
+        enable_preferences=enable_preferences,
+    ).render(request)
 
 
 @require_http_methods(['GET', 'POST'])
