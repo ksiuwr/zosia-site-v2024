@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Login, Register, SignUp
+from .templates import Login, Profile, Register, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -65,7 +65,8 @@ def profile(request):
         'registration_start': registration_start,
         'enable_preferences': enable_preferences
     }
-    return render(request, 'users/profile.html', ctx)
+    # return render(request, 'users/profile.html', ctx)
+    return Profile().render(request)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -292,7 +293,7 @@ def register(request):
             form.call(zosia, not is_user_already_registered)
             messages.success(request, _("Preferences saved!"))
 
-            return redirect(reverse('accounts_profile') + '#zosia')
+            return redirect(reverse('accounts_profile'))
         else:
             messages.error(request, errors_format(form))
 

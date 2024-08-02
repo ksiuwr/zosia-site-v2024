@@ -36,3 +36,8 @@ class Register(NamedTuple):
     paid: bool
     discount: int
     before_discounts: bool
+
+
+@template
+class Profile(NamedTuple):
+    pass
