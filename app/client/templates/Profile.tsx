@@ -60,12 +60,12 @@ export const Template = (props: templates.Profile) => {
           )}
         </div>
 
-        <div className="card card-compact mb-8 bg-base-300 lg:card-normal">
+        <div className="card card-compact mb-8 bg-base-100 lg:card-normal">
           <div className="card-body">
             <h2 className="card-title text-lg lg:text-xl">Payments</h2>
             <p className="whitespace-pre-wrap">Your payments</p>
 
-            <div className="divider divider-accent my-1"></div>
+            <div className="divider my-1"></div>
 
             <h2 className="card-title text-lg lg:text-xl">Preferences</h2>
             <p className="whitespace-pre-wrap">Your info</p>
@@ -76,7 +76,7 @@ export const Template = (props: templates.Profile) => {
               Update preferences
             </a>
 
-            <div className="divider divider-accent my-1"></div>
+            <div className="divider my-1"></div>
 
             <h2 className="card-title text-lg lg:text-xl">Account</h2>
             <p>
