@@ -16,10 +16,21 @@ const dateFormatter = new Intl.DateTimeFormat("pl-PL", {
   year: "numeric",
 });
 
+const timeFormatter = new Intl.DateTimeFormat("pl-PL", {
+  timeZone: "Europe/Warsaw",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZoneName: "short",
+});
+
 export const getLocalDateTime = (date: Date) => {
   return dateTimeFormatter.format(date);
 };
 
 export const getLocalDate = (date: Date) => {
   return dateFormatter.format(date);
+};
+
+export const getLocalTime = (date: Date) => {
+  return timeFormatter.format(date);
 };

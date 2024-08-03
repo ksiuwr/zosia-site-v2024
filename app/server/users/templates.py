@@ -41,8 +41,28 @@ class Register(NamedTuple):
 
 @template
 class Profile(NamedTuple):
-    zosia: Pick[Zosia, 'account_number', 'account_bank', 'account_owner', 'account_address']
-    preferences: Pick[UserPreferences, 'payment_accepted', 'discount_round', 'is_student']
+    zosia: Pick[Zosia, 'account_number', 'account_bank', 'account_owner', 'account_address', 'registration_suspended']
+    preferences: Pick[
+        UserPreferences,
+        'payment_accepted',
+        'discount_round',
+        'is_student',
+        'vegetarian',
+        'organization.name',
+        'organization.accepted',
+        'transport.name',
+        'transport.departure_time',
+        'transport_baggage',
+        'dinner_day_1',
+        'accommodation_day_1',
+        'breakfast_day_2',
+        'dinner_day_2',
+        'accommodation_day_2',
+        'breakfast_day_3',
+        'dinner_day_3',
+        'accommodation_day_3',
+        'breakfast_day_4',
+    ]
 
     price: int
     transfer_title: str
@@ -52,5 +72,9 @@ class Profile(NamedTuple):
     rooming_start_time: datetime
 
     registration_open: bool
+    registration_over: bool
     registration_start: datetime
-    enable_preferences: bool
+    enable_editing_preferences: bool
+
+    shirt_type: str
+    shirt_size: str

@@ -47,19 +47,23 @@ def profile(request):
     current_prefs = user_preferences.filter(zosia=current_zosia).first()
 
     registration_open = False
+    registration_over = False
     registration_start = None
-    enable_preferences = False
+    enable_editing_preferences = False
 
     if current_zosia:
         registration_open = current_zosia.is_user_registration_open(user)
+        registration_over = current_zosia.is_registration_over
         registration_start = current_zosia.user_registration_start(user)
-        enable_preferences = \
+        enable_editing_preferences = \
             registration_open and not current_zosia.is_registration_over or \
             current_prefs and (current_zosia.is_registration_over or
                                current_zosia.registration_suspended)
      
     price = None
     transfer_title = None
+    shirt_type = None
+    shirt_size = None
     room = None
     roommate = None
     rooming_start_time = None
@@ -67,6 +71,8 @@ def profile(request):
     if current_prefs:
         price = current_prefs.price
         transfer_title = current_prefs.transfer_title
+        shirt_type = current_prefs.get_shirt_type_display()
+        shirt_size = current_prefs.get_shirt_size_display()
         room = current_prefs.room
         roommate = current_prefs.roommate if room else None
         rooming_start_time = current_prefs.rooming_start_time
@@ -83,8 +89,12 @@ def profile(request):
         rooming_start_time=rooming_start_time,
 
         registration_open=registration_open,
+        registration_over=registration_over,
         registration_start=registration_start,
-        enable_preferences=enable_preferences,
+        enable_editing_preferences=enable_editing_preferences,
+
+        shirt_type=shirt_type,
+        shirt_size=shirt_size
     ).render(request)
 
 

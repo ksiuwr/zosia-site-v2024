@@ -51,7 +51,7 @@ export const ProfilePaymentSection = ({
         <Alert type="success">Your payment has been accepted :)</Alert>
       ) : (
         <>
-          <div className="prose mb-3 text-base-content">
+          <div className="prose mb-3">
             <Markdown>
               {paymentInformationMarkdown(
                 price,

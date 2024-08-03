@@ -1,10 +1,11 @@
 import { CenteredContentContainer } from "@client/components/containers/CenteredContentContainer";
 import { Layout } from "@client/components/Layout";
+import { ProfilePreferencesSection } from "@client/components/profile/preferences/ProfilePreferencesSection";
 import { ProfileAccountSection } from "@client/components/profile/ProfileAccountSection";
 import { ProfileNavbar } from "@client/components/profile/ProfileNavbar";
 import { ProfilePaymentSection } from "@client/components/profile/ProfilePaymentSection";
 
-import { reverse, templates } from "@reactivated";
+import { templates } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.Profile) => {
@@ -32,21 +33,63 @@ export const Template = (props: templates.Profile) => {
               </>
             )}
 
-            <h2 className="card-title text-lg lg:text-xl">Preferences</h2>
-            <p className="whitespace-pre-wrap">Your info</p>
-            <a
-              className="btn btn-outline btn-block"
-              href={reverse("user_zosia_register")}
-            >
-              Update preferences
-            </a>
-
-            <div className="divider my-1"></div>
-
             {props.zosia && props.preferences && (
               <>
                 {/* TODO: Add rooms info here */}
                 {/* <div className="divider my-1"></div> */}
+              </>
+            )}
+
+            {props.zosia && (
+              <>
+                <ProfilePreferencesSection
+                  preferences={{
+                    vegetarian: props.preferences?.vegetarian || false,
+                    shirtType: props.shirt_type,
+                    shirtSize: props.shirt_size,
+                    transport: props.preferences?.transport?.name,
+                    transportDeparture: props.preferences?.transport
+                      ?.departure_time
+                      ? new Date(props.preferences?.transport?.departure_time)
+                      : undefined,
+                    transportBaggage:
+                      props.preferences?.transport_baggage || false,
+                    organization: props.preferences?.organization?.name,
+                    organizationAccepted:
+                      props.preferences?.organization?.accepted,
+                  }}
+                  registrationInfo={{
+                    registrationOpen: props.registration_open,
+                    registrationOver: props.registration_over,
+                    registrationSuspended: props.zosia.registration_suspended,
+                    registrationStart: new Date(props.registration_start),
+                  }}
+                  accomodation={{
+                    accomodation: [
+                      ["Day 1 - dinner", props.preferences?.dinner_day_1],
+                      [
+                        "Day 1 - accomodation",
+                        props.preferences?.accommodation_day_1,
+                      ],
+                      ["Day 2 - breakfast", props.preferences?.breakfast_day_2],
+                      ["Day 2 - dinner", props.preferences?.dinner_day_2],
+                      [
+                        "Day 2 - accomodation",
+                        props.preferences?.accommodation_day_2,
+                      ],
+                      ["Day 3 - breakfast", props.preferences?.breakfast_day_3],
+                      ["Day 3 - dinner", props.preferences?.dinner_day_3],
+                      [
+                        "Day 3 - accomodation",
+                        props.preferences?.accommodation_day_3,
+                      ],
+                      ["Day 4 - breakfast", props.preferences?.breakfast_day_4],
+                    ],
+                  }}
+                  userRegistered={Boolean(props.preferences)}
+                  enableEditingPreferences={props.enable_editing_preferences}
+                />
+                <div className="divider my-1"></div>
               </>
             )}
 
