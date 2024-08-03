@@ -1,6 +1,7 @@
 import json
 import re
 
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -26,12 +27,17 @@ MAX_NUMBER_OF_GAMES = 3
 def index(request):
     boardgames = Boardgame.objects.all().annotate(
         votes=Count('boardgame_votes')).order_by('-votes', 'name')
+    
+    try:
+        current_zosia = Zosia.objects.get(active=True)
+    except Zosia.DoesNotExist:
+        messages.error(request, _('There is no active conference'))
+        return redirect(reverse('accounts_profile'))
 
     try:
-        current_zosia = Zosia.objects.find_active()
         preferences = UserPreferences.objects.get(
             zosia=current_zosia, user=request.user)
-    except (Zosia.DoesNotExist, UserPreferences.DoesNotExist):
+    except (UserPreferences.DoesNotExist):
         ctx = {'boardgames': boardgames}
     else:
         paid = preferences.payment_accepted

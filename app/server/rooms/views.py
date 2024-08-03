@@ -31,7 +31,7 @@ def index(request):
         zosia = Zosia.objects.get(active=True)
     except Zosia.DoesNotExist:
         messages.error(request, _('There is no active conference'))
-        return redirect(reverse('index'))
+        return redirect(reverse('accounts_profile'))
 
     try:
         preferences = UserPreferences.objects.get(zosia=zosia, user=request.user)

@@ -62,7 +62,12 @@ def lecture_add(request):
     """
     participant can add his own lecture
     """
-    zosia = Zosia.objects.find_active()
+    try:
+        zosia = Zosia.objects.get(active=True)
+    except Zosia.DoesNotExist:
+        messages.error(request, _('There is no active conference'))
+        return redirect(reverse('accounts_profile'))
+
     if not zosia.is_lectures_open:
         messages.error(request, _("Call for paper is not open right now!"))
         return redirect(reverse('accounts_profile'))
