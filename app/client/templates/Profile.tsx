@@ -4,6 +4,7 @@ import { ProfilePreferencesSection } from "@client/components/profile/preference
 import { ProfileAccountSection } from "@client/components/profile/ProfileAccountSection";
 import { ProfileNavbar } from "@client/components/profile/ProfileNavbar";
 import { ProfilePaymentSection } from "@client/components/profile/ProfilePaymentSection";
+import { ProfileRoomsSection } from "@client/components/profile/ProfileRoomsSection";
 
 import { templates } from "@reactivated";
 import React from "react";
@@ -33,12 +34,18 @@ export const Template = (props: templates.Profile) => {
               </>
             )}
 
-            {props.zosia && props.preferences && (
-              <>
-                {/* TODO: Add rooms info here */}
-                {/* <div className="divider my-1"></div> */}
-              </>
-            )}
+            {props.zosia &&
+              props.preferences &&
+              props.preferences.payment_accepted && (
+                <>
+                  <ProfileRoomsSection
+                    roomName={props.room || undefined}
+                    roommate={props.roommate || undefined}
+                    roomingStartTime={new Date(props.rooming_start_time)}
+                  />
+                  <div className="divider my-1"></div>
+                </>
+              )}
 
             {props.zosia && (
               <>
