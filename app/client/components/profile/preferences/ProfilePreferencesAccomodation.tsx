@@ -18,6 +18,7 @@ export const ProfilePreferencesAccomodation = ({
             type="checkbox"
             className="checkbox size-6 cursor-default checked:checkbox-success"
             checked={checked}
+            readOnly
           ></input>
           <span>{accomodationName}</span>
         </div>

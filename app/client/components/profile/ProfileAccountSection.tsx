@@ -18,11 +18,11 @@ export const ProfileAccountSection = () => {
   return (
     <>
       <h2 className="card-title text-lg lg:text-xl">Account</h2>
-      <p className="prose">
+      <div className="prose">
         <Markdown>
           {accountInfoMarkdown(user.first_name, user.last_name, user.email)}
         </Markdown>
-      </p>
+      </div>
 
       {user.is_staff && (
         <div className="mt-3">

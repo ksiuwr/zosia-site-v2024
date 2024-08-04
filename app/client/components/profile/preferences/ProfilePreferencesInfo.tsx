@@ -46,8 +46,8 @@ T-shirt: **${shirtType} ${shirtSize}**
 
 export const ProfilePreferencesInfo = (props: ProfilePreferencesInfoProps) => {
   return (
-    <p className="prose whitespace-pre-wrap">
+    <div className="prose whitespace-pre-wrap">
       <Markdown>{preferencesInfoMarkdown(props)}</Markdown>
-    </p>
+    </div>
   );
 };
