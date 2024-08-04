@@ -11,6 +11,7 @@ import {
   Bars3Icon,
   BookOpenIcon,
   ClockIcon,
+  DocumentPlusIcon,
   HomeModernIcon,
   InformationCircleIcon,
   LockClosedIcon,
@@ -89,6 +90,10 @@ export const MobileMenu = () => {
               <SideNavLink to={reverse("boardgames_index")}>
                 <PuzzlePieceIcon className={`size-${ICON_SIZE}`} />
                 Boardgames
+              </SideNavLink>
+              <SideNavLink to={reverse("lectures_add")}>
+                <DocumentPlusIcon className={`size-${ICON_SIZE}`} />
+                Add Lecture
               </SideNavLink>
               <Divider />
             </>

@@ -1,5 +1,5 @@
 import {
-  BookOpenIcon,
+  DocumentPlusIcon,
   HomeModernIcon,
   LockClosedIcon,
   PuzzlePieceIcon,
@@ -40,7 +40,7 @@ export const ProfileNavbar = () => {
           )}
           href={reverse("lectures_add")}
         >
-          <BookOpenIcon className={`size-${ICON_SIZE}`} />
+          <DocumentPlusIcon className={`size-${ICON_SIZE}`} />
           Add lecture
         </a>
       </div>
