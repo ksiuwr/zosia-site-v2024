@@ -12,7 +12,7 @@ export const Template = (props: templates.AccountEdit) => {
     <Layout>
       <PageTitle>Edit account info</PageTitle>
       <CenteredFormContainer>
-        <BasicForm form={form} submitButtonLabel="Edit" />
+        <BasicForm form={form} submitButtonLabel="Save" />
       </CenteredFormContainer>
     </Layout>
   );
