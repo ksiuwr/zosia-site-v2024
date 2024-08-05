@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import AccountEdit, Login, Profile, Register, SignUp
+from .templates import AccountChangePassword, AccountEdit, Login, Profile, Register, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -20,7 +20,7 @@ from .forms import OrganizationForm, UserPreferencesAdminForm, UserPreferencesFo
 from .models import Organization, UserPreferences
 from server.utils.constants import ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS, \
     ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT, BONUS_STEP, MAX_BONUS_MINUTES, \
-    MIN_BONUS_MINUTES, PAYMENT_GROUPS, UserInternals
+    MIN_BONUS_MINUTES, UserInternals
 from server.utils.forms import errors_format
 from server.utils.views import csv_response
 
@@ -121,8 +121,13 @@ def account_edit(request):
     if form.is_valid():
         form.save()
         return redirect('accounts_profile')
-    
+
     return AccountEdit(form=form).render(request)
+
+
+class ReactChangePasswordView(PasswordChangeView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountChangePassword(form=self.get_form()).render(self.request)
 
 
 @staff_member_required

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal, NamedTuple
 from reactivated import Pick, template
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 
 from .models import UserPreferences, Zosia
 from .forms import EditUserForm, UserForm, UserPreferencesForm
@@ -22,6 +22,11 @@ class SignUp(NamedTuple):
 @template
 class AccountEdit(NamedTuple):
     form: EditUserForm
+
+
+@template
+class AccountChangePassword(NamedTuple):
+    form: PasswordChangeForm
 
 
 @template

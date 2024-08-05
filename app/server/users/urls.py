@@ -15,6 +15,7 @@ urlpatterns = [
         views.activate, name='accounts_activate'),
     path('login/', anonymous_required(views.ReactLoginView.as_view()), name='login'),
     path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
+    path('password_change/', views.ReactChangePasswordView.as_view(), name='password_change'),
     path('organizations/', views.organizations, name='organizations'),
     path('organizations/accept/', views.toggle_organization, name='toggle_organization'),
     path('organizations/add/', views.update_organization, name='organization_add'),
@@ -34,7 +35,6 @@ urlpatterns = [
     path('register/', views.register, name='user_zosia_register'),
     path('', include('django.contrib.auth.urls')),
     # NOTE: it adds following URLs:
-    # ^password_change/$ [name='password_change']
     # ^password_change/done/$ [name='password_change_done']
     # ^password_reset/$ [name='password_reset']
     # ^password_reset/done/$ [name='password_reset_done']
