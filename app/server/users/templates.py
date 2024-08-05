@@ -48,8 +48,6 @@ class Profile(NamedTuple):
         'discount_round',
         'is_student',
         'vegetarian',
-        'organization.name',
-        'organization.accepted',
         'transport.name',
         'transport.departure_time',
         'transport_baggage',
@@ -78,3 +76,5 @@ class Profile(NamedTuple):
 
     shirt_type: str
     shirt_size: str
+
+    organization: str

@@ -10,7 +10,6 @@ export interface ProfilePreferencesInfoProps {
   transportDeparture?: Date;
   transportBaggage: boolean;
   organization?: string;
-  organizationAccepted?: boolean;
 }
 
 const preferencesInfoMarkdown = ({
@@ -21,14 +20,7 @@ const preferencesInfoMarkdown = ({
   transportDeparture,
   transportBaggage,
   organization,
-  organizationAccepted,
 }: ProfilePreferencesInfoProps) => {
-  let organizationDisplay =
-    organization || "You haven't selected any organization";
-  if (organization && !organizationAccepted) {
-    organizationDisplay += " (not accepted yet)";
-  }
-
   let transportDisplay =
     transport || "You haven't selected any form of transport";
   if (transportDeparture) {
@@ -36,7 +28,7 @@ const preferencesInfoMarkdown = ({
   }
 
   return `
-Organization: **${organizationDisplay}**
+Organization: **${organization || "You haven't selected any organization"}**
 Transport: **${transportDisplay}**
 Transport baggage: **${transportBaggage ? "Yes" : "No"}**
 Vegetarian: **${vegetarian ? "Yes" : "No"}**

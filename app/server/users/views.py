@@ -67,6 +67,7 @@ def profile(request):
     room = None
     roommate = None
     rooming_start_time = None
+    organization = None
 
     if current_prefs:
         price = current_prefs.price
@@ -76,6 +77,7 @@ def profile(request):
         room = current_prefs.room
         roommate = current_prefs.roommate if room else None
         rooming_start_time = current_prefs.rooming_start_time
+        organization = current_prefs.organization
 
     return Profile(
         zosia=current_zosia,
@@ -94,7 +96,9 @@ def profile(request):
         enable_editing_preferences=enable_editing_preferences,
 
         shirt_type=shirt_type,
-        shirt_size=shirt_size
+        shirt_size=shirt_size,
+
+        organization=organization
     ).render(request)
 
 

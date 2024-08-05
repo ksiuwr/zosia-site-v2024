@@ -61,9 +61,7 @@ export const Template = (props: templates.Profile) => {
                       : undefined,
                     transportBaggage:
                       props.preferences?.transport_baggage || false,
-                    organization: props.preferences?.organization?.name,
-                    organizationAccepted:
-                      props.preferences?.organization?.accepted,
+                    organization: props.organization,
                   }}
                   registrationInfo={{
                     registrationOpen: props.registration_open,
