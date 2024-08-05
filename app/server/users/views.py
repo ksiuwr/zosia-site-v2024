@@ -1,5 +1,13 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -11,16 +19,33 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import AccountChangePassword, AccountChangePasswordDone, AccountEdit, Login, Profile, Register, SignUp
+from .templates import (
+    AccountChangePassword,
+    AccountChangePasswordDone,
+    AccountEdit,
+    AccountResetPassword,
+    AccountResetPasswordComplete,
+    AccountResetPasswordConfirm,
+    AccountResetPasswordDone,
+    Login,
+    Profile,
+    Register,
+    SignUp,
+)
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
 from .actions import ActivateUser
 from .forms import OrganizationForm, UserPreferencesAdminForm, UserPreferencesForm
 from .models import Organization, UserPreferences
-from server.utils.constants import ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS, \
-    ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT, BONUS_STEP, MAX_BONUS_MINUTES, \
-    MIN_BONUS_MINUTES, UserInternals
+from server.utils.constants import (
+    ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS,
+    ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT,
+    BONUS_STEP,
+    MAX_BONUS_MINUTES,
+    MIN_BONUS_MINUTES,
+    UserInternals,
+)
 from server.utils.forms import errors_format
 from server.utils.views import csv_response
 
@@ -133,6 +158,29 @@ class ReactChangePasswordView(PasswordChangeView):
 class ReactChangePasswordDoneView(PasswordChangeDoneView):
     def render_to_response(self, context, **response_kwargs):
         return AccountChangePasswordDone().render(self.request)
+
+
+class ReactResetPasswordView(PasswordResetView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPassword(form=self.get_form()).render(self.request)
+
+
+class ReactResetPasswordDoneView(PasswordResetDoneView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPasswordDone().render(self.request)
+
+
+class ReactResetPasswordConfirmView(PasswordResetConfirmView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPasswordConfirm(
+            validlink=self.validlink,
+            form=self.get_form()
+        ).render(self.request)
+
+
+class ReactResetPasswordCompleteView(PasswordResetCompleteView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPasswordComplete().render(self.request)
 
 
 @staff_member_required

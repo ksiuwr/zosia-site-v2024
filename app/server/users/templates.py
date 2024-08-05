@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Literal, NamedTuple
+from typing import NamedTuple
 from reactivated import Pick, template
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
 from .models import UserPreferences, Zosia
 from .forms import EditUserForm, UserForm, UserPreferencesForm
@@ -31,6 +31,27 @@ class AccountChangePassword(NamedTuple):
 
 @template
 class AccountChangePasswordDone(NamedTuple):
+    pass
+
+
+@template
+class AccountResetPassword(NamedTuple):
+    form: PasswordResetForm
+
+
+@template
+class AccountResetPasswordDone(NamedTuple):
+    pass
+
+
+@template
+class AccountResetPasswordConfirm(NamedTuple):
+    validlink: bool
+    form: SetPasswordForm
+
+
+@template
+class AccountResetPasswordComplete(NamedTuple):
     pass
 
 
