@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Login, Profile, Register, SignUp
+from .templates import AccountEdit, Login, Profile, Register, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -121,8 +121,8 @@ def account_edit(request):
     if form.is_valid():
         form.save()
         return redirect('accounts_profile')
-    ctx = {'form': form}
-    return render(request, 'users/signup.html', ctx)
+    
+    return AccountEdit(form=form).render(request)
 
 
 @staff_member_required

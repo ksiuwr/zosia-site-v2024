@@ -4,7 +4,7 @@ from reactivated import Pick, template
 from django.contrib.auth.forms import AuthenticationForm
 
 from .models import UserPreferences, Zosia
-from .forms import UserForm, UserPreferencesForm
+from .forms import EditUserForm, UserForm, UserPreferencesForm
 
 
 @template
@@ -17,6 +17,11 @@ class Login(NamedTuple):
 class SignUp(NamedTuple):
     form: UserForm
     is_signup_successful: bool = False
+
+
+@template
+class AccountEdit(NamedTuple):
+    form: EditUserForm
 
 
 @template
