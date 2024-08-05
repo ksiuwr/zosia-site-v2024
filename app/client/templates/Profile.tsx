@@ -39,8 +39,8 @@ export const Template = (props: templates.Profile) => {
               props.preferences.payment_accepted && (
                 <>
                   <ProfileRoomsSection
-                    roomName={props.room || undefined}
-                    roommate={props.roommate || undefined}
+                    roomName={props.room}
+                    roommate={props.roommate}
                     roomingStartTime={new Date(props.rooming_start_time)}
                   />
                   <div className="divider my-1"></div>
@@ -51,7 +51,7 @@ export const Template = (props: templates.Profile) => {
               <>
                 <ProfilePreferencesSection
                   preferences={{
-                    vegetarian: props.preferences?.vegetarian || false,
+                    vegetarian: props.preferences?.vegetarian,
                     shirtType: props.shirt_type,
                     shirtSize: props.shirt_size,
                     transport: props.preferences?.transport?.name,
@@ -59,8 +59,7 @@ export const Template = (props: templates.Profile) => {
                       ?.departure_time
                       ? new Date(props.preferences?.transport?.departure_time)
                       : undefined,
-                    transportBaggage:
-                      props.preferences?.transport_baggage || false,
+                    transportBaggage: props.preferences?.transport_baggage,
                     organization: props.organization,
                   }}
                   registrationInfo={{
