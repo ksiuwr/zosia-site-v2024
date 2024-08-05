@@ -12,7 +12,7 @@ export const Template = (props: templates.AccountChangePassword) => {
     <Layout>
       <PageTitle>Change password</PageTitle>
       <CenteredFormContainer>
-        <BasicForm form={form} submitButtonLabel="Edit" />
+        <BasicForm form={form} submitButtonLabel="Change password" />
       </CenteredFormContainer>
     </Layout>
   );

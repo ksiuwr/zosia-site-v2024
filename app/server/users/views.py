@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import AccountChangePassword, AccountEdit, Login, Profile, Register, SignUp
+from .templates import AccountChangePassword, AccountChangePasswordDone, AccountEdit, Login, Profile, Register, SignUp
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
@@ -128,6 +128,11 @@ def account_edit(request):
 class ReactChangePasswordView(PasswordChangeView):
     def render_to_response(self, context, **response_kwargs):
         return AccountChangePassword(form=self.get_form()).render(self.request)
+
+
+class ReactChangePasswordDoneView(PasswordChangeDoneView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountChangePasswordDone().render(self.request)
 
 
 @staff_member_required

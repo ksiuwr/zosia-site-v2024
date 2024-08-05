@@ -30,6 +30,11 @@ class AccountChangePassword(NamedTuple):
 
 
 @template
+class AccountChangePasswordDone(NamedTuple):
+    pass
+
+
+@template
 class Register(NamedTuple):
     form: UserPreferencesForm
     zosia: Pick[
