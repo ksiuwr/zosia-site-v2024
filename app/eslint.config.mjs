@@ -1,8 +1,9 @@
-import globals from "globals";
 import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 import hooksPlugin from "eslint-plugin-react-hooks";
+import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default [
   {
@@ -24,4 +25,5 @@ export default [
     },
     rules: hooksPlugin.configs.recommended.rules,
   },
+  ...pluginQuery.configs["flat/recommended"],
 ];

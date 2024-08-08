@@ -26,23 +26,28 @@ COPY manage.py ./
 
 FROM base as dev
 
+# Set environment variables for development
 ENV DJANGO_ENV="dev"
 ENV DJANGO_SETTINGS_MODULE="server.settings.dev"
 ENV NODE_ENV="development"
 ENV DB_HOST_FOR_TEST_DB="db"
 
+# Install node dependencies
 RUN npm install
 
+# Install development python dependencies
 COPY requirements.dev.txt ./
 RUN pip install --no-cache-dir -r requirements.dev.txt
 
 
 FROM base as prod
 
+# Set environment variables for production
 ENV DJANGO_ENV="prod"
 ENV DJANGO_SETTINGS_MODULE="server.settings.prod"
 ENV NODE_ENV="production"
 
+# Install node dependencies
 RUN npm install
 
 # Copy code 

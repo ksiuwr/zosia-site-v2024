@@ -5,6 +5,7 @@ import { CenteredFormContainer } from "@client/components/containers/CenteredFor
 import { BasicFormField } from "@client/components/forms/BasicFormField";
 import { BasicFormWithCustomFields } from "@client/components/forms/BasicFormWithCustomFields";
 import { AccomodationFieldGroup } from "@client/components/register/AccomodationFieldGroup";
+import { OrganizationSelector } from "@client/components/register/OrganizationSelector";
 import { CostSummary } from "@client/components/register/PriceSummary";
 import { reverse, templates, useForm } from "@reactivated";
 import React from "react";
@@ -107,14 +108,13 @@ export const Template = (props: templates.Register) => {
             </div>
           )}
 
-          <BasicFormField field={form.fields.organization} />
-          {/* TODO: Add organization button which should show a modal */}
+          <OrganizationSelector field={form.fields.organization} />
           <BasicFormField field={form.fields.transport} />
           <BasicFormField field={form.fields.transport_baggage} />
 
           <div className="divider divider-accent" />
 
-          {accomodationCheckboxesGroups.map((group, index) => (
+          {accomodationCheckboxesGroups.map((group) => (
             <AccomodationFieldGroup
               key={group.accomodation.name}
               dinnerField={group.dinner}

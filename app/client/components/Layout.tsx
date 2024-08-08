@@ -1,5 +1,11 @@
 import { Context } from "@reactivated";
-import React, { PropsWithChildren, useContext, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Helmet } from "react-helmet-async";
 import toast, { Toaster } from "react-hot-toast";
 import { CustomToast } from "./CustomToast";
@@ -8,6 +14,10 @@ import { Navbar } from "./navbar/Navbar";
 
 export const Layout = ({ children }: PropsWithChildren) => {
   const { messages, STATIC_URL } = useContext(Context);
+
+  // React query docs recommend keeping the query client in React state
+  // for server side rendering.
+  const [queryClient] = useState(() => new QueryClient());
 
   useEffect(() => {
     while (messages.length > 0) {
@@ -52,11 +62,13 @@ export const Layout = ({ children }: PropsWithChildren) => {
         />
       </Helmet>
       <Toaster position="top-center" />
-      <div className="flex h-dvh flex-col">
-        <Navbar />
-        <main className="grow bg-base-100">{children}</main>
-        <Footer />
-      </div>
+      <QueryClientProvider client={queryClient}>
+        <div className="flex h-dvh flex-col">
+          <Navbar />
+          <main className="grow bg-base-100">{children}</main>
+          <Footer />
+        </div>
+      </QueryClientProvider>
     </>
   );
 };

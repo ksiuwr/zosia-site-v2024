@@ -209,8 +209,8 @@ def cli():
         help="do not use cache when building container images")
 
     bash_parser = subparsers.add_parser(
-        "bash", aliases=["shell", "sh"],
-        help=f"run Bash shell inside website container")
+        "shell", aliases=["sh"],
+        help=f"run sh shell inside website container")
 
     postgres_parser = subparsers.add_parser(
         "postgres", aliases=["psql"], add_help=False,
@@ -308,8 +308,8 @@ def cli():
     elif args.command in ["test", "t"]:
         run_tests(args.module, args.verbose, args.no_build_frontend)
 
-    elif args.command in ["bash", "shell", "sh"]:
-        docker_exec(["/bin/bash"], WEB_CONTAINER_NAME)
+    elif args.command in ["shell", "sh"]:
+        docker_exec(["/bin/sh"], WEB_CONTAINER_NAME)
 
     elif args.command in ["postgres", "psql"]:
         docker_exec(["psql", "-U", "zosia"], DB_CONTAINER_NAME)
