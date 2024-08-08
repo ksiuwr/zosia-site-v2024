@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const isProduction = process.env.NODE_ENV === "production";
-
 export const zosiaApi = axios.create({
-  baseURL: isProduction ? "https://zosia.org/api/" : "http://0.0.0.0:8000/api/",
+  // '/' in front of baseURL means that it will be appended to the current domain
+  // so if the current domain is http://localhost:8000, then the baseURL will be http://localhost:8000/api/
+  // and for https://zosia.org it will be https://zosia.org/api/
+  baseURL: "/api/",
   withCredentials: true,
   xsrfCookieName: "csrftoken",
   xsrfHeaderName: "X-CSRFTOKEN",
