@@ -8,6 +8,7 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
+import { ThemeToggle } from "../ThemeToggle";
 import { TopNavDropdownLink } from "./TopNavDropdownLink";
 import { TopNavLink } from "./TopNavLink";
 
@@ -77,6 +78,9 @@ export const DesktopMenu = () => {
           <TopNavLink to={reverse("accounts_signup")}>Sign up</TopNavLink>
         </>
       )}
+      <li>
+        <ThemeToggle />
+      </li>
     </ul>
   );
 };

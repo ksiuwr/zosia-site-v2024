@@ -1,3 +1,4 @@
+import { themeInitScript } from "@client/utils/themes";
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, {
@@ -38,7 +39,8 @@ export const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Helmet>
-        <html data-theme="light" />
+        <html />
+        <script>{themeInitScript}</script>
         <meta content="text/html; charset=UTF-8" httpEquiv="Content-Type" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>Zimowy Obóz Studentów Informatyki A</title>
