@@ -27,3 +27,9 @@ class BoardgamesMyGames(NamedTuple):
 @template
 class BoardgamesAdd(NamedTuple):
     form: BoardgameForm
+
+
+@template
+class BoardgamesVote(NamedTuple):
+    boardgames: List[Pick[Boardgame, Literal["id", "name", "url"]]]
+    boardgame_ids_vote_for: List[int]

@@ -13,7 +13,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count
 from urllib.request import urlopen
 
-from .templates import BoardgamesAdd, BoardgamesHome, BoardgamesMyGames
+from .templates import BoardgamesAdd, BoardgamesHome, BoardgamesMyGames, BoardgamesVote
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
@@ -125,11 +125,10 @@ def create(request):
 @login_required
 @require_http_methods(['GET'])
 def vote(request):
-    votes = Vote.objects.filter(
-        user=request.user).values_list('boardgame', flat=True)
-    ctx = {'boardgames': Boardgame.objects.all().order_by('name'),
-           'user_voted': list(votes)}
-    return render(request, 'boardgames/vote.html', ctx)
+    votes = Vote.objects.filter(user=request.user).values_list('boardgame', flat=True)
+    boardgames = Boardgame.objects.all().order_by('name')
+
+    return BoardgamesVote(boardgames=boardgames, boardgame_ids_vote_for=list(votes)).render(request)
 
 
 @login_required
@@ -164,7 +163,15 @@ def vote_edit(request):
     Vote.objects.filter(user=request.user).delete()
     Vote.objects.bulk_create(newVotes)
 
-    return JsonResponse({'new_ids': new_ids})
+    if (len(new_ids) == 0):
+        messages.success(request, "Votes were successfully reset.")
+    else:
+        games_voted_for = ', '.join(
+            map(lambda boardgame: '<strong>"' + boardgame.name + '"</strong>', list(boardgames))
+        )
+        messages.success(request, "Voted for boardgames: {}.".format(games_voted_for))
+
+    return redirect(reverse('boardgames_index'))
 
 
 @staff_member_required
