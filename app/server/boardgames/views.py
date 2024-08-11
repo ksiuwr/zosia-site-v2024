@@ -13,7 +13,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count
 from urllib.request import urlopen
 
-from .templates import BoardgamesHome, BoardgamesMyGames
+from .templates import BoardgamesAdd, BoardgamesHome, BoardgamesMyGames
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
@@ -94,13 +94,13 @@ def get_id(url):
 @require_http_methods(['GET', 'POST'])
 def create(request):
     user_boardgames = Boardgame.objects.filter(user=request.user)
-    ctx = {'form': BoardgameForm(request.POST or None)}
+    form = BoardgameForm(request.POST or None)
 
     if request.method == 'POST':
         if user_boardgames.count() >= MAX_NUMBER_OF_GAMES:
             messages.error(request, _(f"Number of boardgames per account exceeded (max: {MAX_NUMBER_OF_GAMES})."))
-        elif ctx['form'].is_valid():
-            new_url = ctx['form'].cleaned_data['url']
+        elif form.is_valid():
+            new_url = form.cleaned_data['url']
             if not validate_game_url(new_url):
                 messages.error(request, _("This is not a valid boardgame url"))
             else:
@@ -119,7 +119,7 @@ def create(request):
         else:
             messages.error(request, _("Can't add boardgame - form is not valid."))
 
-    return render(request, 'boardgames/create.html', ctx)
+    return BoardgamesAdd(form=form).render(request)
 
 
 @login_required

@@ -1,6 +1,7 @@
 from typing import Literal, NamedTuple, List
 from reactivated import Pick, template
 
+from .forms import BoardgameForm
 from .models import Boardgame
 
 
@@ -21,3 +22,8 @@ class BoardgamesMyGames(NamedTuple):
     user_boardgames: List[Pick[Boardgame, Literal["id", "name", "accepted", "url"]]]
     votes: List[BoardgameVotes]
     can_add: bool
+
+
+@template
+class BoardgamesAdd(NamedTuple):
+    form: BoardgameForm
