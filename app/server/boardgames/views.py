@@ -13,6 +13,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count
 from urllib.request import urlopen
 
+from .templates import BoardgamesHome
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
@@ -27,7 +28,7 @@ MAX_NUMBER_OF_GAMES = 3
 def index(request):
     boardgames = Boardgame.objects.all().annotate(
         votes=Count('boardgame_votes')).order_by('-votes', 'name')
-    
+
     try:
         current_zosia = Zosia.objects.get(active=True)
     except Zosia.DoesNotExist:
@@ -38,12 +39,13 @@ def index(request):
         preferences = UserPreferences.objects.get(
             zosia=current_zosia, user=request.user)
     except (UserPreferences.DoesNotExist):
-        ctx = {'boardgames': boardgames}
+        paid = False
     else:
         paid = preferences.payment_accepted
-        ctx = {'boardgames': boardgames,
-               'paid': paid}
-    return render(request, 'boardgames/index.html', ctx)
+
+    votes = [{"name": name, "votes": num_votes} for name, num_votes in boardgames.values_list('name', 'votes')]
+
+    return BoardgamesHome(boardgames=boardgames, paid=paid, votes=votes).render(request)
 
 
 @login_required

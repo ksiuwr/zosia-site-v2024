@@ -15,10 +15,10 @@ export const ProfileNavbar = () => {
 
   return (
     <div className="my-6">
-      <div className="join flex justify-evenly lg:flex-row">
+      <div className="join flex justify-evenly">
         <a
           className={clsx(
-            "btn btn-outline join-item h-fit grow flex-col py-4",
+            "btn btn-outline join-item h-fit w-1/3 grow flex-col py-4",
             user.is_staff && "rounded-bl-none",
           )}
           href={reverse("boardgames_index")}
@@ -27,7 +27,7 @@ export const ProfileNavbar = () => {
           Boardgames
         </a>
         <a
-          className="btn btn-outline join-item h-fit grow flex-col px-8 py-4"
+          className="btn btn-outline join-item h-fit w-1/3 grow flex-col py-4"
           href={reverse("rooms_index")}
         >
           <HomeModernIcon className={ICON_CSS} />
@@ -35,7 +35,7 @@ export const ProfileNavbar = () => {
         </a>
         <a
           className={clsx(
-            "btn btn-outline join-item h-fit grow flex-col py-4",
+            "btn btn-outline join-item h-fit w-1/3 grow flex-col py-4",
             user.is_staff && "rounded-br-none",
           )}
           href={reverse("lectures_add")}
