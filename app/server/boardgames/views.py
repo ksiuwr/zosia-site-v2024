@@ -13,7 +13,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count
 from urllib.request import urlopen
 
-from .templates import BoardgamesHome
+from .templates import BoardgamesHome, BoardgamesMyGames
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
@@ -28,6 +28,7 @@ MAX_NUMBER_OF_GAMES = 3
 def index(request):
     boardgames = Boardgame.objects.all().annotate(
         votes=Count('boardgame_votes')).order_by('-votes', 'name')
+    votes = [{"name": name, "votes": num_votes} for name, num_votes in boardgames.values_list('name', 'votes')]
 
     try:
         current_zosia = Zosia.objects.get(active=True)
@@ -43,9 +44,7 @@ def index(request):
     else:
         paid = preferences.payment_accepted
 
-    votes = [{"name": name, "votes": num_votes} for name, num_votes in boardgames.values_list('name', 'votes')]
-
-    return BoardgamesHome(boardgames=boardgames, paid=paid, votes=votes).render(request)
+    return BoardgamesHome(boardgames=boardgames, votes=votes, paid=paid).render(request)
 
 
 @login_required
@@ -53,10 +52,10 @@ def index(request):
 def my_boardgames(request):
     user_boardgames = Boardgame.objects.filter(user=request.user).annotate(
         votes=Count('boardgame_votes')).order_by('-votes', 'name')
+    votes = [{"name": name, "votes": num_votes} for name, num_votes in user_boardgames.values_list('name', 'votes')]
     can_add = user_boardgames.count() < MAX_NUMBER_OF_GAMES
-    ctx = {'user_boardgames': user_boardgames,
-           'can_add': can_add}
-    return render(request, 'boardgames/my_boardgames.html', ctx)
+
+    return BoardgamesMyGames(user_boardgames=user_boardgames, votes=votes, can_add=can_add).render(request)
 
 
 def validate_game_url(url: str) -> bool:
@@ -214,5 +213,6 @@ def boardgame_delete(request):
         )
 
     boardgame.delete()
-    return JsonResponse({'msg': "Deleted the boardgame: {}".format(
-        escape(boardgame))})
+
+    messages.success(request, "Deleted boardgame: {}".format(escape(boardgame)))
+    return redirect(reverse('my_boardgames'))

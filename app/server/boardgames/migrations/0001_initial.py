@@ -17,7 +17,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200, verbose_name='Name of the boardgame')),
-                ('votes_amount', models.PositiveSmallIntegerField(default=0)),
                 ('accepted', models.BooleanField(default=False)),
                 ('url', models.CharField(max_length=200, verbose_name='Url to boardgamegeek.com')),
             ],
