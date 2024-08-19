@@ -5,6 +5,7 @@ from typing import TypedDict
 
 
 class UserInfo(TypedDict):
+    id: int
     is_authenticated: bool
     is_staff: bool
     email: str
@@ -19,6 +20,7 @@ class UserContext(TypedDict):
 def user_context(request: HttpRequest) -> UserContext:
     return {
         "user": {
+            "id": request.user.id if not request.user.is_anonymous else None,
             "is_authenticated": request.user.is_authenticated,
             "is_staff": request.user.is_staff,
             "email": request.user.email if not request.user.is_anonymous else "",

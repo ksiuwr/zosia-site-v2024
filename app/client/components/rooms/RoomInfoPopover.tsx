@@ -25,12 +25,12 @@ export const RoomInfoPopover = ({
 }: RoomInfoPopoverProps) => {
   return (
     <Popover>
-      <PopoverButton className="btn btn-ghost">
-        More <ChevronUpIcon className="size-5" />
+      <PopoverButton className="btn btn-ghost flex-nowrap">
+        More <ChevronUpIcon className="size-4" />
       </PopoverButton>
       <PopoverPanel
         transition
-        className="absolute bottom-0 left-0 z-50 h-full w-full transition duration-100 ease-out data-[closed]:scale-90 data-[closed]:opacity-0"
+        className="absolute bottom-0 left-0 z-50 h-full w-full origin-bottom-left transition duration-200 ease-in-out data-[closed]:scale-0 data-[closed]:opacity-0"
       >
         <div className="card card-compact h-full min-h-fit w-full bg-base-100">
           <CloseButton className="absolute bottom-0 left-0 h-full w-full cursor-default"></CloseButton>

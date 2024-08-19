@@ -14,6 +14,7 @@ class Rooms(NamedTuple):
                 "description",
                 "available_beds_single",
                 "available_beds_double",
+                "members.id",
                 "members.first_name",
                 "members.last_name",
                 "lock.expiration_date",

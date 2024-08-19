@@ -6,8 +6,6 @@ import { templates } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.Rooms) => {
-  console.log(props);
-
   return (
     <Layout>
       <PageTitle>Rooms</PageTitle>
@@ -19,6 +17,7 @@ export const Template = (props: templates.Rooms) => {
               name={room.name}
               description={room.description}
               members={room.members.map((member) => ({
+                id: member.id,
                 firstName: member.first_name,
                 lastName: member.last_name,
               }))}

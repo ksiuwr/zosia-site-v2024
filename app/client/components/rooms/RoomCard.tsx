@@ -1,8 +1,15 @@
-import React from "react";
+import {
+  ArrowRightStartOnRectangleIcon,
+  LockClosedIcon,
+} from "@heroicons/react/24/outline";
+import { Context } from "@reactivated";
+import clsx from "clsx";
+import React, { useContext } from "react";
 import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
 
 export interface Member {
+  id: number;
   firstName: string;
   lastName: string;
 }
@@ -22,13 +29,24 @@ export const RoomCard = ({
   availableBedsSingle,
   availableBedsDouble,
 }: RoomCardProps) => {
+  const { user } = useContext(Context);
+
+  const isMyRoom = members.some((member) => member.id === user.id);
+
   const availablePlaces = availableBedsSingle + availableBedsDouble * 2;
 
   return (
-    <div className="card card-bordered border-base-content bg-base-100">
+    <div
+      className={clsx(
+        "card card-bordered card-compact border-base-content bg-base-100 lg:card-normal",
+        isMyRoom && "order-first col-span-2 bg-base-300",
+      )}
+    >
       <div className="card-body">
         <div className="flex justify-between gap-x-4">
-          <h2 className="card-title whitespace-nowrap">{name}</h2>
+          <h2 className="card-title flex-col items-start lg:flex-row">
+            {isMyRoom && <span>Your room: </span>} <span>{name}</span>
+          </h2>
           <RoomMembersCount
             membersCount={members.length}
             maxMembers={availablePlaces}
@@ -43,7 +61,18 @@ export const RoomCard = ({
             availableBedsDouble={availableBedsDouble}
             description={description}
           />
-          <button className="btn btn-primary grow">Enter</button>
+          {isMyRoom ? (
+            <div className="flex grow gap-x-2">
+              <button className="btn btn-warning grow">
+                Lock <LockClosedIcon className="size-5" />
+              </button>
+              <button className="btn btn-error grow">
+                Leave <ArrowRightStartOnRectangleIcon className="size-5" />
+              </button>
+            </div>
+          ) : (
+            <button className="btn btn-primary grow">Enter</button>
+          )}
         </div>
       </div>
     </div>
