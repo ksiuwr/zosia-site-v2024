@@ -1,4 +1,4 @@
-import { CenteredContentContainer } from "@client/components/containers/CenteredContentContainer";
+import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
 import { RoomCard } from "@client/components/rooms/RoomCard";
@@ -11,7 +11,7 @@ export const Template = (props: templates.Rooms) => {
   return (
     <Layout>
       <PageTitle>Rooms</PageTitle>
-      <CenteredContentContainer>
+      <CenteredContainer>
         <div className="mb-6 flex flex-col gap-5 lg:grid lg:grid-cols-2">
           {props.rooms.map((room) => (
             <RoomCard
@@ -27,7 +27,7 @@ export const Template = (props: templates.Rooms) => {
             ></RoomCard>
           ))}
         </div>
-      </CenteredContentContainer>
+      </CenteredContainer>
     </Layout>
   );
 };

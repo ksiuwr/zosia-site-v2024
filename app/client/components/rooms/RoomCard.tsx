@@ -1,7 +1,8 @@
 import React from "react";
+import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
 
-interface Member {
+export interface Member {
   firstName: string;
   lastName: string;
 }
@@ -30,12 +31,18 @@ export const RoomCard = ({
           <h2 className="card-title whitespace-nowrap">{name}</h2>
           <RoomMembersCount
             membersCount={members.length}
-            maxMembers={availablePlaces + 5}
+            maxMembers={availablePlaces}
           />
         </div>
-        <div className="divider my-1"></div>
+        <div className="divider my-5"></div>
         <div className="flex gap-x-4">
-          <button className="btn btn-ghost grow">More</button>
+          <RoomInfoPopover
+            roomName={name}
+            members={members}
+            availableBedsSingle={availableBedsSingle}
+            availableBedsDouble={availableBedsDouble}
+            description={description}
+          />
           <button className="btn btn-primary grow">Enter</button>
         </div>
       </div>
