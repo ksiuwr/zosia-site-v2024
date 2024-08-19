@@ -23,7 +23,7 @@ export const LectureDurationSelect = ({
     queryFn: async ({ queryKey }) => {
       const lecture = queryKey[1];
       if (lecture === "") {
-        return Promise.resolve({
+        return Promise.resolve<LectureDurations>({
           durations: ["Please choose lecture type first!"],
         });
       }
@@ -31,9 +31,8 @@ export const LectureDurationSelect = ({
       const res = await zosiaApi.get(zosiaApiRoutes.addLectureDurations, {
         params: { lecture_type: lecture },
       });
-      return res.data;
+      return res.data as LectureDurations;
     },
-    initialData: { durations: ["Please choose lecture type first!"] },
   });
 
   if (isPending)
@@ -50,8 +49,6 @@ export const LectureDurationSelect = ({
       </Select>
     );
 
-  const durations = data as LectureDurations;
-
   return (
     <Select
       name={field.name}
@@ -60,7 +57,7 @@ export const LectureDurationSelect = ({
       value={field.value ?? ""}
       onChange={(e) => field.handler(e.target.value)}
     >
-      {durations.durations.map((duration) => (
+      {data.durations.map((duration) => (
         <option key={duration} value={duration}>
           {duration}
         </option>
