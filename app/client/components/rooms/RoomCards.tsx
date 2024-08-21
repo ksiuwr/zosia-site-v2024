@@ -1,6 +1,13 @@
-import { RoomAPIData, zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
+import {
+  apiErrorMessageHTML,
+  RoomAPIData,
+  zosiaApi,
+  zosiaApiRoutes,
+} from "@client/utils/zosiaApi";
 import { Context } from "@reactivated";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import parse from "html-react-parser";
 import React, { useContext } from "react";
 import { Alert } from "../alert/Alert";
 import { RoomCard } from "./RoomCard";
@@ -58,7 +65,10 @@ export const RoomCards = ({ initialRoomData }: RoomCardsProps) => {
   }
 
   if (isError) {
-    return <Alert type="error">Error: {error.message}</Alert>;
+    const errorMessage = axios.isAxiosError(error)
+      ? parse(apiErrorMessageHTML(error))
+      : error.message;
+    return <Alert type="error">{errorMessage}</Alert>;
   }
 
   const userIsInSomeRoomAlready = data.some((room) =>

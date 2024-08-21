@@ -3,7 +3,7 @@ import { CustomToast } from "@client/components/CustomToast";
 import axios from "axios";
 import React from "react";
 import toast from "react-hot-toast";
-import { apiErrorMessage } from "./zosiaApi";
+import { apiErrorMessageHTML } from "./zosiaApi";
 
 export const customToast = (message: string, levelTag: AlertType) => {
   toast.custom((t) => (
@@ -24,7 +24,7 @@ export const errorToast = (message: string) => {
 
 export const apiErrorToast = (error: Error) => {
   if (axios.isAxiosError(error)) {
-    errorToast(apiErrorMessage(error));
+    errorToast(apiErrorMessageHTML(error));
   } else {
     errorToast(error.message);
   }

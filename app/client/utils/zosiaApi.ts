@@ -34,18 +34,14 @@ export const zosiaApiRoutes = {
   roomMember: (roomId: number) => `api/v2/rooms/${roomId}/member/`,
 };
 
-export const apiErrorMessage = (error: AxiosError) => {
+export const apiErrorMessageHTML = (error: AxiosError) => {
   const responseData = error.response?.data;
 
   if (typeof responseData === "string") {
     return escapeHtml(responseData);
   }
 
-  if (
-    error.response?.status == 400 &&
-    typeof responseData === "object" &&
-    responseData !== null
-  ) {
+  if (typeof responseData === "object" && responseData !== null) {
     const infos = Object.entries(responseData).map((e) => {
       const msg = Array.isArray(e[1])
         ? e[1].map(escapeHtml).join("<br/>")
