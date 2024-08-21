@@ -1,4 +1,5 @@
 import { themeInitScript } from "@client/utils/themes";
+import { customToast } from "@client/utils/toast";
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, {
@@ -8,8 +9,7 @@ import React, {
   useState,
 } from "react";
 import { Helmet } from "react-helmet-async";
-import toast, { Toaster } from "react-hot-toast";
-import { CustomToast } from "./CustomToast";
+import { Toaster } from "react-hot-toast";
 import { Footer } from "./Footer";
 import { Navbar } from "./navbar/Navbar";
 
@@ -25,13 +25,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
       const message = messages.pop();
 
       if (message) {
-        toast.custom((t) => (
-          <CustomToast
-            isToastVisible={t.visible}
-            levelTag={message.level_tag}
-            message={message.message}
-          />
-        ));
+        customToast(message.message, message.level_tag);
       }
     }
   }, [messages]);
@@ -70,6 +64,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
           <main className="grow bg-base-100">{children}</main>
           <Footer />
         </div>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </>
   );

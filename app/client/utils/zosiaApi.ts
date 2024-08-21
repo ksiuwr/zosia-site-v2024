@@ -1,5 +1,21 @@
 import { reverse } from "@reactivated";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+
+export interface RoomAPIData {
+  id: number;
+  name: string;
+  description: string;
+  members: {
+    user: {
+      id: number;
+      first_name: string;
+      last_name: string;
+    };
+    joined_at: string;
+  }[];
+  available_beds_single: number;
+  available_beds_double: number;
+}
 
 export const zosiaApi = axios.create({
   // '/' in baseURL resolves to the current domain
@@ -14,4 +30,49 @@ export const zosiaApi = axios.create({
 export const zosiaApiRoutes = {
   organizations: "api/v1/users/organizations/",
   addLectureDurations: reverse("load_durations"),
+  rooms: "api/v2/rooms/",
+  roomMember: (roomId: number) => `api/v2/rooms/${roomId}/member/`,
+};
+
+export const apiErrorMessage = (error: AxiosError) => {
+  const responseData = error.response?.data;
+
+  if (typeof responseData === "string") {
+    return escapeHtml(responseData);
+  }
+
+  if (
+    error.response?.status == 400 &&
+    typeof responseData === "object" &&
+    responseData !== null
+  ) {
+    const infos = Object.entries(responseData).map((e) => {
+      const msg = Array.isArray(e[1])
+        ? e[1].map(escapeHtml).join("<br/>")
+        : escapeHtml(e[1] as string);
+
+      return (
+        "<span><strong>" + escapeHtml(e[0]) + "</strong><br/>" + msg + "</span>"
+      );
+    });
+
+    return "<p>" + infos.join("<br/><br/>") + "</p>";
+  }
+
+  return "There was an internal error with your request. Please contact site administrators.";
+};
+
+const escapeHtml = (input: string) => {
+  const mapping = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  };
+
+  return input.replace(
+    /[&<>"']/g,
+    (match) => mapping[match as keyof typeof mapping],
+  );
 };

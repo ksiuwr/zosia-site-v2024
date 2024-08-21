@@ -131,11 +131,12 @@ class Room(models.Model):
                                   code="invalid",
                                   params={"room": self})
 
-        # Remove user from previous room
+        # Ensure user is not already in a room
         prev_room = user.room_of_user.all().first()
-
         if prev_room is not None:
-            prev_room.leave(user)
+            raise ValidationError(_("Cannot join %(room)s, user is already in a room."),
+                                  code="invalid",
+                                  params={"room": self})
 
         self.members.add(user)
         self.save()

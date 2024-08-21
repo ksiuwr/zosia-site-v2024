@@ -6,11 +6,11 @@ import {
 } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { Member } from "./RoomCard";
+import { RoomMember } from "./RoomCards";
 
 interface RoomInfoPopoverProps {
   roomName: string;
-  members: Member[];
+  members: RoomMember[];
   availableBedsSingle: number;
   availableBedsDouble: number;
   description: string;

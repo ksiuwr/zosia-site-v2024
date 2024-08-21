@@ -10,6 +10,7 @@ class Rooms(NamedTuple):
         Pick[
             Room,
             Literal[
+                "id",
                 "name",
                 "description",
                 "available_beds_single",

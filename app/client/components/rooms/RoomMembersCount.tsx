@@ -4,19 +4,19 @@ import React from "react";
 
 interface RoomMembersCountProps {
   membersCount: number;
-  maxMembers: number;
+  availablePlaces: number;
 }
 
 export const RoomMembersCount = ({
   membersCount,
-  maxMembers,
+  availablePlaces,
 }: RoomMembersCountProps) => {
   return (
     <div className="flex flex-wrap">
       {Array.from(Array(membersCount).keys()).map((i) => (
         <UserIconSolid key={i} className="size-6" />
       ))}
-      {Array.from(Array(maxMembers - membersCount).keys()).map((i) => (
+      {Array.from(Array(availablePlaces).keys()).map((i) => (
         <UserIconOutline key={i} className="size-6" />
       ))}
     </div>
