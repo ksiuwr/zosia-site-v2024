@@ -107,6 +107,10 @@ export const RoomCard = ({
             leaveRoom={leaveRoom}
             lockRoom={lockRoom}
             unlockRoom={unlockRoom}
+            enterRoomPending={joinRoomMutation.isPending}
+            leaveRoomPending={leaveRoomMutation.isPending}
+            lockRoomPending={lockRoomMutation.isPending}
+            unlockRoomPending={unlockRoomMutation.isPending}
           />
         </div>
       </div>

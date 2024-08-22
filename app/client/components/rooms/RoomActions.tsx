@@ -5,6 +5,7 @@ import {
   LockOpenIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
+import { LoadingContentSpinner } from "../LoadingContentSpinner";
 
 const ICON_CSS = "size-5";
 
@@ -17,6 +18,10 @@ interface RoomActionsProps {
   leaveRoom: () => void;
   lockRoom: () => void;
   unlockRoom: () => void;
+  enterRoomPending: boolean;
+  leaveRoomPending: boolean;
+  lockRoomPending: boolean;
+  unlockRoomPending: boolean;
 }
 
 export const RoomActions = ({
@@ -28,24 +33,46 @@ export const RoomActions = ({
   leaveRoom,
   lockRoom,
   unlockRoom,
+  enterRoomPending,
+  leaveRoomPending,
+  lockRoomPending,
+  unlockRoomPending,
 }: RoomActionsProps) => {
   if (isMyRoom) {
     return (
       <div className="flex grow gap-x-2">
         {isLocked && canUnlock && (
-          <button className="btn btn-warning grow" onClick={unlockRoom}>
-            Unlock <LockOpenIcon className={ICON_CSS} />
+          <button
+            className="btn btn-warning grow"
+            onClick={unlockRoom}
+            disabled={unlockRoomPending}
+          >
+            <LoadingContentSpinner isLoading={unlockRoomPending}>
+              Unlock <LockOpenIcon className={ICON_CSS} />
+            </LoadingContentSpinner>
           </button>
         )}
 
         {!isLocked && (
-          <button className="btn btn-warning grow" onClick={lockRoom}>
-            Lock <LockClosedIcon className={ICON_CSS} />
+          <button
+            className="btn btn-warning grow"
+            onClick={lockRoom}
+            disabled={lockRoomPending}
+          >
+            <LoadingContentSpinner isLoading={lockRoomPending}>
+              Lock <LockClosedIcon className={ICON_CSS} />
+            </LoadingContentSpinner>
           </button>
         )}
 
-        <button className="btn btn-error grow" onClick={leaveRoom}>
-          Leave <ArrowRightStartOnRectangleIcon className={ICON_CSS} />
+        <button
+          className="btn btn-error grow"
+          onClick={leaveRoom}
+          disabled={leaveRoomPending}
+        >
+          <LoadingContentSpinner isLoading={leaveRoomPending}>
+            Leave <ArrowRightStartOnRectangleIcon className={ICON_CSS} />
+          </LoadingContentSpinner>
         </button>
       </div>
     );
@@ -54,10 +81,12 @@ export const RoomActions = ({
   return (
     <button
       className="btn btn-primary grow"
-      disabled={!canEnter}
+      disabled={!canEnter || enterRoomPending}
       onClick={enterRoom}
     >
-      Enter <ArrowRightEndOnRectangleIcon className={ICON_CSS} />
+      <LoadingContentSpinner isLoading={enterRoomPending}>
+        Enter <ArrowRightEndOnRectangleIcon className={ICON_CSS} />
+      </LoadingContentSpinner>
     </button>
   );
 };

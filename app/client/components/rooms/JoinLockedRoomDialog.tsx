@@ -3,6 +3,7 @@ import { UseMutationResult } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import React from "react";
 import { CustomDialog } from "../CustomDialog";
+import { LoadingContentSpinner } from "../LoadingContentSpinner";
 import { ApiErrorMessage } from "./ApiErrorMessage";
 
 interface JoinLockedRoomDialogProps {
@@ -53,11 +54,9 @@ export const JoinLockedRoomDialog = ({
           type="submit"
           disabled={joinRoomMutation.isPending}
         >
-          {joinRoomMutation.isPending ? (
-            <span className="loading loading-spinner"></span>
-          ) : (
-            <span>Enter room</span>
-          )}
+          <LoadingContentSpinner isLoading={joinRoomMutation.isPending}>
+            Enter room
+          </LoadingContentSpinner>
         </button>
 
         {joinRoomMutation.isError && (

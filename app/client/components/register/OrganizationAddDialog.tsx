@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { CustomDialog } from "../CustomDialog";
+import { LoadingContentSpinner } from "../LoadingContentSpinner";
 
 interface OrganizationAddDialogProps {
   dialogOpen: boolean;
@@ -60,11 +61,9 @@ export const OrganizationAddDialog = ({
           type="submit"
           disabled={addOrgMutation.isPending}
         >
-          {addOrgMutation.isPending ? (
-            <span className="loading loading-spinner"></span>
-          ) : (
-            <span>Add organization</span>
-          )}
+          <LoadingContentSpinner isLoading={addOrgMutation.isPending}>
+            Add organization
+          </LoadingContentSpinner>
         </button>
 
         {addOrgMutation.isError && (
