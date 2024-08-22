@@ -6,6 +6,7 @@ import {
 } from "@client/utils/zosiaApi";
 import { Context } from "@reactivated";
 import { useQuery } from "@tanstack/react-query";
+import { parseISO } from "date-fns";
 import parse from "html-react-parser";
 import React, { useContext } from "react";
 import { Alert } from "../alert/Alert";
@@ -16,6 +17,11 @@ export interface RoomData {
   name: string;
   description: string;
   members: RoomMember[];
+  lock?: {
+    user: RoomMember;
+    password?: string;
+    expirationDate: Date;
+  };
   availableBedsSingle: number;
   availableBedsDouble: number;
 }
@@ -48,6 +54,17 @@ export const RoomCards = ({ initialRoomData }: RoomCardsProps) => {
           firstName: member.user.first_name,
           lastName: member.user.last_name,
         })),
+        lock: room.lock
+          ? {
+              user: {
+                id: room.lock.user.id,
+                firstName: room.lock.user.first_name,
+                lastName: room.lock.user.last_name,
+              },
+              password: room.lock.password ?? undefined,
+              expirationDate: parseISO(room.lock.expiration_date),
+            }
+          : undefined,
         availableBedsSingle: room.available_beds_single,
         availableBedsDouble: room.available_beds_double,
       }));

@@ -6,15 +6,22 @@ export interface RoomAPIData {
   name: string;
   description: string;
   members: {
-    user: {
-      id: number;
-      first_name: string;
-      last_name: string;
-    };
+    user: RoomAPIUserData;
     joined_at: string;
   }[];
+  lock: {
+    user: RoomAPIUserData;
+    password: string | null;
+    expiration_date: string;
+  } | null;
   available_beds_single: number;
   available_beds_double: number;
+}
+
+interface RoomAPIUserData {
+  id: number;
+  first_name: string;
+  last_name: string;
 }
 
 export const zosiaApi = axios.create({
@@ -32,6 +39,7 @@ export const zosiaApiRoutes = {
   addLectureDurations: reverse("load_durations"),
   rooms: "api/v2/rooms/",
   roomMember: (roomId: number) => `api/v2/rooms/${roomId}/member/`,
+  lockRoom: (roomId: number) => `api/v2/rooms/${roomId}/lock/`,
 };
 
 export const apiErrorMessageHTML = (error: Error) => {

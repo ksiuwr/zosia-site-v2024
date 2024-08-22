@@ -18,6 +18,9 @@ class Rooms(NamedTuple):
                 "members.id",
                 "members.first_name",
                 "members.last_name",
+                "lock.user.id",
+                "lock.user.first_name",
+                "lock.user.last_name",
                 "lock.expiration_date",
             ],
         ]

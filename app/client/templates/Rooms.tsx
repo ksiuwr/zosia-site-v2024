@@ -3,6 +3,7 @@ import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
 import { RoomCards } from "@client/components/rooms/RoomCards";
 import { templates } from "@reactivated";
+import { parseISO } from "date-fns";
 import React from "react";
 
 export const Template = (props: templates.Rooms) => {
@@ -20,6 +21,18 @@ export const Template = (props: templates.Rooms) => {
               firstName: member.first_name,
               lastName: member.last_name,
             })),
+            lock: room.lock
+              ? {
+                  user: {
+                    id: room.lock.user.id,
+                    firstName: room.lock.user.first_name,
+                    lastName: room.lock.user.last_name,
+                  },
+                  // TODO: send password from backend if this lock is owned by the current user
+                  // password: room.lock.password,
+                  expirationDate: parseISO(room.lock.expiration_date),
+                }
+              : undefined,
             availableBedsSingle: room.available_beds_single,
             availableBedsDouble: room.available_beds_double,
           }))}
