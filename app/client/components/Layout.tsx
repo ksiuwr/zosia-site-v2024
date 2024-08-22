@@ -1,7 +1,7 @@
 import { themeInitScript } from "@client/utils/themes";
-import { customToast } from "@client/utils/toast";
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import parse from "html-react-parser";
 import React, {
   PropsWithChildren,
   useContext,
@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { Helmet } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
+import { showCustomToast } from "./CustomToast";
 import { Footer } from "./Footer";
 import { Navbar } from "./navbar/Navbar";
 
@@ -25,7 +26,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
       const message = messages.pop();
 
       if (message) {
-        customToast(message.message, message.level_tag);
+        showCustomToast(message.level_tag, parse(message.message));
       }
     }
   }, [messages]);

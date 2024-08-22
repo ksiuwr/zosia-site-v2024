@@ -1,19 +1,19 @@
 import { Transition } from "@headlessui/react";
-import parse from "html-react-parser";
-import React from "react";
+
+import React, { PropsWithChildren, ReactNode } from "react";
+import toast from "react-hot-toast";
 import { Alert, AlertType } from "./alert/Alert";
 
 interface CustomToastProps {
   isToastVisible: boolean;
-  message: string;
   levelTag: AlertType;
 }
 
 export const CustomToast = ({
   isToastVisible,
-  message,
   levelTag,
-}: CustomToastProps) => {
+  children,
+}: PropsWithChildren<CustomToastProps>) => {
   return (
     <Transition
       appear
@@ -26,8 +26,16 @@ export const CustomToast = ({
       leaveTo="opacity-0 scale-50"
     >
       <div className="w-fit">
-        <Alert type={levelTag}>{parse(message)}</Alert>
+        <Alert type={levelTag}>{children}</Alert>
       </div>
     </Transition>
   );
+};
+
+export const showCustomToast = (levelTag: AlertType, message: ReactNode) => {
+  toast.custom((t) => (
+    <CustomToast isToastVisible={t.visible} levelTag={levelTag}>
+      {message}
+    </CustomToast>
+  ));
 };

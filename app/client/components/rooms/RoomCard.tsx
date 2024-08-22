@@ -1,5 +1,4 @@
 import { getLocalDateTime } from "@client/utils/time";
-import { apiErrorToast, successToast } from "@client/utils/toast";
 import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
 import {
   ArrowRightEndOnRectangleIcon,
@@ -13,6 +12,8 @@ import { Context } from "@reactivated";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import React, { useContext } from "react";
+import { showCustomToast } from "../CustomToast";
+import { ApiErrorMessage } from "./ApiErrorMessage";
 import { RoomData } from "./RoomCards";
 import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
@@ -47,7 +48,7 @@ export const RoomCard = ({
   };
 
   const onMutationError = (error: Error) => {
-    apiErrorToast(error);
+    showCustomToast("error", <ApiErrorMessage error={error} />);
     console.error(error);
   };
 
@@ -60,7 +61,7 @@ export const RoomCard = ({
     },
     onSuccess: () => {
       invalidateRoomsData();
-      successToast(`You've joined room ${name}`);
+      showCustomToast("success", `You've joined room ${name}`);
     },
     onError: onMutationError,
   });
@@ -73,7 +74,7 @@ export const RoomCard = ({
     },
     onSuccess: () => {
       invalidateRoomsData();
-      successToast(`You've left room ${name}`);
+      showCustomToast("success", `You've left room ${name}`);
     },
     onError: onMutationError,
   });
@@ -91,7 +92,10 @@ export const RoomCard = ({
         ? getLocalDateTime(roomData.lock.expirationDate)
         : "";
 
-      successToast(`You've locked room ${name} until ${expirationDate}.`);
+      showCustomToast(
+        "success",
+        `You've locked room ${name} until ${expirationDate}.`,
+      );
     },
     onError: onMutationError,
   });
@@ -102,8 +106,9 @@ export const RoomCard = ({
     },
     onSuccess: () => {
       invalidateRoomsData();
-      successToast(
-        `You've unlocked room ${name}.<br/>Now everybody can join the room.`,
+      showCustomToast(
+        "success",
+        `You've unlocked room ${name}. Now everybody can join it.`,
       );
     },
     onError: onMutationError,
