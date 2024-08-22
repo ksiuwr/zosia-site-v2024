@@ -17,7 +17,6 @@ from server.conferences.models import Zosia
 from .forms import UploadFileForm
 from .models import Room
 from .templates import Rooms
-from .serializers import room_to_dict
 from server.users.models import UserPreferences
 from server.utils.views import csv_response, validation_format
 
@@ -65,8 +64,9 @@ def index(request):
 
     rooms = Room.objects.all_visible().prefetch_related('members').all()
     rooms = sorted(rooms, key=lambda x: x.pk)
+    user_lock = request.user.locks.all().first()
 
-    return Rooms(rooms=rooms).render(request)
+    return Rooms(rooms=rooms, user_room_lock=user_lock).render(request)
 
 
 @staff_member_required

@@ -28,8 +28,10 @@ export const Template = (props: templates.Rooms) => {
                     firstName: room.lock.user.first_name,
                     lastName: room.lock.user.last_name,
                   },
-                  // TODO: send password from backend if this lock is owned by the current user
-                  // password: room.lock.password,
+                  password:
+                    props.user_room_lock.id === room.lock.id
+                      ? props.user_room_lock.password
+                      : undefined,
                   expirationDate: parseISO(room.lock.expiration_date),
                 }
               : undefined,

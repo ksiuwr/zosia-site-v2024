@@ -1,7 +1,7 @@
 from typing import List, Literal, NamedTuple
 from reactivated import Pick, template
 
-from .models import Room
+from .models import Room, RoomLock
 
 
 @template
@@ -18,6 +18,7 @@ class Rooms(NamedTuple):
                 "members.id",
                 "members.first_name",
                 "members.last_name",
+                "lock.id",
                 "lock.user.id",
                 "lock.user.first_name",
                 "lock.user.last_name",
@@ -25,3 +26,4 @@ class Rooms(NamedTuple):
             ],
         ]
     ]
+    user_room_lock: Pick[RoomLock, Literal["id", "password"]]

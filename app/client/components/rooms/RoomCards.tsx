@@ -33,6 +33,7 @@ export interface RoomMember {
 }
 
 interface RoomCardsProps {
+  /** This is initial room data, used during server-side rendering. */
   initialRoomData: RoomData[];
 }
 
@@ -70,6 +71,8 @@ export const RoomCards = ({ initialRoomData }: RoomCardsProps) => {
       }));
     },
     initialData: initialRoomData,
+    // With SSR, set staleTime above 0 to avoid refetching immediately on the client
+    staleTime: 60 * 1000,
   });
 
   if (isPending) {
