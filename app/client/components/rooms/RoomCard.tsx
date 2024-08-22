@@ -1,31 +1,20 @@
 import { getLocalDateTime } from "@client/utils/time";
-import { RoomAPIData, zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
-import {
-  ArrowRightEndOnRectangleIcon,
-  ArrowRightStartOnRectangleIcon,
-  LockClosedIcon,
-  LockOpenIcon,
-} from "@heroicons/react/24/outline";
 
+import { RoomData } from "@client/utils/roomData";
 import { LockClosedIcon as LockClosedIconSolid } from "@heroicons/react/24/solid";
 import { Context } from "@reactivated";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
-import { parseISO } from "date-fns";
 import React, { useContext } from "react";
-import { showCustomToast } from "../CustomToast";
-import { ApiErrorMessage } from "./ApiErrorMessage";
 import { JoinLockedRoomDialog } from "./JoinLockedRoomDialog";
-import { RoomData } from "./RoomCards";
+import { RoomActions } from "./RoomActions";
 import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
+import { useRoomMutations } from "./RoomMutations";
 
 interface RoomCardProps {
   roomData: RoomData;
   userIsInSomeRoomAlready: boolean;
 }
-
-const ICON_CSS = "size-5";
 
 export const RoomCard = ({
   roomData: {
@@ -41,80 +30,12 @@ export const RoomCard = ({
 }: RoomCardProps) => {
   const { user } = useContext(Context);
 
-  const queryClient = useQueryClient();
-
-  const invalidateRoomsData = () => {
-    queryClient.invalidateQueries({
-      queryKey: [zosiaApiRoutes.rooms],
-    });
-  };
-
-  const onMutationError = (error: Error) => {
-    showCustomToast("error", <ApiErrorMessage error={error} />);
-    console.error(error);
-  };
-
-  const joinRoomMutation = useMutation({
-    mutationFn: async (password?: string) => {
-      return await zosiaApi.post(zosiaApiRoutes.roomMember(id), {
-        user: user.id,
-        password: password,
-      });
-    },
-    onSuccess: () => {
-      invalidateRoomsData();
-      showCustomToast("success", `You've joined room ${name}`);
-    },
-    onError: onMutationError,
-  });
-
-  const leaveRoomMutation = useMutation({
-    mutationFn: async () => {
-      return await zosiaApi.delete(zosiaApiRoutes.roomMember(id), {
-        data: { user: user.id },
-      });
-    },
-    onSuccess: () => {
-      invalidateRoomsData();
-      showCustomToast("success", `You've left room ${name}`);
-    },
-    onError: onMutationError,
-  });
-
-  const lockRoomMutation = useMutation({
-    mutationFn: async () => {
-      return await zosiaApi.post<RoomAPIData>(zosiaApiRoutes.lockRoom(id), {
-        user: user.id,
-      });
-    },
-    onSuccess: (data) => {
-      invalidateRoomsData();
-      const roomData = data.data;
-      const expirationDate = roomData.lock
-        ? getLocalDateTime(parseISO(roomData.lock.expiration_date))
-        : "";
-
-      showCustomToast(
-        "success",
-        `You've locked room ${name} until ${expirationDate}.`,
-      );
-    },
-    onError: onMutationError,
-  });
-
-  const unlockRoomMutation = useMutation({
-    mutationFn: async () => {
-      return await zosiaApi.delete(zosiaApiRoutes.lockRoom(id));
-    },
-    onSuccess: () => {
-      invalidateRoomsData();
-      showCustomToast(
-        "success",
-        `You've unlocked room ${name}. Now everybody can join it.`,
-      );
-    },
-    onError: onMutationError,
-  });
+  const {
+    joinRoomMutation,
+    leaveRoomMutation,
+    lockRoomMutation,
+    unlockRoomMutation,
+  } = useRoomMutations(id, name);
 
   const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] =
     React.useState(false);
@@ -125,6 +46,7 @@ export const RoomCard = ({
 
   const isLocked = lock !== undefined && lock.expirationDate > new Date();
   const canUnlock = isLocked && lock.password !== undefined;
+  const canEnter = availablePlaces > 0 && !userIsInSomeRoomAlready;
 
   const enterRoom = () => {
     if (isLocked) {
@@ -176,33 +98,16 @@ export const RoomCard = ({
             availableBedsDouble={availableBedsDouble}
             description={description}
           />
-          {isMyRoom ? (
-            <div className="flex grow gap-x-2">
-              {isLocked ? (
-                canUnlock && (
-                  <button className="btn btn-warning grow" onClick={unlockRoom}>
-                    Unlock <LockOpenIcon className={ICON_CSS} />
-                  </button>
-                )
-              ) : (
-                <button className="btn btn-warning grow" onClick={lockRoom}>
-                  Lock <LockClosedIcon className={ICON_CSS} />
-                </button>
-              )}
-
-              <button className="btn btn-error grow" onClick={leaveRoom}>
-                Leave <ArrowRightStartOnRectangleIcon className={ICON_CSS} />
-              </button>
-            </div>
-          ) : (
-            <button
-              className="btn btn-primary grow"
-              disabled={availablePlaces <= 0 || userIsInSomeRoomAlready}
-              onClick={enterRoom}
-            >
-              Enter <ArrowRightEndOnRectangleIcon className={ICON_CSS} />
-            </button>
-          )}
+          <RoomActions
+            isMyRoom={isMyRoom}
+            isLocked={isLocked}
+            canUnlock={canUnlock}
+            canEnter={canEnter}
+            enterRoom={enterRoom}
+            leaveRoom={leaveRoom}
+            lockRoom={lockRoom}
+            unlockRoom={unlockRoom}
+          />
         </div>
       </div>
       <JoinLockedRoomDialog

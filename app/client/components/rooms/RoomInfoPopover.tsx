@@ -1,3 +1,4 @@
+import { RoomMember } from "@client/utils/roomData";
 import {
   CloseButton,
   Popover,
@@ -6,7 +7,6 @@ import {
 } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { RoomMember } from "./RoomCards";
 
 interface RoomInfoPopoverProps {
   roomName: string;
