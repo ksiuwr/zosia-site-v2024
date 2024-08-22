@@ -1,10 +1,5 @@
 import { RoomMember } from "@client/utils/roomData";
-import {
-  CloseButton,
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-} from "@headlessui/react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
@@ -33,7 +28,6 @@ export const RoomInfoPopover = ({
         className="absolute bottom-0 left-0 z-50 h-full w-full origin-bottom-left transition duration-200 ease-in-out data-[closed]:scale-0 data-[closed]:opacity-0"
       >
         <div className="card card-compact h-full min-h-fit w-full bg-base-100">
-          <CloseButton className="absolute bottom-0 left-0 h-full w-full cursor-default"></CloseButton>
           <div className="prose card-body max-w-none">
             <h3>{roomName}</h3>
             <p>
