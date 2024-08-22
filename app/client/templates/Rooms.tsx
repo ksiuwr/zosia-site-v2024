@@ -29,7 +29,7 @@ export const Template = (props: templates.Rooms) => {
                     lastName: room.lock.user.last_name,
                   },
                   password:
-                    props.user_room_lock.id === room.lock.id
+                    props.user_room_lock?.id === room.lock.id
                       ? props.user_room_lock.password
                       : undefined,
                   expirationDate: parseISO(room.lock.expiration_date),

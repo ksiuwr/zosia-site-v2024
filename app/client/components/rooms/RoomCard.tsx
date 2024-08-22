@@ -1,5 +1,5 @@
 import { getLocalDateTime } from "@client/utils/time";
-import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
+import { RoomAPIData, zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
 import {
   ArrowRightEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
@@ -11,9 +11,11 @@ import { LockClosedIcon as LockClosedIconSolid } from "@heroicons/react/24/solid
 import { Context } from "@reactivated";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
+import { parseISO } from "date-fns";
 import React, { useContext } from "react";
 import { showCustomToast } from "../CustomToast";
 import { ApiErrorMessage } from "./ApiErrorMessage";
+import { JoinLockedRoomDialog } from "./JoinLockedRoomDialog";
 import { RoomData } from "./RoomCards";
 import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
@@ -53,10 +55,10 @@ export const RoomCard = ({
   };
 
   const joinRoomMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (password?: string) => {
       return await zosiaApi.post(zosiaApiRoutes.roomMember(id), {
         user: user.id,
-        password: "",
+        password: password,
       });
     },
     onSuccess: () => {
@@ -81,15 +83,15 @@ export const RoomCard = ({
 
   const lockRoomMutation = useMutation({
     mutationFn: async () => {
-      return await zosiaApi.post(zosiaApiRoutes.lockRoom(id), {
+      return await zosiaApi.post<RoomAPIData>(zosiaApiRoutes.lockRoom(id), {
         user: user.id,
       });
     },
     onSuccess: (data) => {
       invalidateRoomsData();
-      const roomData = data.data as RoomData;
+      const roomData = data.data;
       const expirationDate = roomData.lock
-        ? getLocalDateTime(roomData.lock.expirationDate)
+        ? getLocalDateTime(parseISO(roomData.lock.expiration_date))
         : "";
 
       showCustomToast(
@@ -114,6 +116,9 @@ export const RoomCard = ({
     onError: onMutationError,
   });
 
+  const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] =
+    React.useState(false);
+
   const isMyRoom = members.some((member) => member.id === user.id);
   const allPlaces = availableBedsSingle + availableBedsDouble * 2;
   const availablePlaces = allPlaces - members.length;
@@ -121,7 +126,13 @@ export const RoomCard = ({
   const isLocked = lock !== undefined && lock.expirationDate > new Date();
   const canUnlock = isLocked && lock.password !== undefined;
 
-  const enterRoom = () => joinRoomMutation.mutate();
+  const enterRoom = () => {
+    if (isLocked) {
+      setRoomPasswordDialogOpen(true);
+    } else {
+      joinRoomMutation.mutate("");
+    }
+  };
   const leaveRoom = () => leaveRoomMutation.mutate();
   const lockRoom = () => lockRoomMutation.mutate();
   const unlockRoom = () => unlockRoomMutation.mutate();
@@ -168,9 +179,11 @@ export const RoomCard = ({
           {isMyRoom ? (
             <div className="flex grow gap-x-2">
               {isLocked ? (
-                <button className="btn btn-warning grow" onClick={unlockRoom}>
-                  Unlock <LockOpenIcon className={ICON_CSS} />
-                </button>
+                canUnlock && (
+                  <button className="btn btn-warning grow" onClick={unlockRoom}>
+                    Unlock <LockOpenIcon className={ICON_CSS} />
+                  </button>
+                )
               ) : (
                 <button className="btn btn-warning grow" onClick={lockRoom}>
                   Lock <LockClosedIcon className={ICON_CSS} />
@@ -192,6 +205,12 @@ export const RoomCard = ({
           )}
         </div>
       </div>
+      <JoinLockedRoomDialog
+        roomName={name}
+        joinRoomMutation={joinRoomMutation}
+        dialogOpen={roomPasswordDialogOpen}
+        closeDialog={() => setRoomPasswordDialogOpen(false)}
+      />
     </div>
   );
 };

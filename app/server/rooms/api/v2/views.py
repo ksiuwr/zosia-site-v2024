@@ -50,7 +50,7 @@ class RoomViewSet(ModelViewSet):
         sender = self.request.user
 
         return Room.objects.all() if sender.is_staff else \
-            Room.objects.all_visible_with_member(sender)
+            Room.objects.all_visible()
 
     @action(detail=True, methods=["POST"])
     def hide(self, request, pk):
