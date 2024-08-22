@@ -6,7 +6,6 @@ import {
 } from "@client/utils/zosiaApi";
 import { Context } from "@reactivated";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import parse from "html-react-parser";
 import React, { useContext } from "react";
 import { Alert } from "../alert/Alert";
@@ -65,9 +64,7 @@ export const RoomCards = ({ initialRoomData }: RoomCardsProps) => {
   }
 
   if (isError) {
-    const errorMessage = axios.isAxiosError(error)
-      ? parse(apiErrorMessageHTML(error))
-      : error.message;
+    const errorMessage = parse(apiErrorMessageHTML(error));
     return <Alert type="error">{errorMessage}</Alert>;
   }
 

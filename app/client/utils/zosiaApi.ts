@@ -34,7 +34,15 @@ export const zosiaApiRoutes = {
   roomMember: (roomId: number) => `api/v2/rooms/${roomId}/member/`,
 };
 
-export const apiErrorMessageHTML = (error: AxiosError) => {
+export const apiErrorMessageHTML = (error: Error) => {
+  if (axios.isAxiosError(error)) {
+    return apiAxiosErrorMessageHTML(error);
+  }
+
+  return error.message;
+};
+
+const apiAxiosErrorMessageHTML = (error: AxiosError) => {
   const responseData = error.response?.data;
 
   if (typeof responseData === "string") {

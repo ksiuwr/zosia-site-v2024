@@ -1,6 +1,5 @@
 import { AlertType } from "@client/components/alert/Alert";
 import { CustomToast } from "@client/components/CustomToast";
-import axios from "axios";
 import React from "react";
 import toast from "react-hot-toast";
 import { apiErrorMessageHTML } from "./zosiaApi";
@@ -23,9 +22,5 @@ export const errorToast = (message: string) => {
 };
 
 export const apiErrorToast = (error: Error) => {
-  if (axios.isAxiosError(error)) {
-    errorToast(apiErrorMessageHTML(error));
-  } else {
-    errorToast(error.message);
-  }
+  errorToast(apiErrorMessageHTML(error));
 };
