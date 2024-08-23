@@ -4,6 +4,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { PropsWithChildren } from "react";
 
 interface CustomDialogProps {
@@ -27,14 +28,14 @@ export const CustomDialog = ({
     >
       <DialogBackdrop className="fixed inset-0 bg-black/50" />
       <div className="fixed inset-0 flex w-screen items-center justify-center">
-        <DialogPanel className="modal-box">
+        <DialogPanel className="modal-box pt-10">
           <DialogTitle className="mb-6 text-xl font-bold">{title}</DialogTitle>
 
           <button
-            className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+            className="btn btn-circle btn-ghost absolute right-0 top-0 lg:right-2 lg:top-2"
             onClick={onClose}
           >
-            ✕
+            <XMarkIcon className="size-5 lg:size-6" />
           </button>
 
           {children}
