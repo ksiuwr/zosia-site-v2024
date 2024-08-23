@@ -4,6 +4,7 @@ import {
   LockClosedIcon,
   LockOpenIcon,
 } from "@heroicons/react/24/outline";
+import clsx from "clsx";
 import React from "react";
 import { LoadingContentSpinner } from "../LoadingContentSpinner";
 
@@ -39,9 +40,12 @@ export const RoomActions = ({
   unlockRoomPending,
 }: RoomActionsProps) => {
   if (isMyRoom) {
+    const showUnlockButton = isLocked && canUnlock;
+    const showLockButton = !isLocked;
+
     return (
       <div className="flex grow gap-x-1 lg:gap-x-4">
-        {isLocked && canUnlock && (
+        {showUnlockButton && (
           <button
             className="btn btn-warning basis-1/2"
             onClick={unlockRoom}
@@ -53,7 +57,7 @@ export const RoomActions = ({
           </button>
         )}
 
-        {!isLocked && (
+        {showLockButton && (
           <button
             className="btn btn-warning basis-1/2"
             onClick={lockRoom}
@@ -66,7 +70,10 @@ export const RoomActions = ({
         )}
 
         <button
-          className="btn btn-error basis-1/2"
+          className={clsx(
+            "btn btn-error grow",
+            showUnlockButton || (showLockButton && "basis-1/2"),
+          )}
           onClick={leaveRoom}
           disabled={leaveRoomPending}
         >
