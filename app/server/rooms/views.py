@@ -21,7 +21,6 @@ from server.users.models import UserPreferences
 from server.utils.views import csv_response, validation_format
 
 
-@cache_page(60 * 15)  # Cache hard (15mins)
 @vary_on_cookie
 @login_required
 @require_http_methods(['GET'])
