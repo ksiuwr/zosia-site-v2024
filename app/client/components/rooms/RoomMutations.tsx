@@ -1,7 +1,12 @@
-import { RoomAPIData } from "@client/utils/roomData";
+import {
+  convertRoomAPIDataToRoomData,
+  RoomAPIData,
+  RoomData,
+} from "@client/utils/roomData";
 import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
 import { Context } from "@reactivated";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 import React, { useContext } from "react";
 import { showCustomToast } from "../CustomToast";
 import { ApiErrorMessage } from "./ApiErrorMessage";
@@ -11,9 +16,15 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
 
   const queryClient = useQueryClient();
 
-  const onMutationSuccess = (message: string) => {
-    queryClient.invalidateQueries({
-      queryKey: [zosiaApiRoutes.rooms],
+  const onMutationSuccess = (
+    data: AxiosResponse<RoomAPIData, unknown>,
+    message: string,
+  ) => {
+    const updatedRoom = convertRoomAPIDataToRoomData(data.data);
+    queryClient.setQueryData([zosiaApiRoutes.rooms], (oldData: RoomData[]) => {
+      return oldData.map((room) =>
+        room.id === updatedRoom.id ? updatedRoom : room,
+      );
     });
     showCustomToast("success", message);
   };
@@ -33,7 +44,8 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
         },
       );
     },
-    onSuccess: () => onMutationSuccess(`You've joined room ${roomName}.`),
+    onSuccess: (data) =>
+      onMutationSuccess(data, `You've joined room ${roomName}.`),
     onError: onMutationError,
   });
 
@@ -46,7 +58,8 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
         },
       );
     },
-    onSuccess: () => onMutationSuccess(`You've left room ${roomName}.`),
+    onSuccess: (data) =>
+      onMutationSuccess(data, `You've left room ${roomName}.`),
     onError: onMutationError,
   });
 
@@ -56,8 +69,9 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
         user: user.id,
       });
     },
-    onSuccess: () =>
+    onSuccess: (data) =>
       onMutationSuccess(
+        data,
         `You've locked room ${roomName}. Share the password with your friends.`,
       ),
     onError: onMutationError,
@@ -69,8 +83,9 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
         zosiaApiRoutes.lockRoom(roomId),
       );
     },
-    onSuccess: () =>
+    onSuccess: (data) =>
       onMutationSuccess(
+        data,
         `You've unlocked room ${roomName}. Now everybody can join it.`,
       ),
     onError: onMutationError,
