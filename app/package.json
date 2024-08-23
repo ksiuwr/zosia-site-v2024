@@ -1,16 +1,16 @@
 {
-  "name": "zosia16-site",
-  "version": "3.0.0",
+  "name": "zosia-site-v2024",
+  "version": "4.0.0",
   "author": "KSI UWr <ksi@cs.uni.wroc.pl> (https://ksi.ii.uni.wroc.pl/)",
-  "description": "Django 3.2 version of ZOSIA registration page",
+  "description": "Django 4.2 + React version of ZOSIA registration page",
   "license": "GPL-3.0-only",
-  "homepage": "https://github.com/ksiuwr/zosia16-site#readme",
+  "homepage": "https://github.com/ksiuwr/zosia-site-v2024",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ksiuwr/zosia16-site.git"
+    "url": "git+https://github.com/ksiuwr/zosia-site-v2024.git"
   },
   "bugs": {
-    "url": "https://github.com/ksiuwr/zosia16-site/issues"
+    "url": "https://github.com/ksiuwr/zosia-site-v2024/issues"
   },
   "scripts": {
     "format": "npx prettier --config ./.prettierrc --write client/**/*.{ts,tsx,js,jsx,scss,yml,html}",
