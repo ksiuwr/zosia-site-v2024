@@ -17,10 +17,15 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
 
   const queryClient = useQueryClient();
 
+  const invalidateRoomData = () => {
+    queryClient.invalidateQueries({ queryKey: [ROOM_QUERY_KEY] });
+  };
+
   const onMutationSuccess = (
     data: AxiosResponse<RoomAPIData, unknown>,
     message: string,
   ) => {
+    // Update rooms data with this specific room right after getting the response from server.
     const updatedRoom = convertRoomAPIDataToRoomData(data.data);
     queryClient.setQueryData([ROOM_QUERY_KEY], (oldData: RoomData[]) => {
       return oldData.map((room) =>
@@ -28,11 +33,17 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
       );
     });
     showCustomToast("success", message);
+
+    // Invalidate the rooms data to refetch it from the server and get the most recent data for other rooms.
+    invalidateRoomData();
   };
 
   const onMutationError = (error: Error) => {
     showCustomToast("error", <ApiErrorMessage error={error} />);
     console.error(error);
+
+    // Invalidate the rooms data to refetch it from the server and get the most recent data for all rooms.
+    invalidateRoomData();
   };
 
   const joinRoomMutation = useMutation({
