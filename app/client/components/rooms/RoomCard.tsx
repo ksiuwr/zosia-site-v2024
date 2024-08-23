@@ -89,8 +89,8 @@ export const RoomCard = ({
             )}
           </p>
         )}
-        <div className="divider my-5"></div>
-        <div className="flex gap-x-4">
+        <div className="divider my-2 lg:my-5"></div>
+        <div className="flex gap-x-1 lg:gap-x-4">
           <RoomInfoPopover
             roomName={name}
             members={members}

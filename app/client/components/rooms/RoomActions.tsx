@@ -40,10 +40,10 @@ export const RoomActions = ({
 }: RoomActionsProps) => {
   if (isMyRoom) {
     return (
-      <div className="flex grow gap-x-2">
+      <div className="flex grow gap-x-1 lg:gap-x-4">
         {isLocked && canUnlock && (
           <button
-            className="btn btn-warning grow"
+            className="btn btn-warning basis-1/2"
             onClick={unlockRoom}
             disabled={unlockRoomPending}
           >
@@ -55,7 +55,7 @@ export const RoomActions = ({
 
         {!isLocked && (
           <button
-            className="btn btn-warning grow"
+            className="btn btn-warning basis-1/2"
             onClick={lockRoom}
             disabled={lockRoomPending}
           >
@@ -66,7 +66,7 @@ export const RoomActions = ({
         )}
 
         <button
-          className="btn btn-error grow"
+          className="btn btn-error basis-1/2"
           onClick={leaveRoom}
           disabled={leaveRoomPending}
         >
