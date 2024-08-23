@@ -1,5 +1,6 @@
 import {
   convertRoomAPIDataToRoomData,
+  ROOM_QUERY_KEY,
   RoomAPIData,
   RoomData,
 } from "@client/utils/roomData";
@@ -20,7 +21,7 @@ export const RoomCards = ({ initialRoomData }: RoomCardsProps) => {
   const { user } = useContext(Context);
 
   const { isPending, isError, data, error } = useQuery({
-    queryKey: [zosiaApiRoutes.rooms],
+    queryKey: [ROOM_QUERY_KEY],
     queryFn: async () => {
       const res = await zosiaApi.get<RoomAPIData[]>(zosiaApiRoutes.rooms);
       return res.data.map(convertRoomAPIDataToRoomData);

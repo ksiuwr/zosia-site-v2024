@@ -1,5 +1,6 @@
 import {
   convertRoomAPIDataToRoomData,
+  ROOM_QUERY_KEY,
   RoomAPIData,
   RoomData,
 } from "@client/utils/roomData";
@@ -21,7 +22,7 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
     message: string,
   ) => {
     const updatedRoom = convertRoomAPIDataToRoomData(data.data);
-    queryClient.setQueryData([zosiaApiRoutes.rooms], (oldData: RoomData[]) => {
+    queryClient.setQueryData([ROOM_QUERY_KEY], (oldData: RoomData[]) => {
       return oldData.map((room) =>
         room.id === updatedRoom.id ? updatedRoom : room,
       );

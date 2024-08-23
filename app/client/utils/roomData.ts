@@ -1,6 +1,8 @@
 import { templates } from "@reactivated";
 import { parseISO } from "date-fns/parseISO";
 
+export const ROOM_QUERY_KEY = "rooms";
+
 /** Single room data retrieved from server */
 export interface RoomAPIData {
   id: number;
