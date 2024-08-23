@@ -72,7 +72,7 @@ export const RoomActions = ({
         <button
           className={clsx(
             "btn btn-error grow",
-            showUnlockButton || (showLockButton && "basis-1/2"),
+            (showUnlockButton || showLockButton) && "basis-1/2",
           )}
           onClick={leaveRoom}
           disabled={leaveRoomPending}

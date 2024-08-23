@@ -4,7 +4,7 @@ import { RoomData } from "@client/utils/roomData";
 import { LockClosedIcon as LockClosedIconSolid } from "@heroicons/react/24/solid";
 import { Context } from "@reactivated";
 import clsx from "clsx";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { JoinLockedRoomDialog } from "./JoinLockedRoomDialog";
 import { RoomActions } from "./RoomActions";
 import { RoomInfoPopover } from "./RoomInfoPopover";
@@ -37,16 +37,16 @@ export const RoomCard = ({
     unlockRoomMutation,
   } = useRoomMutations(id, name);
 
-  const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] =
-    React.useState(false);
+  const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] = useState(false);
 
-  const isMyRoom = members.some((member) => member.id === user.id);
   const allPlaces = availableBedsSingle + availableBedsDouble * 2;
   const availablePlaces = allPlaces - members.length;
+  const canEnter = availablePlaces > 0 && !userIsInSomeRoomAlready;
 
   const isLocked = lock !== undefined && lock.expirationDate > new Date();
   const canUnlock = isLocked && lock.password !== undefined;
-  const canEnter = availablePlaces > 0 && !userIsInSomeRoomAlready;
+
+  const isMyRoom = members.some((member) => member.id === user.id);
 
   const enterRoom = () => {
     if (isLocked) {
