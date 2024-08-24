@@ -48,6 +48,9 @@ class RoomManager(models.Manager):
     def all_visible(self):
         return self.filter(hidden=False)
 
+    def all_visible_with_member(self, user):
+        return self.filter(hidden=False) | self.filter(hidden=True, members__pk=user.pk)
+
     def filter_visible(self, **params):
         if params.get("hidden"):
             return None
