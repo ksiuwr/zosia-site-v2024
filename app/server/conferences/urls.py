@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
+from django.views.generic.base import RedirectView
 
 from . import views
 
@@ -6,7 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('terms/', views.terms_and_conditions, name='terms_and_conditions'),
     path('privacy/', views.privacy_policy, name='privacy_policy'),
-    path('panel/', views.admin_panel, name='admin'),
+    path('panel/', RedirectView.as_view(url=reverse_lazy('admin:index')), name='admin'),
     path('transport/', views.transport, name='transport'),
     path('transport/add/', views.transport_add, name='transport_add'),
     path('transport/list/transport_by_user', views.list_csv_transport_by_user,

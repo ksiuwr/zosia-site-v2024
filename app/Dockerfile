@@ -20,7 +20,6 @@ COPY tsconfig.json ./
 
 # Copy static files
 COPY static ./static
-COPY js ./js
 COPY manage.py ./
 
 
