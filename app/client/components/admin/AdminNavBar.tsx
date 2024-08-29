@@ -145,15 +145,19 @@ const navbarSections: AdminNavBarSection[] = [
 
 export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
   return (
-    <div
+    <nav
       className={clsx(
-        showAsSidebar && "hidden h-full overflow-scroll bg-base-300 lg:block",
+        showAsSidebar && "hidden h-full overflow-scroll bg-base-200 lg:block",
         !showAsSidebar &&
           "w-full rounded-box border border-base-content bg-base-100",
       )}
     >
       {showAsSidebar && (
-        <h1 className="pt-4 text-center text-xl font-bold">Admin Panel</h1>
+        <h1 className="pt-4 text-center text-xl font-bold">
+          <a className="btn btn-ghost text-xl" href={reverse("admin")}>
+            Admin Panel
+          </a>
+        </h1>
       )}
 
       <ul
@@ -184,6 +188,6 @@ export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
           </li>
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };
