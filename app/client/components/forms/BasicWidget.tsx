@@ -1,4 +1,13 @@
-import { Checkbox, Input, Select, Textarea } from "@headlessui/react";
+import {
+  Checkbox,
+  Input,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Textarea,
+} from "@headlessui/react";
+import { CheckIcon } from "@heroicons/react/24/outline";
 import { FieldHandler, Widget } from "@reactivated";
 import React from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
@@ -59,25 +68,59 @@ export const BasicWidget = ({
       );
 
     case "django.forms.widgets.Select":
+    case "django.forms.widgets.SelectMultiple":
       return (
-        <Select
-          name={field.name}
-          className="select select-bordered w-full"
-          required={field.widget.required}
+        <Listbox
           value={field.value ?? ""}
-          onChange={(e) => field.handler(e.target.value)}
+          onChange={field.handler}
+          multiple={field.tag === "django.forms.widgets.SelectMultiple"}
         >
-          {field.widget.optgroups.map((optgroup) => {
-            const currentOption = optgroup[1][0];
-            const optgroupValue = (currentOption.value ?? "").toString();
+          {/* These hidden inputs allow us to send selected data through HTML <form/> */}
+          {field.tag === "django.forms.widgets.Select" && (
+            <input type="hidden" name={field.name} value={field.value ?? ""} />
+          )}
+          {field.tag === "django.forms.widgets.SelectMultiple" &&
+            field.value.map((value) => (
+              <input
+                type="hidden"
+                key={value}
+                name={field.name}
+                value={value}
+              />
+            ))}
+          <ListboxButton className="select select-bordered h-fit w-full py-2">
+            {field.widget.optgroups
+              .filter((optgroup) => {
+                if (field.tag === "django.forms.widgets.Select")
+                  return optgroup[1][0].value === field.value;
 
-            return (
-              <option key={optgroupValue} value={optgroupValue}>
-                {currentOption.label}
-              </option>
-            );
-          })}
-        </Select>
+                if (field.tag === "django.forms.widgets.SelectMultiple")
+                  return field.value.includes(String(optgroup[1][0].value));
+              })
+              .map((selectedOptGroup) => selectedOptGroup[1][0].label)
+              .join(", ")}
+          </ListboxButton>
+          <ListboxOptions
+            anchor="bottom start"
+            className="w-[var(--button-width)] rounded-box bg-base-300 [--anchor-padding:1.5rem]"
+          >
+            {field.widget.optgroups.map((optgroup) => {
+              const currentOption = optgroup[1][0];
+              const optgroupValue = (currentOption.value ?? "").toString();
+
+              return (
+                <ListboxOption
+                  key={optgroupValue}
+                  value={optgroupValue}
+                  className="group btn no-animation btn-block rounded-none font-normal data-[selected]:btn-success data-[focus]:btn-active"
+                >
+                  {currentOption.label}
+                  <CheckIcon className="invisible size-6 group-data-[selected]:visible" />
+                </ListboxOption>
+              );
+            })}
+          </ListboxOptions>
+        </Listbox>
       );
     default:
       return <Widget field={field} />;
