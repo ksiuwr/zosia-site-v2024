@@ -5,12 +5,16 @@ import { DesktopMenu } from "./desktop/DesktopMenu";
 import { MobileMenu } from "./mobile/MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
-export const Navbar = () => {
+interface NavbarProps {
+  adminSidebarShown?: boolean;
+}
+
+export const Navbar = ({ adminSidebarShown }: NavbarProps) => {
   const context = useContext(Context);
 
   return (
     <nav className="w-full bg-base-300 py-2">
-      <CenteredContainer>
+      <CenteredContainer adminSidebarShown={adminSidebarShown}>
         <div className="relative flex h-full items-center justify-center align-middle lg:justify-between">
           <MobileMenu />
           <a href={reverse("index")} className="flex flex-col justify-center">

@@ -4,7 +4,7 @@ from reactivated import Pick, template
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
 from .models import UserPreferences, Zosia
-from .forms import EditUserForm, UserForm, UserPreferencesForm
+from .forms import EditUserForm, MailForm, UserForm, UserPreferencesForm
 
 
 @template
@@ -114,3 +114,8 @@ class Profile(NamedTuple):
     shirt_size: str
 
     organization: str
+
+
+@template
+class AdminUsersSendEmail(NamedTuple):
+    form: MailForm

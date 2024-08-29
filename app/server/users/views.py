@@ -27,6 +27,7 @@ from .templates import (
     AccountResetPasswordComplete,
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
+    AdminUsersSendEmail,
     Login,
     Profile,
     Register,
@@ -198,8 +199,7 @@ def mail_to_all(request):
             ctx = {'text': text, 'subject': subject, 'receivers': receivers}
             return render(request, 'users/mail_sent.html', ctx)
 
-    ctx = {'form': form}
-    return render(request, 'users/mail.html', ctx)
+    return AdminUsersSendEmail(form=form).render(request)
 
 
 @require_http_methods(['GET', 'POST'])

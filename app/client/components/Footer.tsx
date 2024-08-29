@@ -3,14 +3,18 @@ import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
 import { CenteredContainer } from "./containers/CenteredContainer";
 
-export const Footer = () => {
+interface FooterProps {
+  adminSidebarShown?: boolean;
+}
+
+export const Footer = ({ adminSidebarShown }: FooterProps) => {
   const context = useContext(Context);
 
   const serverTime = new Date(context.server_time);
 
   return (
     <footer className="w-full bg-neutral py-5 text-neutral-content">
-      <CenteredContainer>
+      <CenteredContainer adminSidebarShown={adminSidebarShown}>
         <div className="footer max-lg:footer-center max-lg:gap-6 lg:justify-between">
           <aside>
             <h6 className="footer-title max-lg:mb-0">
