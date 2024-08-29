@@ -1,6 +1,6 @@
-import { reverse } from "@reactivated";
+import { Context, reverse } from "@reactivated";
 import clsx from "clsx";
-import React from "react";
+import React, { useContext } from "react";
 
 interface AdminNavBarProps {
   showAsSidebar?: boolean;
@@ -144,6 +144,8 @@ const navbarSections: AdminNavBarSection[] = [
 ];
 
 export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
+  const { request } = useContext(Context);
+
   return (
     <nav
       className={clsx(
@@ -181,7 +183,15 @@ export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
             <ul>
               {links.map(({ linkTitle, href }) => (
                 <li key={href}>
-                  <a href={href}>{linkTitle}</a>
+                  <a
+                    href={href}
+                    className={clsx(
+                      request.path === href &&
+                        "bg-base-content text-base-100 hover:bg-base-content hover:text-base-100",
+                    )}
+                  >
+                    {linkTitle}
+                  </a>
                 </li>
               ))}
             </ul>
