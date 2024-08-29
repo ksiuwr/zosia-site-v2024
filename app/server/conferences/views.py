@@ -1,7 +1,6 @@
 from collections import Counter
 import csv
 import json
-from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib import messages
@@ -13,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import HomePage, TermsAndConditions, PrivacyPolicy, SignupRules
+from .templates import AdminPanelHome, HomePage, TermsAndConditions, PrivacyPolicy, SignupRules
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -126,7 +125,7 @@ def sign_up_rules_for_invited(request):
 @staff_member_required
 @require_http_methods(['GET'])
 def admin_panel(request):
-    return render(request, 'conferences/admin.html')
+    return AdminPanelHome().render(request)
 
 
 @staff_member_required

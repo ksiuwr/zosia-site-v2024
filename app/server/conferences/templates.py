@@ -16,6 +16,7 @@ class HomePage(NamedTuple):
     registration_open: bool
     zosia_end_date: str
 
+
 @template
 class TermsAndConditions(NamedTuple):
     zosia: Pick[Zosia, Literal['start_date']]
@@ -23,10 +24,17 @@ class TermsAndConditions(NamedTuple):
     zosia_title: str
     place: Pick[Place, Literal['town']]
 
+
 @template
 class PrivacyPolicy(NamedTuple):
     pass
 
+
 @template
 class SignupRules(NamedTuple):
+    pass
+
+
+@template
+class AdminPanelHome(NamedTuple):
     pass
