@@ -19,6 +19,10 @@ type UserGroup =
 export const Template = (props: templates.AdminUsersSendEmail) => {
   const form = useForm({ form: props.form });
 
+  const selectedGroupField = form.fields.select_groups.value
+    ? form.fields[form.fields.select_groups.value as UserGroup]
+    : undefined;
+
   return (
     <AdminLayout>
       <PageTitle>Send email to users</PageTitle>
@@ -27,11 +31,12 @@ export const Template = (props: templates.AdminUsersSendEmail) => {
           <BasicFormField field={form.fields.subject} />
           <BasicFormField field={form.fields.text} />
           <BasicFormField field={form.fields.select_groups} />
-          {form.fields.select_groups.value && (
-            <BasicFormField
-              field={form.fields[form.fields.select_groups.value as UserGroup]}
-            />
-          )}
+          {selectedGroupField && <BasicFormField field={selectedGroupField} />}
+          <p className="prose max-w-none">
+            This message will be sent to the following recipients:
+            <br />
+            <strong>{selectedGroupField?.value.join(", ")}</strong>
+          </p>
         </BasicFormWithCustomFields>
       </AdminCenteredFormContainer>
     </AdminLayout>

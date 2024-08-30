@@ -112,7 +112,7 @@ export const BasicWidget = ({
                 <ListboxOption
                   key={optgroupValue}
                   value={optgroupValue}
-                  className="group btn no-animation btn-block rounded-none font-normal data-[selected]:btn-success data-[focus]:btn-active"
+                  className="group btn no-animation btn-block justify-start rounded-none font-normal data-[selected]:btn-success data-[focus]:btn-active"
                 >
                   {currentOption.label}
                   <CheckIcon className="invisible size-6 group-data-[selected]:visible" />
