@@ -29,7 +29,7 @@ export const OrganizationAddDialog = ({
       });
       closeDialog();
       setOrganizationToAdd("");
-      selectOption(data.data["id"]);
+      selectOption(String(data.data["id"]));
     },
   });
 

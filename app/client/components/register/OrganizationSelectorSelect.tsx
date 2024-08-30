@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
 import { DjangoFormsWidgetsSelect } from "reactivated/dist/generated";
+import { BasicListbox } from "../forms/widgets/BasicListbox";
 
 interface OrganizationSelectorSelectProps {
   field: WidgetHandler<DjangoFormsWidgetsSelect>;
@@ -25,14 +26,21 @@ export const OrganizationSelectorSelect = ({
   const { isPending, isError, data, error } = useQuery({
     queryKey: [zosiaApiRoutes.organizations],
     queryFn: () =>
-      zosiaApi.get(zosiaApiRoutes.organizations).then((res) => res.data),
+      zosiaApi.get<Organization[]>(zosiaApiRoutes.organizations).then((res) =>
+        res.data.map((org) => {
+          return {
+            ...org,
+            id: String(org.id),
+          };
+        }),
+      ),
     initialData: field.widget.optgroups
       .map((optgroup) => {
         return {
           id: (optgroup[1][0].value ?? "").toString(),
           name: optgroup[1][0].label,
           accepted: true,
-        };
+        } as Organization;
       })
       .filter((org) => org.id !== ""),
     // With SSR, set staleTime above 0 to avoid refetching immediately on the client
@@ -53,24 +61,20 @@ export const OrganizationSelectorSelect = ({
       </Select>
     );
 
-  const organizations = data as Organization[];
-
   return (
-    <Select
+    <BasicListbox
       name={field.name}
-      className="select select-bordered w-full"
-      required={field.widget.required}
       value={field.value ?? ""}
-      onChange={(e) => field.handler(e.target.value)}
-    >
-      <option value={""}>---------</option>
-      {organizations.map((organization) => (
-        <option key={organization.id} value={organization.id}>
-          {organization.accepted
+      onChange={field.handler}
+      optgroups={[{ value: "", label: "---------" }].concat(
+        data.map((organization) => ({
+          value: organization.id,
+          label: organization.accepted
             ? organization.name
-            : `${organization.name} (${organization.user?.first_name} ${organization.user?.last_name})`}
-        </option>
-      ))}
-    </Select>
+            : `${organization.name} (${organization.user?.first_name} ${organization.user?.last_name})`,
+        })),
+      )}
+      multiple={false}
+    />
   );
 };
