@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import NamedTuple
+from typing import List, Literal, NamedTuple
 from reactivated import Pick, template
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
@@ -60,14 +60,16 @@ class Register(NamedTuple):
     form: UserPreferencesForm
     zosia: Pick[
         Zosia,
-        'price_accommodation',
-        'price_accommodation_breakfast',
-        'price_accommodation_dinner',
-        'price_whole_day',
-        'price_transport',
-        'price_transport_with_discount',
-        'price_transfer_baggage',
-        'price_base',
+        Literal[
+            'price_accommodation',
+            'price_accommodation_breakfast',
+            'price_accommodation_dinner',
+            'price_whole_day',
+            'price_transport',
+            'price_transport_with_discount',
+            'price_transfer_baggage',
+            'price_base',
+        ],
     ]
     is_user_already_registered: bool
     paid: bool
@@ -77,25 +79,29 @@ class Register(NamedTuple):
 
 @template
 class Profile(NamedTuple):
-    zosia: Pick[Zosia, 'account_number', 'account_bank', 'account_owner', 'account_address', 'registration_suspended']
+    zosia: Pick[
+        Zosia, Literal['account_number', 'account_bank', 'account_owner', 'account_address', 'registration_suspended']
+    ]
     preferences: Pick[
         UserPreferences,
-        'payment_accepted',
-        'discount_round',
-        'is_student',
-        'vegetarian',
-        'transport.name',
-        'transport.departure_time',
-        'transport_baggage',
-        'dinner_day_1',
-        'accommodation_day_1',
-        'breakfast_day_2',
-        'dinner_day_2',
-        'accommodation_day_2',
-        'breakfast_day_3',
-        'dinner_day_3',
-        'accommodation_day_3',
-        'breakfast_day_4',
+        Literal[
+            'payment_accepted',
+            'discount_round',
+            'is_student',
+            'vegetarian',
+            'transport.name',
+            'transport.departure_time',
+            'transport_baggage',
+            'dinner_day_1',
+            'accommodation_day_1',
+            'breakfast_day_2',
+            'dinner_day_2',
+            'accommodation_day_2',
+            'breakfast_day_3',
+            'dinner_day_3',
+            'accommodation_day_3',
+            'breakfast_day_4',
+        ],
     ]
 
     price: int
@@ -119,3 +125,10 @@ class Profile(NamedTuple):
 @template
 class AdminUsersSendEmail(NamedTuple):
     form: MailForm
+
+
+@template
+class AdminUsersSendEmailComplete(NamedTuple):
+    text: str
+    subject: str
+    receivers: List[str]

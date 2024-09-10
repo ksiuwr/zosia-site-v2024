@@ -28,6 +28,7 @@ from .templates import (
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
     AdminUsersSendEmail,
+    AdminUsersSendEmailComplete,
     Login,
     Profile,
     Register,
@@ -188,16 +189,15 @@ class ReactResetPasswordCompleteView(PasswordResetCompleteView):
 @require_http_methods(['GET', 'POST'])
 def mail_to_all(request):
     form = forms.MailForm(request.POST or None)
-    print(request.method)
+
     if request.method == 'POST':
         print(form.errors)
         if form.is_valid():
             form.send_mail()
             text = form.cleaned_data.get('text')
             subject = form.cleaned_data.get('subject')
-            receivers = form.receivers()
-            ctx = {'text': text, 'subject': subject, 'receivers': receivers}
-            return render(request, 'users/mail_sent.html', ctx)
+            receivers = map(lambda user: user.email, form.receivers()) 
+            return AdminUsersSendEmailComplete(text=text, subject=subject, receivers=receivers).render(request)
 
     return AdminUsersSendEmail(form=form).render(request)
 
