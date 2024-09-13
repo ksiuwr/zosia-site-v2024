@@ -27,6 +27,7 @@ from .templates import (
     AccountResetPasswordComplete,
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
+    AdminUsersPreferences,
     AdminUsersSendEmail,
     AdminUsersSendEmailComplete,
     Login,
@@ -269,16 +270,20 @@ def user_preferences_index(request):
         .filter(zosia=zosia).select_related('user') \
         .order_by('pk') \
         .all()
-    ctx = {
-        'objects': user_preferences,
-        'change_bonus': ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS,
-        'toggle_payment': ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT,
-        'min_bonus': MIN_BONUS_MINUTES,
-        'max_bonus': MAX_BONUS_MINUTES,
-        'bonus_step': BONUS_STEP,
-    }
 
-    return render(request, 'users/user_preferences_index.html', ctx)
+    price_for_user = list(
+        map(lambda user_pref: {"user_id": user_pref.user.id, "price": user_pref.price}, user_preferences)
+    )
+
+    return AdminUsersPreferences(
+        user_preferences=user_preferences,
+        price_for_user=price_for_user,
+        change_bonus_command=ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS,
+        toggle_payment_command=ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT,
+        min_bonus_minutes=MIN_BONUS_MINUTES,
+        max_bonus_minutes=MAX_BONUS_MINUTES,
+        bonus_step=BONUS_STEP
+    ).render(request)
 
 
 @staff_member_required()

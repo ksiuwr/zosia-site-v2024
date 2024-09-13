@@ -132,3 +132,24 @@ class AdminUsersSendEmailComplete(NamedTuple):
     text: str
     subject: str
     receivers: List[str]
+
+
+class PriceForUser(NamedTuple):
+    user_id: int
+    price: int
+
+
+@template
+class AdminUsersPreferences(NamedTuple):
+    user_preferences: List[
+        Pick[
+            UserPreferences,
+            Literal['id', 'user.id', 'user.hash', 'user.first_name', 'user.last_name', 'payment_accepted', 'bonus_minutes'],
+        ]
+    ]
+    price_for_user: List[PriceForUser]
+    change_bonus_command: str
+    toggle_payment_command: str
+    min_bonus_minutes: int
+    max_bonus_minutes: int
+    bonus_step: int

@@ -14,7 +14,10 @@ export const zosiaApi = axios.create({
 export const zosiaApiRoutes = {
   organizations: "api/v1/users/organizations/",
   addLectureDurations: reverse("load_durations"),
+
   rooms: "api/v2/rooms/",
   roomMember: (roomId: number) => `api/v2/rooms/${roomId}/member/`,
   lockRoom: (roomId: number) => `api/v2/rooms/${roomId}/lock/`,
+
+  adminUserPreferencesEdit: reverse("user_preferences_admin_edit"),
 };
