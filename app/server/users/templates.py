@@ -3,8 +3,8 @@ from typing import List, Literal, NamedTuple
 from reactivated import Pick, template
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
-from .models import UserPreferences, Zosia
-from .forms import EditUserForm, MailForm, UserForm, UserPreferencesForm
+from .models import User, UserPreferences, Zosia
+from .forms import EditUserForm, MailForm, UserForm, UserPreferencesAdminForm, UserPreferencesForm
 
 
 @template
@@ -153,3 +153,9 @@ class AdminUsersPreferences(NamedTuple):
     min_bonus_minutes: int
     max_bonus_minutes: int
     bonus_step: int
+
+
+@template
+class AdminUsersPreferencesEdit(NamedTuple):
+    form: UserPreferencesAdminForm
+    user: Pick[User, Literal['id', 'first_name', 'last_name', 'email']]

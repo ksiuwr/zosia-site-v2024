@@ -28,6 +28,7 @@ from .templates import (
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
     AdminUsersPreferences,
+    AdminUsersPreferencesEdit,
     AdminUsersSendEmail,
     AdminUsersSendEmailComplete,
     Login,
@@ -289,17 +290,16 @@ def user_preferences_index(request):
 @staff_member_required()
 @require_http_methods(['GET', 'POST'])
 def user_preferences_edit(request, pk=None):
-    ctx = {}
     kwargs = {}
+    user = None
 
     if pk is not None:
         user_preferences = get_object_or_404(UserPreferences, pk=pk)
-        ctx['object'] = user_preferences
+        user = user_preferences.user
         kwargs['instance'] = user_preferences
 
     form = UserPreferencesAdminForm(request.POST or None, **kwargs)
-    ctx['form'] = form
-
+    
     if request.method == 'POST':
         if form.is_valid():
             form.save()
@@ -309,7 +309,7 @@ def user_preferences_edit(request, pk=None):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'users/user_preferences_edit.html', ctx)
+    return AdminUsersPreferencesEdit(form=form, user=user).render(request)
 
 
 @staff_member_required()
