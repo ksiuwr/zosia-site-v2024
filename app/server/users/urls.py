@@ -15,6 +15,12 @@ urlpatterns = [
         views.activate, name='accounts_activate'),
     path('login/', anonymous_required(views.ReactLoginView.as_view()), name='login'),
     path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
+    path('password_change/', views.ReactChangePasswordView.as_view(), name='password_change'),
+    path('password_change/done/', views.ReactChangePasswordDoneView.as_view(), name='password_change_done'),
+    path("password_reset/", views.ReactResetPasswordView.as_view(), name="password_reset"),
+    path("password_reset/done/", views.ReactResetPasswordDoneView.as_view(), name="password_reset_done"),
+    path("reset/<uidb64>/<token>/", views.ReactResetPasswordConfirmView.as_view(), name="password_reset_confirm"),
+    path("reset/done/", views.ReactResetPasswordCompleteView.as_view(), name="password_reset_complete"),
     path('organizations/', views.organizations, name='organizations'),
     path('organizations/accept/', views.toggle_organization, name='toggle_organization'),
     path('organizations/add/', views.update_organization, name='organization_add'),
@@ -32,13 +38,4 @@ urlpatterns = [
     path('lectures/list/all', views.list_csv_lectures,
             name='list_csv_lectures'),
     path('register/', views.register, name='user_zosia_register'),
-    path('', include('django.contrib.auth.urls')),
-    # NOTE: it adds following URLs:
-    # ^password_change/$ [name='password_change']
-    # ^password_change/done/$ [name='password_change_done']
-    # ^password_reset/$ [name='password_reset']
-    # ^password_reset/done/$ [name='password_reset_done']
-    # ^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$
-    #   [name='password_reset_confirm']
-    # ^reset/done/$ [name='password_reset_complete']
 ]

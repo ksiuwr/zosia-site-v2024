@@ -112,7 +112,7 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.transport} />
           <BasicFormField field={form.fields.transport_baggage} />
 
-          <div className="divider divider-accent" />
+          <div className="divider" />
 
           {accomodationCheckboxesGroups.map((group) => (
             <AccomodationFieldGroup
@@ -123,7 +123,7 @@ export const Template = (props: templates.Register) => {
             />
           ))}
 
-          <div className="divider divider-accent" />
+          <div className="divider" />
 
           <BasicFormField field={form.fields.contact} />
           <BasicFormField field={form.fields.information} />
@@ -132,7 +132,7 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.shirt_type} />
           <BasicFormField field={form.fields.terms_accepted} />
 
-          <div className="divider divider-accent" />
+          <div className="divider" />
 
           <CostSummary
             priceAccommodation={props.zosia.price_accommodation}

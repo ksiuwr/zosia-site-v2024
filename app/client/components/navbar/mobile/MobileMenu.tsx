@@ -1,7 +1,7 @@
 import {
   Popover,
+  PopoverBackdrop,
   PopoverButton,
-  PopoverOverlay,
   PopoverPanel,
   Transition,
 } from "@headlessui/react";
@@ -11,6 +11,7 @@ import {
   Bars3Icon,
   BookOpenIcon,
   ClockIcon,
+  DocumentPlusIcon,
   HomeModernIcon,
   InformationCircleIcon,
   LockClosedIcon,
@@ -24,7 +25,7 @@ import React, { useContext } from "react";
 import { Divider } from "./Divider";
 import { SideNavLink } from "./SideNavLink";
 
-const ICON_SIZE = 6;
+const ICON_CSS = "size-6";
 
 export const MobileMenu = () => {
   const context = useContext(Context);
@@ -35,7 +36,7 @@ export const MobileMenu = () => {
         <Bars3Icon className="size-6" />
       </PopoverButton>
 
-      <PopoverOverlay className="fixed inset-0 z-40 bg-black/50" />
+      <PopoverBackdrop className="fixed inset-0 z-40 bg-black/50" />
       <Transition
         enter="transition ease-in-out duration-200"
         enterFrom="-translate-x-full"
@@ -48,24 +49,22 @@ export const MobileMenu = () => {
           {context.user.is_authenticated ? (
             <>
               <SideNavLink to={reverse("accounts_profile")}>
-                <UserCircleIcon className={`size-${ICON_SIZE}`} />
+                <UserCircleIcon className={ICON_CSS} />
                 {context.user.first_name} {context.user.last_name}
               </SideNavLink>
               <SideNavLink to={reverse("logout")}>
-                <ArrowRightStartOnRectangleIcon
-                  className={`size-${ICON_SIZE}`}
-                />
+                <ArrowRightStartOnRectangleIcon className={ICON_CSS} />
                 Log out
               </SideNavLink>
             </>
           ) : (
             <>
               <SideNavLink to={reverse("login")}>
-                <ArrowRightEndOnRectangleIcon className={`size-${ICON_SIZE}`} />
+                <ArrowRightEndOnRectangleIcon className={ICON_CSS} />
                 Log in
               </SideNavLink>
               <SideNavLink to={reverse("accounts_signup")}>
-                <UserPlusIcon className={`size-${ICON_SIZE}`} />
+                <UserPlusIcon className={ICON_CSS} />
                 Sign up
               </SideNavLink>
             </>
@@ -74,7 +73,7 @@ export const MobileMenu = () => {
           {context.user.is_staff && (
             <>
               <SideNavLink to={reverse("admin")}>
-                <LockClosedIcon className={`size-${ICON_SIZE}`} />
+                <LockClosedIcon className={ICON_CSS} />
                 Admin
               </SideNavLink>
               <Divider />
@@ -83,30 +82,34 @@ export const MobileMenu = () => {
           {context.user.is_authenticated && (
             <>
               <SideNavLink to={reverse("rooms_index")}>
-                <HomeModernIcon className={`size-${ICON_SIZE}`} />
+                <HomeModernIcon className={ICON_CSS} />
                 Rooms
               </SideNavLink>
               <SideNavLink to={reverse("boardgames_index")}>
-                <PuzzlePieceIcon className={`size-${ICON_SIZE}`} />
+                <PuzzlePieceIcon className={ICON_CSS} />
                 Boardgames
+              </SideNavLink>
+              <SideNavLink to={reverse("lectures_add")}>
+                <DocumentPlusIcon className={ICON_CSS} />
+                Add Lecture
               </SideNavLink>
               <Divider />
             </>
           )}
           <SideNavLink to={reverse("blog_index")}>
-            <InformationCircleIcon className={`size-${ICON_SIZE}`} />
+            <InformationCircleIcon className={ICON_CSS} />
             Blog
           </SideNavLink>
           <SideNavLink to={reverse("questions_index")}>
-            <QuestionMarkCircleIcon className={`size-${ICON_SIZE}`} />
+            <QuestionMarkCircleIcon className={ICON_CSS} />
             Q&A
           </SideNavLink>
           <SideNavLink to={reverse("lectures_index")}>
-            <BookOpenIcon className={`size-${ICON_SIZE}`} />
+            <BookOpenIcon className={ICON_CSS} />
             Lectures
           </SideNavLink>
           <SideNavLink to={reverse("lectures_schedule")}>
-            <ClockIcon className={`size-${ICON_SIZE}`} />
+            <ClockIcon className={ICON_CSS} />
             Schedule
           </SideNavLink>
         </PopoverPanel>

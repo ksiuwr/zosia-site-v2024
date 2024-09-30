@@ -25,7 +25,7 @@ export const Alert = React.forwardRef<
     <div
       ref={ref}
       role="alert"
-      className={`alert my-3 w-full grid-flow-col ${alertCSSMap[type]}`}
+      className={`alert mb-3 w-full grid-flow-col ${alertCSSMap[type]}`}
     >
       <AlertIcon type={type} />
       <span>{children}</span>

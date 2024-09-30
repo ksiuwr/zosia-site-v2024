@@ -60,7 +60,7 @@ export const CostSummary = ({
   const totalCost = calculateTotalCost();
 
   return (
-    <div className="card card-bordered bg-base-300">
+    <div className="card card-bordered border-base-content bg-base-100">
       <div className="card-body p-4 lg:p-8">
         <h2 className="text-center text-2xl font-bold">Cost summary</h2>
 

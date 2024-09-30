@@ -11,11 +11,11 @@ interface CardProps {
 export const Card = ({ title, content, authors, description }: CardProps) => {
   return (
     <CenteredContentContainer>
-      <div className="card card-compact mb-8 bg-base-300 lg:card-normal">
+      <div className="card card-bordered card-compact mb-8 border-base-content bg-base-100 lg:card-normal">
         <div className="card-body">
           <h2 className="card-title text-lg lg:text-xl">{title}</h2>
           <p className="whitespace-pre-wrap">{content}</p>
-          <div className="divider divider-accent my-1"></div>
+          <div className="divider my-1"></div>
           <div className="card-actions flex-wrap justify-between gap-y-1">
             <span className="font-bold">{authors}</span>
             <span>{description}</span>

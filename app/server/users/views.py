@@ -1,5 +1,13 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -11,16 +19,33 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Login, Register, SignUp
+from .templates import (
+    AccountChangePassword,
+    AccountChangePasswordDone,
+    AccountEdit,
+    AccountResetPassword,
+    AccountResetPasswordComplete,
+    AccountResetPasswordConfirm,
+    AccountResetPasswordDone,
+    Login,
+    Profile,
+    Register,
+    SignUp,
+)
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
 from .actions import ActivateUser
 from .forms import OrganizationForm, UserPreferencesAdminForm, UserPreferencesForm
 from .models import Organization, UserPreferences
-from server.utils.constants import ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS, \
-    ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT, BONUS_STEP, MAX_BONUS_MINUTES, \
-    MIN_BONUS_MINUTES, PAYMENT_GROUPS, UserInternals
+from server.utils.constants import (
+    ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS,
+    ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT,
+    BONUS_STEP,
+    MAX_BONUS_MINUTES,
+    MIN_BONUS_MINUTES,
+    UserInternals,
+)
 from server.utils.forms import errors_format
 from server.utils.views import csv_response
 
@@ -41,31 +66,65 @@ class ReactLoginView(LoginView):
 @require_http_methods(['GET'])
 def profile(request):
     user = request.user
-    current_zosia = Zosia.objects.find_active()
-    user_preferences = UserPreferences.objects.select_related('transport', 'zosia').filter(user=user)
+    current_zosia: Zosia = Zosia.objects.find_active()
 
+    user_preferences = UserPreferences.objects.select_related('transport', 'zosia').filter(user=user)
     current_prefs = user_preferences.filter(zosia=current_zosia).first()
+
+    registration_open = False
+    registration_over = False
+    registration_start = None
+    enable_editing_preferences = False
 
     if current_zosia:
         registration_open = current_zosia.is_user_registration_open(user)
+        registration_over = current_zosia.is_registration_over
         registration_start = current_zosia.user_registration_start(user)
-        enable_preferences = \
+        enable_editing_preferences = \
             registration_open and not current_zosia.is_registration_over or \
             current_prefs and (current_zosia.is_registration_over or
                                current_zosia.registration_suspended)
-    else:
-        registration_open = False
-        registration_start = None
-        enable_preferences = False
+     
+    price = None
+    transfer_title = None
+    shirt_type = None
+    shirt_size = None
+    room = None
+    roommate = None
+    rooming_start_time = None
+    organization = None
 
-    ctx = {
-        'zosia': current_zosia,
-        'current_prefs': current_prefs,
-        'registration_open': registration_open,
-        'registration_start': registration_start,
-        'enable_preferences': enable_preferences
-    }
-    return render(request, 'users/profile.html', ctx)
+    if current_prefs:
+        price = current_prefs.price
+        transfer_title = current_prefs.transfer_title
+        shirt_type = current_prefs.get_shirt_type_display()
+        shirt_size = current_prefs.get_shirt_size_display()
+        room = current_prefs.room
+        roommate = current_prefs.roommate if room else None
+        rooming_start_time = current_prefs.rooming_start_time
+        organization = current_prefs.organization
+
+    return Profile(
+        zosia=current_zosia,
+        preferences=current_prefs,
+
+        price=price,
+        transfer_title=transfer_title,
+
+        room=room,
+        roommate=roommate,
+        rooming_start_time=rooming_start_time,
+
+        registration_open=registration_open,
+        registration_over=registration_over,
+        registration_start=registration_start,
+        enable_editing_preferences=enable_editing_preferences,
+
+        shirt_type=shirt_type,
+        shirt_size=shirt_size,
+
+        organization=organization
+    ).render(request)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -87,8 +146,41 @@ def account_edit(request):
     if form.is_valid():
         form.save()
         return redirect('accounts_profile')
-    ctx = {'form': form}
-    return render(request, 'users/signup.html', ctx)
+
+    return AccountEdit(form=form).render(request)
+
+
+class ReactChangePasswordView(PasswordChangeView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountChangePassword(form=self.get_form()).render(self.request)
+
+
+class ReactChangePasswordDoneView(PasswordChangeDoneView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountChangePasswordDone().render(self.request)
+
+
+class ReactResetPasswordView(PasswordResetView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPassword(form=self.get_form()).render(self.request)
+
+
+class ReactResetPasswordDoneView(PasswordResetDoneView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPasswordDone().render(self.request)
+
+
+class ReactResetPasswordConfirmView(PasswordResetConfirmView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPasswordConfirm(
+            validlink=self.validlink,
+            form=self.get_form()
+        ).render(self.request)
+
+
+class ReactResetPasswordCompleteView(PasswordResetCompleteView):
+    def render_to_response(self, context, **response_kwargs):
+        return AccountResetPasswordComplete().render(self.request)
 
 
 @staff_member_required
@@ -292,7 +384,7 @@ def register(request):
             form.call(zosia, not is_user_already_registered)
             messages.success(request, _("Preferences saved!"))
 
-            return redirect(reverse('accounts_profile') + '#zosia')
+            return redirect(reverse('accounts_profile'))
         else:
             messages.error(request, errors_format(form))
 

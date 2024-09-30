@@ -47,6 +47,11 @@ export const DesktopMenu = () => {
                   Rooms
                 </TopNavDropdownLink>
               </MenuItem>
+              <MenuItem>
+                <TopNavDropdownLink to={reverse("lectures_add")}>
+                  Add Lecture
+                </TopNavDropdownLink>
+              </MenuItem>
               {context.user.is_staff && (
                 <>
                   <MenuSeparator className="divider m-0" />
