@@ -1,6 +1,7 @@
 from typing import List, Literal, NamedTuple
 from reactivated import template, Pick
 
+from .forms import LectureForm
 from .models import Lecture
 
 
@@ -19,3 +20,8 @@ class Lectures(NamedTuple):
     ]
 
     all_authors_names: List[AuthorsNamesWithLectureId]
+
+
+@template
+class AddLecture(NamedTuple):
+    form: LectureForm

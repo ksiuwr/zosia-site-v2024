@@ -3,6 +3,7 @@ import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
 import { DesktopMenu } from "./desktop/DesktopMenu";
 import { MobileMenu } from "./mobile/MobileMenu";
+import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar = () => {
   const context = useContext(Context);
@@ -19,6 +20,9 @@ export const Navbar = () => {
               className="h-10 lg:h-12"
             />
           </a>
+          <div className="absolute right-0 lg:hidden">
+            <ThemeToggle />
+          </div>
           <DesktopMenu />
         </div>
       </CenteredContainer>

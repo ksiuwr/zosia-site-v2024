@@ -29,6 +29,8 @@ services:
       # Package.json and lock file are mounted to allow installing node modules from within the container for conveniance
       - ./app/package.json:/code/package.json
       - ./app/package-lock.json:/code/package-lock.json
+      # Tailwind config is mounted to allow changing themes without rebuilding the container
+      - ./app/tailwind.config.ts:/code/tailwind.config.ts
     ports:
       - "8000:8000"
     depends_on:
