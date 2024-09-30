@@ -1,13 +1,14 @@
 import { AdminCenteredContainer } from "@client/components/admin/layout/AdminCenteredContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
 import { AdminUsersPreferencesBonus } from "@client/components/admin/users/AdminUsersPreferencesBonus";
+import { AdminUsersPreferencesImportPayments } from "@client/components/admin/users/AdminUsersPreferencesImportPayments";
 import { AdminUsersPreferencesPaymentStatus } from "@client/components/admin/users/AdminUsersPreferencesPaymentStatus";
 import { PageTitle } from "@client/components/PageTitle";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { reverse, templates } from "@reactivated";
 import React, { useState } from "react";
 
-interface UserPreferences {
+export interface UserPreferences {
   id: number;
   userHash: string;
   userName: string;
@@ -34,33 +35,39 @@ export const Template = (props: templates.AdminUsersPreferences) => {
     }),
   );
 
+  const findUserPreferences = (userHash: string) => {
+    return usersPreferences.find((userPreferences) =>
+      userPreferences.userHash.startsWith(userHash),
+    );
+  };
+
   const onPaymentAcceptedChange = (
     userPreferencesId: number,
     newPaymentAccepted: boolean,
   ) => {
     setUsersPreferences((prevUsersPreferences) =>
-      prevUsersPreferences.map((userPreference) => {
-        if (userPreference.id === userPreferencesId) {
+      prevUsersPreferences.map((userPreferences) => {
+        if (userPreferences.id === userPreferencesId) {
           return {
-            ...userPreference,
+            ...userPreferences,
             paymentAccepted: newPaymentAccepted,
           };
         }
-        return userPreference;
+        return userPreferences;
       }),
     );
   };
 
   const onBonusChange = (userPreferencesId: number, newBonus: number) => {
     setUsersPreferences((prevUsersPreferences) =>
-      prevUsersPreferences.map((userPreference) => {
-        if (userPreference.id === userPreferencesId) {
+      prevUsersPreferences.map((userPreferences) => {
+        if (userPreferences.id === userPreferencesId) {
           return {
-            ...userPreference,
+            ...userPreferences,
             bonus: newBonus,
           };
         }
-        return userPreference;
+        return userPreferences;
       }),
     );
   };
@@ -70,6 +77,19 @@ export const Template = (props: templates.AdminUsersPreferences) => {
       <PageTitle>User Preferences</PageTitle>
       <AdminCenteredContainer>
         <div className="mx-auto w-full overflow-x-auto">
+          <AdminUsersPreferencesImportPayments
+            findPaymentInfo={findUserPreferences}
+            togglePaymentAcceptedCommand={props.toggle_payment_command}
+            onPaymentAcceptedChange={onPaymentAcceptedChange}
+            changeBonusCommandName={props.change_bonus_command}
+            onBonusChange={onBonusChange}
+            minBonusMinutes={props.min_bonus_minutes}
+            maxBonusMinutes={props.max_bonus_minutes}
+            bonusStep={props.bonus_step}
+          />
+
+          <div className="divider"></div>
+
           <table className="table table-zebra table-xs my-6 lg:table-lg lg:table-fixed">
             <thead>
               <tr>

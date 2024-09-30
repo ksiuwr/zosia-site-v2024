@@ -1,8 +1,6 @@
-import { showCustomToast } from "@client/components/CustomToast";
-import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
 import { Input } from "@headlessui/react";
-import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useChangeBonusMutation } from "./AdminUsersMutations";
 
 interface AdminUsersPreferencesBonusProps {
   minBonusMinutes: number;
@@ -29,33 +27,18 @@ export const AdminUsersPreferencesBonus = ({
 }: AdminUsersPreferencesBonusProps) => {
   const [uiBonusValue, setUiBonusValue] = useState(bonusValue);
 
-  const changeBonusMutation = useMutation({
-    mutationFn: async (newBonus: number) => {
-      return await zosiaApi.post<{ msg: string; bonus: number }>(
-        zosiaApiRoutes.adminUserPreferencesEdit,
-        {
-          key: userPreferencesId,
-          bonus: newBonus,
-          command: changeBonusCommand,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-    },
-    onSuccess: (data) => {
-      onBonusChange(userPreferencesId, data.data.bonus);
-      setUiBonusValue(data.data.bonus);
-      showCustomToast("success", data.data.msg);
-    },
-    onError: (error) => {
-      showCustomToast("error", "Error while changing bonus.");
-      console.error(error);
-      setUiBonusValue(bonusValue);
-    },
-  });
+  const changeBonusMutation = useChangeBonusMutation(
+    changeBonusCommand,
+    onBonusChange,
+    (bonus) => setUiBonusValue(bonus),
+    () => setUiBonusValue(bonusValue),
+  );
+
+  useEffect(() => {
+    // Reset UI bonus value when bonus value changes externally
+    // (e.g. when a file with payments is imported)
+    setUiBonusValue(bonusValue);
+  }, [bonusValue]);
 
   return (
     <div className="flex flex-col gap-y-1">
@@ -72,7 +55,10 @@ export const AdminUsersPreferencesBonus = ({
           onChange={(e) => setUiBonusValue(parseInt(e.target.value))}
           className="range range-primary range-xs hidden lg:range-sm lg:block"
           onMouseUp={() => {
-            changeBonusMutation.mutate(uiBonusValue);
+            changeBonusMutation.mutate({
+              userPreferencesId,
+              newBonus: uiBonusValue,
+            });
           }}
         />
       )}
