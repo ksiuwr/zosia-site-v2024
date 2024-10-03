@@ -10,7 +10,7 @@ export const AdminTable = ({
 }: PropsWithChildren<AdminTableProps>) => {
   return (
     <div className="overflow-x-auto">
-      <table className="table table-zebra my-6 lg:table-lg">
+      <table className="table table-zebra table-sm my-6 lg:table-lg">
         <thead>
           <tr>
             {headerNames.map((headerName) => (
