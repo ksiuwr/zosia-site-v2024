@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
+from .templates import AdminOrganizersList, AdminOrganizersUpdate
 from .forms import OrganizerForm
 from .models import OrganizerContact
 from server.utils.forms import errors_format
@@ -12,26 +13,21 @@ from server.utils.forms import errors_format
 @staff_member_required()
 @require_http_methods(['GET'])
 def index(request):
-    ctx = {'objects': OrganizerContact.objects.all()}
-    return render(request, 'organizers/index.html', ctx)
+    return AdminOrganizersList(organizers=OrganizerContact.objects.all()).render(request)
 
 
 @staff_member_required()
 @require_http_methods(['POST', 'GET'])
 def update(request, contact_id=None):
-    ctx = {}
     kwargs = {}
-    organizer = None
+    organizer_name = ''
 
     if contact_id is not None:
         organizer = get_object_or_404(OrganizerContact, pk=contact_id)
-        ctx['object'] = organizer
         kwargs['instance'] = organizer
+        organizer_name = organizer.user.full_name
 
     form = OrganizerForm(request.POST or None, **kwargs)
-
-    ctx['form'] = form
-    ctx['organizer'] = organizer
 
     if request.method == 'POST':
         if form.is_valid():
@@ -41,7 +37,7 @@ def update(request, contact_id=None):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'organizers/update.html', ctx)
+    return AdminOrganizersUpdate(form=form, organizer_name=organizer_name).render(request)
 
 
 @staff_member_required()
