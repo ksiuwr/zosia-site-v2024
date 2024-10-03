@@ -6,6 +6,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
+from .templates import AdminSponsorsList, AdminSponsorsUpdate
 from .forms import SponsorForm
 from .models import Sponsor
 from server.utils.constants import BUCKET_NAME, BUCKET_URL
@@ -16,24 +17,25 @@ from server.utils.s3 import list_bucket_objects
 @staff_member_required()
 @require_http_methods(['GET'])
 def index(request):
-    ctx = {'objects': Sponsor.objects.all()}
-    return render(request, 'sponsors/index.html', ctx)
+    return AdminSponsorsList(sponsors=Sponsor.objects.all()).render(request)
 
 
 @staff_member_required()
 @require_http_methods(['POST', 'GET'])
 def update(request, sponsor_id=None):
-    ctx = {}
     kwargs = {}
+    editing_existing_sponsor = False
+
     if sponsor_id is not None:
         sponsor = get_object_or_404(Sponsor, pk=sponsor_id)
-        ctx['object'] = sponsor
+        editing_existing_sponsor = True
         kwargs['instance'] = sponsor
 
     form = SponsorForm(request.POST or None, request.FILES or None, **kwargs)
-    ctx['form'] = form
-    ctx['s3_objects'] = list_bucket_objects(BUCKET_NAME)
-    ctx['bucket_url'] = BUCKET_URL
+    
+    # TODO: Allow uploading images to Google Cloud Storage bucket
+    # ctx['s3_objects'] = list_bucket_objects(BUCKET_NAME)
+    # ctx['bucket_url'] = BUCKET_URL
 
     if request.method == 'POST':
         if form.is_valid():
@@ -43,7 +45,7 @@ def update(request, sponsor_id=None):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'sponsors/update.html', ctx)
+    return AdminSponsorsUpdate(form=form, editing_existing_sponsor=editing_existing_sponsor).render(request)
 
 
 @staff_member_required()
