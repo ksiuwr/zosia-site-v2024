@@ -32,7 +32,7 @@ def update(request, sponsor_id=None):
         kwargs['instance'] = sponsor
 
     form = SponsorForm(request.POST or None, request.FILES or None, **kwargs)
-    
+
     # TODO: Allow uploading images to Google Cloud Storage bucket
     # ctx['s3_objects'] = list_bucket_objects(BUCKET_NAME)
     # ctx['bucket_url'] = BUCKET_URL
@@ -55,5 +55,4 @@ def toggle_active(request):
     sponsor = get_object_or_404(Sponsor, pk=sponsor_id)
     sponsor.toggle_active()
     sponsor.save()
-    return JsonResponse({'msg': "{} changed status!".format(
-        escape(sponsor.name))})
+    return JsonResponse({'msg': "{} changed status!".format(escape(sponsor.name)), 'isActive': sponsor.is_active})

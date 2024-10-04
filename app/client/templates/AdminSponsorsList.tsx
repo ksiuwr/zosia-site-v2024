@@ -1,5 +1,6 @@
 import { AdminCenteredContentContainer } from "@client/components/admin/layout/AdminCenteredContentContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
+import { AdminSponsorsActiveCheckbox } from "@client/components/admin/sponsors/AdminSponsorsActiveCheckbox";
 import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
@@ -24,7 +25,12 @@ export const Template = (props: templates.AdminSponsorsList) => {
                   {sponsor.sponsor_type.charAt(0).toUpperCase() +
                     sponsor.sponsor_type.slice(1)}
                 </td>
-                <td>{sponsor.is_active ? "Yes" : "No"}</td>
+                <td>
+                  <AdminSponsorsActiveCheckbox
+                    sponsorId={sponsor.id}
+                    initialIsActive={sponsor.is_active}
+                  />
+                </td>
                 <td>
                   <AdminTableActions>
                     <AdminTableEditLink
