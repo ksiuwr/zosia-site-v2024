@@ -12,7 +12,7 @@ class QuestionsAndAnswers(NamedTuple):
 
 @template
 class AdminQuestionsList(NamedTuple):
-    questions: List[Pick[QA, Literal['id', 'question', 'priority']]]
+    questions: List[Pick[QA, Literal['id', 'question', 'answer', 'priority']]]
 
 
 @template

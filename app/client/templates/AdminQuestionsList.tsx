@@ -4,6 +4,7 @@ import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableDeleteLink } from "@client/components/admin/tables/AdminTableDeleteLink";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
+import { AdminTablePopover } from "@client/components/admin/tables/AdminTablePopover";
 import { PageTitle } from "@client/components/PageTitle";
 import { reverse, templates } from "@reactivated";
 import React from "react";
@@ -16,7 +17,15 @@ export const Template = (props: templates.AdminQuestionsList) => {
         <AdminTable headerNames={["Question", "Priority", "Actions"]}>
           {props.questions.map((question) => (
             <tr key={question.id}>
-              <td>{question.question}</td>
+              <td>
+                <AdminTablePopover
+                  buttonLabel={question.question}
+                  panelContent={[
+                    { header: "Question:", description: question.question },
+                    { header: "Answer:", description: question.answer },
+                  ]}
+                />
+              </td>
               <td>{question.priority}</td>
               <td>
                 <AdminTableActions>
