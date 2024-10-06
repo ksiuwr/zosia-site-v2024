@@ -6,6 +6,7 @@ import { AdminTableActions } from "@client/components/admin/tables/AdminTableAct
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { PageTitle } from "@client/components/PageTitle";
 import { reverse, templates } from "@reactivated";
+import clsx from "clsx";
 import React from "react";
 
 export const Template = (props: templates.AdminSponsorsList) => {
@@ -22,8 +23,20 @@ export const Template = (props: templates.AdminSponsorsList) => {
               <tr key={sponsor.id}>
                 <td>{sponsor.name}</td>
                 <td>
-                  {sponsor.sponsor_type.charAt(0).toUpperCase() +
-                    sponsor.sponsor_type.slice(1)}
+                  <span
+                    className={clsx(
+                      "badge lg:badge-lg",
+                      sponsor.sponsor_type === "gold" &&
+                        "bg-amber-400 text-black",
+                      sponsor.sponsor_type === "silver" &&
+                        "bg-slate-400 text-black",
+                      sponsor.sponsor_type === "bronze" &&
+                        "bg-yellow-950 text-white",
+                    )}
+                  >
+                    {sponsor.sponsor_type.charAt(0).toUpperCase() +
+                      sponsor.sponsor_type.slice(1)}
+                  </span>
                 </td>
                 <td>
                   <AdminSponsorsActiveCheckbox
