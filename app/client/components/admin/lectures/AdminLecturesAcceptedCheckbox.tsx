@@ -4,23 +4,23 @@ import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { AdminTableCheckbox } from "../tables/AdminTableCheckbox";
 
-interface AdminSponsorsActiveCheckboxProps {
-  sponsorId: number;
+interface AdminLecturesAcceptedCheckboxProps {
+  lectureId: number;
   initialIsActive: boolean;
 }
 
-export const AdminSponsorsActiveCheckbox = ({
-  sponsorId,
+export const AdminLecturesAcceptedCheckbox = ({
+  lectureId,
   initialIsActive,
-}: AdminSponsorsActiveCheckboxProps) => {
+}: AdminLecturesAcceptedCheckboxProps) => {
   const [isActive, setIsActive] = useState(initialIsActive);
 
-  const toggleSponsorActiveMutation = useMutation({
+  const toggleLectureAcceptedMutation = useMutation({
     mutationFn: async () => {
       return await zosiaApi.post<{ msg: string; isActive: boolean }>(
-        zosiaApiRoutes.adminSponsorToggleActive,
+        zosiaApiRoutes.adminLecturesToggleAccept,
         {
-          key: sponsorId,
+          key: lectureId,
         },
         {
           headers: {
@@ -34,7 +34,7 @@ export const AdminSponsorsActiveCheckbox = ({
       showCustomToast("success", data.data.msg);
     },
     onError: (error) => {
-      showCustomToast("error", "Error while toggling sponsor active state.");
+      showCustomToast("error", "Error while toggling lecture accepted state.");
       console.error(error);
     },
   });
@@ -42,8 +42,8 @@ export const AdminSponsorsActiveCheckbox = ({
   return (
     <AdminTableCheckbox
       isChecked={isActive}
-      isPending={toggleSponsorActiveMutation.isPending}
-      onToggle={toggleSponsorActiveMutation.mutate}
+      isPending={toggleLectureAcceptedMutation.isPending}
+      onToggle={toggleLectureAcceptedMutation.mutate}
     />
   );
 };

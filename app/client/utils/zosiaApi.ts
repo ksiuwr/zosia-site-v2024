@@ -21,4 +21,5 @@ export const zosiaApiRoutes = {
 
   adminUserPreferencesEdit: reverse("user_preferences_admin_edit"),
   adminSponsorToggleActive: reverse("sponsors_toggle_active"),
+  adminLecturesToggleAccept: reverse("lectures_toggle_accept"),
 };

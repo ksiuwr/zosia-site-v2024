@@ -21,8 +21,8 @@ export const Template = (props: templates.AdminQuestionsList) => {
                 <AdminTablePopover
                   buttonLabel={question.question}
                   panelContent={[
-                    { header: "Question:", description: question.question },
-                    { header: "Answer:", description: question.answer },
+                    { header: "Question", description: question.question },
+                    { header: "Answer", description: question.answer },
                   ]}
                 />
               </td>
