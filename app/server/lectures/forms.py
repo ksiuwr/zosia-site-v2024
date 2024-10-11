@@ -28,4 +28,4 @@ class LectureAdminForm(forms.ModelForm):
 class ScheduleForm(forms.ModelForm):
     class Meta:
         model = Schedule
-        fields = ['content']
+        fields = ['schedule_data']
