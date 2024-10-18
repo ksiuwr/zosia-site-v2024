@@ -7,7 +7,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import AddLecture, AdminLecturesList, AdminLecturesUpdate, Lectures
+from .templates import AddLecture, AdminLecturesList, AdminLecturesUpdate, AdminScheduleUpdate, Lectures
 from server.conferences.models import Zosia
 from .forms import LectureAdminForm, LectureForm, ScheduleForm
 from .models import Lecture, Schedule
@@ -133,11 +133,13 @@ def schedule_update(request):
     zosia = Zosia.objects.find_active()
     schedule, _ = Schedule.objects.get_or_create(zosia=zosia)
     form = ScheduleForm(request.POST or None, instance=schedule)
-    ctx = {'form': form, 'zosia': zosia}
+
     if request.method == 'POST':
         if form.is_valid():
+            # TODO: Redirect to schedule_display
             form.save()
-    return render(request, 'lectures/schedule_add.html', ctx)
+
+    return AdminScheduleUpdate(form=form).render(request)
 
 
 def load_durations(request):

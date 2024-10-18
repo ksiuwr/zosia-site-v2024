@@ -8,16 +8,19 @@ import { BasicFormWithCustomFields } from "./BasicFormWithCustomFields";
 interface BasicFormProps<T extends FieldMap> {
   form: FormHandler<T>;
   submitButtonLabel: string;
+  onFormSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export const BasicForm = <T extends FieldMap>({
   form,
   submitButtonLabel,
+  onFormSubmit,
 }: BasicFormProps<T>) => {
   return (
     <BasicFormWithCustomFields
       form={form}
       submitButtonLabel={submitButtonLabel}
+      onFormSubmit={onFormSubmit}
     >
       {form.visibleFields.map((field) => (
         <BasicFormField

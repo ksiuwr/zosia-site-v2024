@@ -7,15 +7,17 @@ import { Alert } from "../alert/Alert";
 interface BasicFormWithCustomFieldsProps<T extends FieldMap> {
   form: FormHandler<T>;
   submitButtonLabel: string;
+  onFormSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export const BasicFormWithCustomFields = <T extends FieldMap>({
   form,
   submitButtonLabel,
+  onFormSubmit,
   children,
 }: PropsWithChildren<BasicFormWithCustomFieldsProps<T>>) => {
   return (
-    <form method="POST">
+    <form method="POST" onSubmit={onFormSubmit}>
       <CSRFToken />
       {form.nonFieldErrors?.map((error) => (
         <Alert key={error} type="error">

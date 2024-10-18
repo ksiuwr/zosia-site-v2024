@@ -1,7 +1,7 @@
 from typing import List, Literal, NamedTuple
 from reactivated import template, Pick
 
-from .forms import LectureAdminForm, LectureForm
+from .forms import LectureAdminForm, LectureForm, ScheduleForm
 from .models import Lecture
 
 
@@ -55,3 +55,8 @@ class AdminLecturesList(NamedTuple):
 class AdminLecturesUpdate(NamedTuple):
     form: LectureAdminForm
     editing_existing_lecture: bool = False
+
+
+@template
+class AdminScheduleUpdate(NamedTuple):
+    form: ScheduleForm
