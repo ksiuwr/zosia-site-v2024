@@ -49,7 +49,7 @@ class RoomManager(models.Manager):
         return self.filter(hidden=False)
 
     def all_visible_with_member(self, user):
-        return self.filter(hidden=False) | self.filter(members__pk=user.pk)
+        return self.filter(hidden=False) | self.filter(hidden=True, members__pk=user.pk)
 
     def filter_visible(self, **params):
         if params.get("hidden"):
@@ -131,11 +131,12 @@ class Room(models.Model):
                                   code="invalid",
                                   params={"room": self})
 
-        # Remove user from previous room
+        # Ensure user is not already in a room
         prev_room = user.room_of_user.all().first()
-
         if prev_room is not None:
-            prev_room.leave(user)
+            raise ValidationError(_("Cannot join %(room)s, user is already in a room."),
+                                  code="invalid",
+                                  params={"room": self})
 
         self.members.add(user)
         self.save()

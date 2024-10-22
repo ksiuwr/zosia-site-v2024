@@ -387,7 +387,7 @@ class RoomJoinAPITestCase(RoomsAPITestCase):
         room_assertions.assertJoined(self.normal_2, self.room_2)
         room_assertions.assertJoined(self.normal_1, self.room_2)
 
-    def test_user_can_join_other_room(self):
+    def test_user_cannot_join_other_room(self):
         self.client.force_authenticate(user=self.normal_1)
         create_user_preferences(self.normal_1, self.zosia, payment_accepted=True)
         self.room_1.join(self.normal_1)
@@ -397,9 +397,9 @@ class RoomJoinAPITestCase(RoomsAPITestCase):
         self.room_1.refresh_from_db()
         self.room_2.refresh_from_db()
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        room_assertions.assertEmpty(self.room_1)
-        room_assertions.assertJoined(self.normal_1, self.room_2)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        room_assertions.assertEmpty(self.room_2)
+        room_assertions.assertJoined(self.normal_1, self.room_1)
 
     def test_user_cannot_join_without_active_zosia(self):
         self.client.force_authenticate(user=self.normal_1)
@@ -643,7 +643,7 @@ class RoomLeaveAPITestCase(RoomsAPITestCase):
         self.client.force_authenticate(user=self.normal_1)
         create_user_preferences(self.normal_1, self.zosia, payment_accepted=True)
 
-        self.room_2.join(self.normal_2)
+        self.room_2.join(self.normal_1)
         self.room_2.join(self.normal_2)
         self.room_2.set_lock(self.normal_2)
 

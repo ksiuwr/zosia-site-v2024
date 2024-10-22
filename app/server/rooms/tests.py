@@ -68,11 +68,11 @@ class RoomTestCase(TestCase):
         with self.assertRaises(ValidationError):
             self.room_2.join(self.normal_2)
 
-    def test_user_can_join_another_room_leaving_previous_room(self):
+    def test_user_cannot_join_another_room_if_already_in_a_room(self):
         self.room_1.join(self.normal_1)
-        self.room_2.join(self.normal_1)
-        self.assertEqual(self.room_1.members_count, 0)
-        room_assertions.assertJoined(self.normal_1, self.room_2)
+
+        with self.assertRaises(ValidationError):
+            self.room_2.join(self.normal_1)
 
     def test_user_can_leave_not_joined_room(self):
         self.room_1.leave(self.normal_1)
@@ -159,24 +159,6 @@ class RoomTestCase(TestCase):
         self.room_1.join(self.normal_2)
         room_assertions.assertJoined(self.normal_2, self.room_1)
 
-    def test_room_is_unlocked_after_joining_other_room(self):
-        self.room_1.join(self.normal_1)
-        self.room_1.set_lock(self.normal_1)
-        room_assertions.assertLocked(self.room_1, self.normal_1)
-
-        self.room_2.join(self.normal_1)
-        self.refresh()
-        room_assertions.assertUnlocked(self.room_1)
-
-    def test_room_remains_locked_after_not_owner_joins_other_room(self):
-        self.room_1.join(self.normal_1)
-        self.room_1.set_lock(self.normal_1)
-        self.room_1.join(self.normal_2, password=self.room_1.lock.password)
-        room_assertions.assertJoined(self.normal_2, self.room_1)
-
-        self.room_2.join(self.normal_2)
-        self.refresh()
-        room_assertions.assertLocked(self.room_1, self.normal_1)
 
     def test_room_is_unlocked_after_owner_leaves_room(self):
         self.room_1.join(self.normal_1)
