@@ -1,3 +1,4 @@
+import json
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -7,7 +8,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import AddLecture, AdminLecturesList, AdminLecturesUpdate, AdminScheduleUpdate, Lectures
+from .templates import AddLecture, AdminLecturesList, AdminLecturesUpdate, AdminScheduleUpdate, Lectures, Schedule as ScheduleTemplate
 from server.conferences.models import Zosia
 from .forms import LectureAdminForm, LectureForm, ScheduleForm
 from .models import Lecture, Schedule
@@ -121,8 +122,7 @@ def schedule_display(request):
     zosia = Zosia.objects.find_active()
     try:
         schedule = Schedule.objects.get(zosia=zosia)
-        ctx = {'schedule': schedule}
-        return render(request, 'lectures/schedule.html', ctx)
+        return ScheduleTemplate(schedule_json_data=json.dumps(schedule.schedule_data)).render(request)
     except Schedule.DoesNotExist:
         messages.warning(request, _("Schedule is not defined yet."))
         return redirect('lectures_index')
@@ -136,8 +136,8 @@ def schedule_update(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            # TODO: Redirect to schedule_display
             form.save()
+            return redirect('lectures_schedule')
 
     return AdminScheduleUpdate(form=form).render(request)
 

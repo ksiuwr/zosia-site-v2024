@@ -23,6 +23,11 @@ class Lectures(NamedTuple):
 
 
 @template
+class Schedule(NamedTuple):
+    schedule_json_data: str
+
+
+@template
 class AddLecture(NamedTuple):
     form: LectureForm
 
