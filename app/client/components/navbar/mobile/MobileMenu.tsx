@@ -33,7 +33,7 @@ export const MobileMenu = () => {
   return (
     <Popover className="absolute left-0 lg:hidden">
       <PopoverButton className="btn btn-circle btn-ghost">
-        <Bars3Icon className="size-6" />
+        <Bars3Icon className="size-8" />
       </PopoverButton>
 
       <PopoverBackdrop className="fixed inset-0 z-40 bg-black/50" />

@@ -14,7 +14,7 @@ RUN apk add --no-cache --virtual build-dependencies libpq-dev build-base \
 COPY package.json ./
 COPY package-lock.json ./
 COPY postcss.config.js ./
-COPY tailwind.config.js ./
+COPY tailwind.config.ts ./
 COPY .prettierrc ./
 COPY tsconfig.json ./
 

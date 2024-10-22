@@ -6,7 +6,6 @@ from server.users.models import User
 class Boardgame(models.Model):
     name = models.CharField(verbose_name=_(
         "Name of the boardgame"), max_length=200)
-    votes_amount = models.PositiveSmallIntegerField(default=0)  #TODO: Remove this
     accepted = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=False)
     url = models.CharField(verbose_name=_(

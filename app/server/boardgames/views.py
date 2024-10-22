@@ -13,6 +13,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count
 from urllib.request import urlopen
 
+from .templates import BoardgamesAdd, BoardgamesHome, BoardgamesMyGames, BoardgamesVote
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
@@ -27,7 +28,8 @@ MAX_NUMBER_OF_GAMES = 3
 def index(request):
     boardgames = Boardgame.objects.all().annotate(
         votes=Count('boardgame_votes')).order_by('-votes', 'name')
-    
+    votes = [{"name": name, "votes": num_votes} for name, num_votes in boardgames.values_list('name', 'votes')]
+
     try:
         current_zosia = Zosia.objects.get(active=True)
     except Zosia.DoesNotExist:
@@ -38,12 +40,11 @@ def index(request):
         preferences = UserPreferences.objects.get(
             zosia=current_zosia, user=request.user)
     except (UserPreferences.DoesNotExist):
-        ctx = {'boardgames': boardgames}
+        paid = False
     else:
         paid = preferences.payment_accepted
-        ctx = {'boardgames': boardgames,
-               'paid': paid}
-    return render(request, 'boardgames/index.html', ctx)
+
+    return BoardgamesHome(boardgames=boardgames, votes=votes, paid=paid).render(request)
 
 
 @login_required
@@ -51,10 +52,10 @@ def index(request):
 def my_boardgames(request):
     user_boardgames = Boardgame.objects.filter(user=request.user).annotate(
         votes=Count('boardgame_votes')).order_by('-votes', 'name')
+    votes = [{"name": name, "votes": num_votes} for name, num_votes in user_boardgames.values_list('name', 'votes')]
     can_add = user_boardgames.count() < MAX_NUMBER_OF_GAMES
-    ctx = {'user_boardgames': user_boardgames,
-           'can_add': can_add}
-    return render(request, 'boardgames/my_boardgames.html', ctx)
+
+    return BoardgamesMyGames(user_boardgames=user_boardgames, votes=votes, can_add=can_add).render(request)
 
 
 def validate_game_url(url: str) -> bool:
@@ -93,13 +94,13 @@ def get_id(url):
 @require_http_methods(['GET', 'POST'])
 def create(request):
     user_boardgames = Boardgame.objects.filter(user=request.user)
-    ctx = {'form': BoardgameForm(request.POST or None)}
+    form = BoardgameForm(request.POST or None)
 
     if request.method == 'POST':
         if user_boardgames.count() >= MAX_NUMBER_OF_GAMES:
             messages.error(request, _(f"Number of boardgames per account exceeded (max: {MAX_NUMBER_OF_GAMES})."))
-        elif ctx['form'].is_valid():
-            new_url = ctx['form'].cleaned_data['url']
+        elif form.is_valid():
+            new_url = form.cleaned_data['url']
             if not validate_game_url(new_url):
                 messages.error(request, _("This is not a valid boardgame url"))
             else:
@@ -118,17 +119,16 @@ def create(request):
         else:
             messages.error(request, _("Can't add boardgame - form is not valid."))
 
-    return render(request, 'boardgames/create.html', ctx)
+    return BoardgamesAdd(form=form).render(request)
 
 
 @login_required
 @require_http_methods(['GET'])
 def vote(request):
-    votes = Vote.objects.filter(
-        user=request.user).values_list('boardgame', flat=True)
-    ctx = {'boardgames': Boardgame.objects.all().order_by('name'),
-           'user_voted': list(votes)}
-    return render(request, 'boardgames/vote.html', ctx)
+    votes = Vote.objects.filter(user=request.user).values_list('boardgame', flat=True)
+    boardgames = Boardgame.objects.all().order_by('name')
+
+    return BoardgamesVote(boardgames=boardgames, boardgame_ids_vote_for=list(votes)).render(request)
 
 
 @login_required
@@ -163,7 +163,15 @@ def vote_edit(request):
     Vote.objects.filter(user=request.user).delete()
     Vote.objects.bulk_create(newVotes)
 
-    return JsonResponse({'new_ids': new_ids})
+    if (len(new_ids) == 0):
+        messages.success(request, "Votes were successfully reset.")
+    else:
+        games_voted_for = ', '.join(
+            map(lambda boardgame: '<strong>"' + boardgame.name + '"</strong>', list(boardgames))
+        )
+        messages.success(request, "Voted for boardgames: {}.".format(games_voted_for))
+
+    return redirect(reverse('boardgames_index'))
 
 
 @staff_member_required
@@ -212,5 +220,6 @@ def boardgame_delete(request):
         )
 
     boardgame.delete()
-    return JsonResponse({'msg': "Deleted the boardgame: {}".format(
-        escape(boardgame))})
+
+    messages.success(request, "Deleted boardgame: {}".format(escape(boardgame)))
+    return redirect(reverse('my_boardgames'))

@@ -7,7 +7,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import Lectures
+from .templates import AddLecture, Lectures
 from server.conferences.models import Zosia
 from .forms import LectureAdminForm, LectureForm, ScheduleForm
 from .models import Lecture, Schedule
@@ -73,7 +73,6 @@ def lecture_add(request):
         return redirect(reverse('accounts_profile'))
 
     form = LectureForm(request.POST or None)
-    ctx = {'form': form}
 
     if request.method == 'POST':
         if form.is_valid():
@@ -89,7 +88,7 @@ def lecture_add(request):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'lectures/add.html', ctx)
+    return AddLecture(form=form).render(request)
 
 
 @staff_member_required()
@@ -148,7 +147,5 @@ def schedule_update(request):
 
 def load_durations(request):
     lecture_type = request.GET.get("lecture_type")
-    author_id = request.GET.get("author")
-    author = User.objects.get(pk=author_id) if author_id is not None else request.user
-    durations = {'durations': [d[0] for d in get_durations(lecture_type, author)]}
+    durations = {'durations': [d[0] for d in get_durations(lecture_type, request.user)]}
     return JsonResponse(durations)

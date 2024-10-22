@@ -13,7 +13,7 @@ export const BasicDescription = ({ field }: BasicDescriptionProps) => {
   }
 
   return (
-    <Description as="div" className="prose mx-2 max-w-none">
+    <Description as="div" className="prose mx-2 mt-1 max-w-none">
       {field.error && (
         <span className="block text-error">{parse(field.error)}</span>
       )}
