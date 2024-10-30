@@ -1,7 +1,7 @@
 import {
-  convertRoomAPIDataToRoomData,
+  convertRoomApiDataToRoomData,
   ROOM_QUERY_KEY,
-  RoomAPIData,
+  RoomApiData,
   RoomData,
 } from "@client/utils/roomData";
 import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
@@ -33,8 +33,8 @@ export const RoomCards = ({
   const { isPending, isError, data, error } = useQuery({
     queryKey: [ROOM_QUERY_KEY],
     queryFn: async () => {
-      const res = await zosiaApi.get<RoomAPIData[]>(zosiaApiRoutes.rooms);
-      return res.data.map(convertRoomAPIDataToRoomData);
+      const res = await zosiaApi.get<RoomApiData[]>(zosiaApiRoutes.rooms);
+      return res.data.map(convertRoomApiDataToRoomData);
     },
     initialData: initialRoomData,
     // With SSR, set staleTime above 0 to avoid refetching immediately on the client

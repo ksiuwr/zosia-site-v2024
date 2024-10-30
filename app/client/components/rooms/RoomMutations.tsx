@@ -1,7 +1,7 @@
 import {
-  convertRoomAPIDataToRoomData,
+  convertRoomApiDataToRoomData,
   ROOM_QUERY_KEY,
-  RoomAPIData,
+  RoomApiData,
   RoomData,
 } from "@client/utils/roomData";
 import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
@@ -22,11 +22,11 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
   };
 
   const onMutationSuccess = (
-    data: AxiosResponse<RoomAPIData, unknown>,
+    data: AxiosResponse<RoomApiData, unknown>,
     message: string,
   ) => {
     // Update rooms data with this specific room right after getting the response from server.
-    const updatedRoom = convertRoomAPIDataToRoomData(data.data);
+    const updatedRoom = convertRoomApiDataToRoomData(data.data);
     queryClient.setQueryData([ROOM_QUERY_KEY], (oldData: RoomData[]) => {
       return oldData.map((room) =>
         room.id === updatedRoom.id ? updatedRoom : room,
@@ -48,7 +48,7 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
 
   const joinRoomMutation = useMutation({
     mutationFn: async (password?: string) => {
-      return await zosiaApi.post<RoomAPIData>(
+      return await zosiaApi.post<RoomApiData>(
         zosiaApiRoutes.roomMember(roomId),
         {
           user: user.id,
@@ -63,7 +63,7 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
 
   const leaveRoomMutation = useMutation({
     mutationFn: async () => {
-      return await zosiaApi.delete<RoomAPIData>(
+      return await zosiaApi.delete<RoomApiData>(
         zosiaApiRoutes.roomMember(roomId),
         {
           data: { user: user.id },
@@ -77,7 +77,7 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
 
   const lockRoomMutation = useMutation({
     mutationFn: async () => {
-      return await zosiaApi.post<RoomAPIData>(zosiaApiRoutes.lockRoom(roomId), {
+      return await zosiaApi.post<RoomApiData>(zosiaApiRoutes.lockRoom(roomId), {
         user: user.id,
       });
     },
@@ -91,7 +91,7 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
 
   const unlockRoomMutation = useMutation({
     mutationFn: async () => {
-      return await zosiaApi.delete<RoomAPIData>(
+      return await zosiaApi.delete<RoomApiData>(
         zosiaApiRoutes.lockRoom(roomId),
       );
     },
