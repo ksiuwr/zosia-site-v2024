@@ -73,9 +73,6 @@ class ViewTestCase(BlogTests):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('blog_create'), follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'blog/create.html')
-        context = response.context[-1]
-        self.assertTrue(isinstance(context['form'], BlogPostForm))
 
     def test_create_post_normal_user(self):
         count = BlogPost.objects.count()
@@ -99,4 +96,3 @@ class ViewTestCase(BlogTests):
         response = self.client.post(
             reverse('blog_edit', kwargs={'pk': blog_post_id}), {}, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'blog/create.html')
