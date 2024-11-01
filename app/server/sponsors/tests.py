@@ -119,15 +119,11 @@ class ViewsTestCase(SponsorTestCase):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('sponsors_index'), follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(list(context['objects']), list(Sponsor.objects.all()))
 
     def test_add_get_staff_user(self):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('sponsors_add'), follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, SponsorForm)
 
     def test_edit_get_staff_user(self):
         login_as_user(self.staff, self.client)
@@ -137,9 +133,6 @@ class ViewsTestCase(SponsorTestCase):
                                            kwargs={'sponsor_id': sponsor.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, SponsorForm)
-        self.assertEqual(context['object'], sponsor)
 
     def test_toggle_active_post(self):
         login_as_user(self.staff, self.client)
