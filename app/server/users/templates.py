@@ -20,6 +20,11 @@ class SignUp(NamedTuple):
 
 
 @template
+class AccountActivated(NamedTuple):
+    is_conference_active: bool = False
+
+
+@template
 class AccountEdit(NamedTuple):
     form: EditUserForm
 
@@ -144,7 +149,9 @@ class AdminUsersPreferences(NamedTuple):
     user_preferences: List[
         Pick[
             UserPreferences,
-            Literal['id', 'user.id', 'user.hash', 'user.first_name', 'user.last_name', 'payment_accepted', 'bonus_minutes'],
+            Literal[
+                'id', 'user.id', 'user.hash', 'user.first_name', 'user.last_name', 'payment_accepted', 'bonus_minutes'
+            ],
         ]
     ]
     price_for_user: List[PriceForUser]

@@ -20,6 +20,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from .templates import (
+    AccountActivated,
     AccountChangePassword,
     AccountChangePasswordDone,
     AccountEdit,
@@ -218,11 +219,7 @@ def activate(request, uidb64, token):
         return redirect('index')
 
     current_zosia = Zosia.objects.find_active()
-    ctx = {
-        'zosia': current_zosia,
-        'user': action.user,
-    }
-    return render(request, 'users/activate.html', ctx)
+    return AccountActivated(is_conference_active=current_zosia is not None).render(request)
 
 
 @staff_member_required
