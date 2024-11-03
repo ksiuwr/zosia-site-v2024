@@ -13,7 +13,13 @@ export const Template = (props: templates.AdminOrganizersList) => {
     <AdminLayout>
       <PageTitle>Organizers</PageTitle>
       <AdminCenteredContentContainer>
-        <AdminTable headerNames={["Name", "Phone number", "Actions"]}>
+        <AdminTable
+          headerNames={["Name", "Phone number", "Actions"]}
+          addEntryLink={{
+            href: reverse("organizers_add"),
+            label: "Add organizer",
+          }}
+        >
           {props.organizers.map((organizer) => (
             <tr key={organizer.id}>
               <td>{`${organizer.user.first_name} ${organizer.user.last_name}`}</td>

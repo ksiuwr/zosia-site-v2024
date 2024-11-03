@@ -23,6 +23,10 @@ export const Template = (props: templates.AdminLecturesList) => {
             "Accepted?",
             "Actions",
           ]}
+          addEntryLink={{
+            href: reverse("lectures_staff_add"),
+            label: "Add lecture",
+          }}
         >
           {props.lectures.map((lecture) => (
             <tr key={lecture.id}>

@@ -3,12 +3,15 @@ import React, { PropsWithChildren } from "react";
 
 interface AdminTableProps {
   headerNames: string[];
-  addEntryHref?: string;
+  addEntryLink?: {
+    href: string;
+    label: string;
+  };
 }
 
 export const AdminTable = ({
   headerNames,
-  addEntryHref,
+  addEntryLink,
   children,
 }: PropsWithChildren<AdminTableProps>) => {
   return (
@@ -25,10 +28,13 @@ export const AdminTable = ({
         </thead>
         <tbody>{children}</tbody>
       </table>
-      {addEntryHref && (
-        <a href={addEntryHref} className="btn btn-success btn-block lg:btn-lg">
+      {addEntryLink && (
+        <a
+          href={addEntryLink.href}
+          className="btn btn-success btn-block lg:btn-lg"
+        >
           <PlusIcon className="size-6" />
-          Add entry
+          <span>{addEntryLink.label}</span>
         </a>
       )}
     </div>

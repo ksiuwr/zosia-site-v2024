@@ -15,6 +15,10 @@ export const Template = (props: templates.AdminBlogList) => {
       <AdminCenteredContentContainer>
         <AdminTable
           headerNames={["Author", "Title", "Publication date", "Actions"]}
+          addEntryLink={{
+            href: reverse("blog_create"),
+            label: "Add blog post",
+          }}
         >
           {props.posts.map((post) => (
             <tr key={post.id}>

@@ -14,7 +14,13 @@ export const Template = (props: templates.AdminSponsorsList) => {
     <AdminLayout>
       <PageTitle>Sponsors</PageTitle>
       <AdminCenteredContentContainer>
-        <AdminTable headerNames={["Name", "Type", "Active", "Actions"]}>
+        <AdminTable
+          headerNames={["Name", "Type", "Active", "Actions"]}
+          addEntryLink={{
+            href: reverse("sponsors_add"),
+            label: "Add sponsor",
+          }}
+        >
           {props.sponsors
             .sort((sponsor1, sponsor2) =>
               sponsor1.name.localeCompare(sponsor2.name),

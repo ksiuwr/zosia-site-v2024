@@ -12,7 +12,7 @@ export const CenteredContainer = ({
   return (
     <div
       className={clsx(
-        "mx-auto w-11/12 2xl:container",
+        "mx-auto mb-8 w-11/12 2xl:container",
         adminSidebarShown && "lg:w-11/12",
         !adminSidebarShown && "lg:w-4/6",
       )}

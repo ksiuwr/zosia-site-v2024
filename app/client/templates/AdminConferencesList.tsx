@@ -15,7 +15,10 @@ export const Template = (props: templates.AdminConferencesList) => {
       <AdminCenteredContentContainer>
         <AdminTable
           headerNames={["Conference name", "Actions"]}
-          addEntryHref={reverse("zosia_add")}
+          addEntryLink={{
+            href: reverse("zosia_add"),
+            label: "Add conference",
+          }}
         >
           {props.conferences.map((conference) => (
             <tr key={conference.id}>
