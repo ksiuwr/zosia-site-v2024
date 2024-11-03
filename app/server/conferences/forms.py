@@ -3,10 +3,8 @@ from django import forms
 from .models import Place, Transport, Zosia
 
 
-class SplitDateTimePickerField(forms.SplitDateTimeField):
+class UTCDateTimePickerField(forms.DateTimeField):
     def __init__(self, *args, **kwargs):
-        kwargs["widget"] = forms.SplitDateTimeWidget(date_attrs={"class": "datepicker"},
-                                                     time_attrs={"class": "timepicker"})
         super().__init__(*args, **kwargs)
         self.help_text = "Provide date and time in <b>UTC</b> time zone!"
 
@@ -16,7 +14,7 @@ class TransportForm(forms.ModelForm):
         model = Transport
         fields = '__all__'
         field_classes = {
-            "departure_time": SplitDateTimePickerField
+            "departure_time": UTCDateTimePickerField
         }
 
     def __init__(self, *args, **kwargs):
@@ -36,6 +34,16 @@ class ZosiaForm(forms.ModelForm):
     class Meta:
         model = Zosia
         fields = '__all__'
+        field_classes = {
+            "early_registration_start": UTCDateTimePickerField,
+            "start_date": UTCDateTimePickerField,
+            "registration_start": UTCDateTimePickerField,
+            "registration_end": UTCDateTimePickerField,
+            "lecture_registration_start": UTCDateTimePickerField,
+            "lecture_registration_end": UTCDateTimePickerField,
+            "rooming_start": UTCDateTimePickerField,
+            "rooming_end": UTCDateTimePickerField,
+        }
 
     def __init__(self, *args, **kwargs):
         super(ZosiaForm, self).__init__(*args, **kwargs)
