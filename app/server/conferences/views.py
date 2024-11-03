@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import AdminPanelHome, HomePage, TermsAndConditions, PrivacyPolicy, SignupRules
+from .templates import AdminConferencesList, AdminPanelHome, HomePage, TermsAndConditions, PrivacyPolicy, SignupRules
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -170,8 +170,7 @@ def transport_add(request, pk=None):
 @require_http_methods(['GET'])
 def conferences(request):
     all_conferences = Zosia.objects.all()
-    ctx = {'conferences': all_conferences}
-    return render(request, 'conferences/conferences.html', ctx)
+    return AdminConferencesList(conferences=all_conferences).render(request)
 
 
 @staff_member_required

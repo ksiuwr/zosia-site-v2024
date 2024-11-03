@@ -23,6 +23,11 @@ const timeFormatter = new Intl.DateTimeFormat("pl-PL", {
   timeZoneName: "short",
 });
 
+const yearFormatter = new Intl.DateTimeFormat("pl-PL", {
+  timeZone: "Europe/Warsaw",
+  year: "numeric",
+});
+
 export const getLocalDateTime = (date: Date) => {
   return dateTimeFormatter.format(date);
 };
@@ -33,4 +38,8 @@ export const getLocalDate = (date: Date) => {
 
 export const getLocalTime = (date: Date) => {
   return timeFormatter.format(date);
+};
+
+export const getLocalYear = (date: Date) => {
+  return yearFormatter.format(date);
 };

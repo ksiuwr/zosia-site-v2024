@@ -2,6 +2,8 @@ from typing import List, Literal, NamedTuple
 
 from reactivated import template, Pick
 
+from .forms import ZosiaForm
+
 from .models import Place, Zosia
 from server.sponsors.models import Sponsor
 
@@ -38,3 +40,13 @@ class SignupRules(NamedTuple):
 @template
 class AdminPanelHome(NamedTuple):
     pass
+
+
+@template
+class AdminConferencesList(NamedTuple):
+    conferences: List[Pick[Zosia, Literal['id', 'start_date']]]
+
+
+# @template
+# class AdminConferencesUpdate(NamedTuple):
+#     form: ZosiaForm
