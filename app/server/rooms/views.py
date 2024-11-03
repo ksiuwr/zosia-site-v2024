@@ -16,12 +16,11 @@ from django.views.decorators.vary import vary_on_cookie
 from server.conferences.models import Zosia
 from .forms import UploadFileForm
 from .models import Room
-from .serializers import room_to_dict
+from .templates import Rooms
 from server.users.models import UserPreferences
 from server.utils.views import csv_response, validation_format
 
 
-@cache_page(60 * 15)  # Cache hard (15mins)
 @vary_on_cookie
 @login_required
 @require_http_methods(['GET'])
@@ -64,12 +63,9 @@ def index(request):
 
     rooms = Room.objects.all_visible().prefetch_related('members').all()
     rooms = sorted(rooms, key=lambda x: x.pk)
-    rooms_json = json.dumps(list(map(room_to_dict, rooms)))
-    context = {
-        'rooms': rooms,
-        'rooms_json': rooms_json,
-    }
-    return render(request, 'rooms/index.html', context)
+    user_lock = request.user.locks.all().first()
+
+    return Rooms(rooms=rooms, user_room_lock=user_lock).render(request)
 
 
 @staff_member_required

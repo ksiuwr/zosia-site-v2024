@@ -1,16 +1,16 @@
 {
-  "name": "zosia16-site",
-  "version": "3.0.0",
+  "name": "zosia-site-v2024",
+  "version": "4.0.0",
   "author": "KSI UWr <ksi@cs.uni.wroc.pl> (https://ksi.ii.uni.wroc.pl/)",
-  "description": "Django 3.2 version of ZOSIA registration page",
+  "description": "Django 4.2 + React version of ZOSIA registration page",
   "license": "GPL-3.0-only",
-  "homepage": "https://github.com/ksiuwr/zosia16-site#readme",
+  "homepage": "https://github.com/ksiuwr/zosia-site-v2024",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ksiuwr/zosia16-site.git"
+    "url": "git+https://github.com/ksiuwr/zosia-site-v2024.git"
   },
   "bugs": {
-    "url": "https://github.com/ksiuwr/zosia16-site/issues"
+    "url": "https://github.com/ksiuwr/zosia-site-v2024/issues"
   },
   "scripts": {
     "format": "npx prettier --config ./.prettierrc --write client/**/*.{ts,tsx,js,jsx,scss,yml,html}",
@@ -22,12 +22,14 @@
     "@heroicons/react": "^2.1.5",
     "@tailwindcss/typography": "^0.5.13",
     "@tanstack/react-query": "^5.51.15",
+    "@tanstack/react-query-devtools": "^5.52.0",
     "@vis.gl/react-google-maps": "^1.1.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "chart.js": "^3.9.1",
     "clsx": "^2.1.1",
     "daisyui": "^4.12.10",
+    "date-fns": "^3.6.0",
     "html-react-parser": "^5.1.12",
     "jquery": "^3.7.1",
     "postcss": "^8.4.40",
