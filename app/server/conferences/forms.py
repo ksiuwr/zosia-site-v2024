@@ -33,19 +33,9 @@ class PlaceForm(forms.ModelForm):
 
 
 class ZosiaForm(forms.ModelForm):
-    early_registration_start = SplitDateTimePickerField(required=False)
-
     class Meta:
         model = Zosia
         fields = '__all__'
-        field_classes = {
-            "registration_start": SplitDateTimePickerField,
-            "registration_end": SplitDateTimePickerField,
-            "rooming_start": SplitDateTimePickerField,
-            "rooming_end": SplitDateTimePickerField,
-            "lecture_registration_start": SplitDateTimePickerField,
-            "lecture_registration_end": SplitDateTimePickerField
-        }
 
     def __init__(self, *args, **kwargs):
         super(ZosiaForm, self).__init__(*args, **kwargs)

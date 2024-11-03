@@ -12,7 +12,15 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import AdminConferencesList, AdminPanelHome, HomePage, TermsAndConditions, PrivacyPolicy, SignupRules
+from .templates import (
+    AdminConferencesList,
+    AdminConferencesUpdate,
+    AdminPanelHome,
+    HomePage,
+    TermsAndConditions,
+    PrivacyPolicy,
+    SignupRules,
+)
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -188,8 +196,7 @@ def update_zosia(request, pk=None):
         messages.success(request, _('Zosia has been saved'))
         return redirect('conferences')
 
-    ctx = {'form': form, 'zosia': zosia}
-    return render(request, 'conferences/conference_add.html', ctx)
+    return AdminConferencesUpdate(form=form, edit_mode=zosia is not None).render(request)
 
 
 @staff_member_required

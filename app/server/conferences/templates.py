@@ -47,6 +47,7 @@ class AdminConferencesList(NamedTuple):
     conferences: List[Pick[Zosia, Literal['id', 'start_date']]]
 
 
-# @template
-# class AdminConferencesUpdate(NamedTuple):
-#     form: ZosiaForm
+@template
+class AdminConferencesUpdate(NamedTuple):
+    form: ZosiaForm
+    edit_mode: bool
