@@ -18,6 +18,9 @@ from .templates import (
     AdminPanelHome,
     AdminPlacesList,
     AdminPlacesUpdate,
+    AdminTransportList,
+    AdminTransportPassangers,
+    AdminTransportUpdate,
     HomePage,
     TermsAndConditions,
     PrivacyPolicy,
@@ -143,8 +146,7 @@ def admin_panel(request):
 def transport(request):
     zosia = Zosia.objects.find_active()
     transports = Transport.objects.filter(zosia=zosia)
-    ctx = {'zosia': zosia, 'transports': transports}
-    return render(request, 'conferences/transport.html', ctx)
+    return AdminTransportList(transports=transports).render(request)
 
 
 @staff_member_required
@@ -152,8 +154,7 @@ def transport(request):
 def transport_people(request, pk):
     transport_obj = get_object_or_404(Transport, pk=pk)
     users = UserPreferences.objects.select_related('user').filter(transport=transport_obj)
-    ctx = {'transport': transport_obj, 'users': users}
-    return render(request, 'conferences/transport_people.html', ctx)
+    return AdminTransportPassangers(transport=transport_obj, users=users).render(request)
 
 
 @staff_member_required
@@ -172,8 +173,8 @@ def transport_add(request, pk=None):
         form.save()
         messages.success(request, _('Transport has been saved'))
         return redirect('transport')
-    ctx = {'form': form, 'object': instance}
-    return render(request, 'conferences/transport_add.html', ctx)
+    
+    return AdminTransportUpdate(form=form, edit_mode=instance is not None).render(request)
 
 
 @staff_member_required

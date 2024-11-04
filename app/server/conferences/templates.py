@@ -2,10 +2,11 @@ from typing import List, Literal, NamedTuple
 
 from reactivated import template, Pick
 
-from .forms import PlaceForm, ZosiaForm
+from .forms import PlaceForm, TransportForm, ZosiaForm
 
-from .models import Place, Zosia
+from .models import Place, Transport, Zosia
 from server.sponsors.models import Sponsor
+from server.users.models import UserPreferences
 
 
 @template
@@ -61,4 +62,21 @@ class AdminPlacesList(NamedTuple):
 @template
 class AdminPlacesUpdate(NamedTuple):
     form: PlaceForm
+    edit_mode: bool
+
+
+@template
+class AdminTransportList(NamedTuple):
+    transports: List[Pick[Transport, Literal['id', 'name', 'departure_time', 'capacity', 'passengers.id']]]
+
+
+@template
+class AdminTransportPassangers(NamedTuple):
+    transport: Pick[Transport, Literal['id', 'name', 'departure_time']]
+    users: List[Pick[UserPreferences, Literal['id', 'is_student', 'user.first_name', 'user.last_name']]]
+
+
+@template
+class AdminTransportUpdate(NamedTuple):
+    form: TransportForm
     edit_mode: bool
