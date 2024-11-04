@@ -36,7 +36,6 @@ class ZosiaForm(forms.ModelForm):
         fields = '__all__'
         field_classes = {
             "early_registration_start": UTCDateTimePickerField,
-            "start_date": UTCDateTimePickerField,
             "registration_start": UTCDateTimePickerField,
             "registration_end": UTCDateTimePickerField,
             "lecture_registration_start": UTCDateTimePickerField,
