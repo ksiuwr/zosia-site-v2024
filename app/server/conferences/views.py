@@ -16,6 +16,8 @@ from .templates import (
     AdminConferencesList,
     AdminConferencesUpdate,
     AdminPanelHome,
+    AdminPlacesList,
+    AdminPlacesUpdate,
     HomePage,
     TermsAndConditions,
     PrivacyPolicy,
@@ -203,8 +205,7 @@ def update_zosia(request, pk=None):
 @require_http_methods(['GET'])
 def place(request):
     places = Place.objects.filter()
-    ctx = {'places': places}
-    return render(request, 'conferences/place.html', ctx)
+    return AdminPlacesList(places=places).render(request)
 
 
 @staff_member_required
@@ -221,8 +222,8 @@ def place_add(request, pk=None):
         form.save()
         messages.success(request, _('Place has been saved'))
         return redirect('place')
-    ctx = {'form': form, 'object': instance}
-    return render(request, 'conferences/place_add.html', ctx)
+
+    return AdminPlacesUpdate(form=form, edit_mode=instance is not None).render(request)
 
 
 @staff_member_required

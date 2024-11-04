@@ -2,7 +2,7 @@ from typing import List, Literal, NamedTuple
 
 from reactivated import template, Pick
 
-from .forms import ZosiaForm
+from .forms import PlaceForm, ZosiaForm
 
 from .models import Place, Zosia
 from server.sponsors.models import Sponsor
@@ -50,4 +50,15 @@ class AdminConferencesList(NamedTuple):
 @template
 class AdminConferencesUpdate(NamedTuple):
     form: ZosiaForm
+    edit_mode: bool
+
+
+@template
+class AdminPlacesList(NamedTuple):
+    places: List[Pick[Place, Literal['id', 'name']]]
+
+
+@template
+class AdminPlacesUpdate(NamedTuple):
+    form: PlaceForm
     edit_mode: bool
