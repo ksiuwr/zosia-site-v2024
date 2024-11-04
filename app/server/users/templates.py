@@ -3,8 +3,8 @@ from typing import List, Literal, NamedTuple
 from reactivated import Pick, template
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
-from .models import User, UserPreferences, Zosia
-from .forms import EditUserForm, MailForm, UserForm, UserPreferencesAdminForm, UserPreferencesForm
+from .models import Organization, User, UserPreferences, Zosia
+from .forms import EditUserForm, MailForm, OrganizationForm, UserForm, UserPreferencesAdminForm, UserPreferencesForm
 
 
 @template
@@ -166,3 +166,14 @@ class AdminUsersPreferences(NamedTuple):
 class AdminUsersPreferencesEdit(NamedTuple):
     form: UserPreferencesAdminForm
     user: Pick[User, Literal['id', 'first_name', 'last_name', 'email']]
+
+
+@template
+class AdminUsersOrganizationList(NamedTuple):
+    organizations: List[Pick[Organization, Literal['id', 'name', 'accepted', 'user.first_name', 'user.last_name']]]
+
+
+@template
+class AdminUsersOrganizationUpdate(NamedTuple):
+    form: OrganizationForm
+    edit_mode: bool

@@ -28,6 +28,8 @@ from .templates import (
     AccountResetPasswordComplete,
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
+    AdminUsersOrganizationList,
+    AdminUsersOrganizationUpdate,
     AdminUsersPreferences,
     AdminUsersPreferencesEdit,
     AdminUsersSendEmail,
@@ -225,9 +227,8 @@ def activate(request, uidb64, token):
 @staff_member_required
 @require_http_methods(['GET'])
 def organizations(request):
-    org = Organization.objects.all()
-    ctx = {'organizations': org}
-    return render(request, 'users/organizations.html', ctx)
+    organizations = Organization.objects.all()
+    return AdminUsersOrganizationList(organizations=organizations).render(request)
 
 
 @staff_member_required
@@ -244,8 +245,8 @@ def update_organization(request, pk=None):
         form.save()
         messages.success(request, _('Organization updated'))
         return redirect('organizations')
-    ctx = {'form': form, 'organization': organization}
-    return render(request, 'users/organization_form.html', ctx)
+
+    return AdminUsersOrganizationUpdate(form=form, edit_mode=organization is not None).render(request)
 
 
 @staff_member_required
