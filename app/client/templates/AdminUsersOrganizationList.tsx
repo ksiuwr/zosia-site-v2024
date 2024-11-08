@@ -1,5 +1,6 @@
 import { AdminCenteredContentContainer } from "@client/components/admin/layout/AdminCenteredContentContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
+import { AdminOrganizationsAcceptedCheckbox } from "@client/components/admin/organizations/AdminOrganizationsAcceptedCheckbox";
 import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
@@ -28,7 +29,12 @@ export const Template = (props: templates.AdminUsersOrganizationList) => {
             <tr key={organization.id}>
               <td>{organization.name}</td>
               <td>{`${organization.user?.first_name || ""} ${organization.user?.last_name || ""}`}</td>
-              <td>{organization.accepted ? "Yes" : "No"}</td>
+              <td>
+                <AdminOrganizationsAcceptedCheckbox
+                  initialIsAccepted={organization.accepted}
+                  organizationId={organization.id}
+                />
+              </td>
               <td>
                 <AdminTableActions>
                   <AdminTableEditLink

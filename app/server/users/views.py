@@ -256,8 +256,9 @@ def toggle_organization(request):
     organization = get_object_or_404(Organization, pk=organization_id)
     organization.accepted = not organization.accepted
     organization.save(update_fields=['accepted'])
-    return JsonResponse({'msg': "{} changed status!".format(
-        escape(organization))})
+    return JsonResponse(
+        {'msg': f"Organization \"{escape(organization)}\" changed status!", "isAccepted": organization.accepted}
+    )
 
 
 @staff_member_required()
