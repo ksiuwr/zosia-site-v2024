@@ -80,3 +80,40 @@ class AdminTransportPassangers(NamedTuple):
 class AdminTransportUpdate(NamedTuple):
     form: TransportForm
     edit_mode: bool
+
+
+class StatisticsDiscountData(NamedTuple):
+    num_of_taken_discounts_per_round: List[int]
+    available_discounts_per_round: List[int]
+
+
+class StatisticsUserPreferencesData(NamedTuple):
+    num_of_users_with_payment: int
+    num_of_users_with_prefs_only: int
+    num_of_users_without_prefs: int
+
+
+class StatisticsCostData(NamedTuple):
+    cost_values: List[int]
+    cost_counts: List[int]
+
+
+class StatisticsTransportData(NamedTuple):
+    class TransportDataValues(NamedTuple):
+        paid: List[int]
+        not_paid: List[int]
+        empty: List[int]
+
+    transport_labels: List[str]
+    transport_values: TransportDataValues
+
+
+@template
+class AdminStatistics(NamedTuple):
+    num_of_registered_users: int
+    num_of_vegetarians: int
+    num_of_students: int
+    discount_data: StatisticsDiscountData
+    user_preferences_data: StatisticsUserPreferencesData
+    cost_data: StatisticsCostData
+    transport_data: StatisticsTransportData

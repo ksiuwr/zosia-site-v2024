@@ -18,10 +18,15 @@ from .templates import (
     AdminPanelHome,
     AdminPlacesList,
     AdminPlacesUpdate,
+    AdminStatistics,
     AdminTransportList,
     AdminTransportPassangers,
     AdminTransportUpdate,
     HomePage,
+    StatisticsCostData,
+    StatisticsDiscountData,
+    StatisticsTransportData,
+    StatisticsUserPreferencesData,
     TermsAndConditions,
     PrivacyPolicy,
     SignupRules,
@@ -286,10 +291,6 @@ def statistics(request):
     prefs_count = user_prefs.count()
     paid_count = user_prefs.filter(payment_accepted=True).count()
 
-    users_with_payment = paid_count
-    users_with_prefs_only = prefs_count - paid_count
-    users_without_prefs = users_count - prefs_count
-
     # data for second chart
     if len(user_prefs):
         price_items = Counter([t.price for t in user_prefs]).items()
@@ -300,45 +301,44 @@ def statistics(request):
     # data for transport info chart
     transport_list = Transport.objects.all()
     transport_labels = []
-    transport_values = {'paid': [], 'notPaid': [], 'empty': []}
+    transport_values = {'paid': [], 'not_paid': [], 'empty': []}
     for t in transport_list:
         transport_labels.append(f'{t}')
         transport_values['paid'].append(t.paid_passengers_count)
-        transport_values['notPaid'].append(t.passengers_count - t.paid_passengers_count)
+        transport_values['not_paid'].append(t.passengers_count - t.paid_passengers_count)
         transport_values['empty'].append(t.free_seats)
 
     # discount
     discounts = list(
         user_prefs.filter(discount_round__gt=0).values_list('discount_round', flat=True))
 
-    # discount_values = {
-    #     "round_1": (discounts.count(1), zosia.first_discount_limit),
-    #     "round_2": (discounts.count(2), zosia.second_discount_limit),
-    #     "round_3": (discounts.count(3), zosia.third_discount_limit)
-    #     }
-
-    discount_values = {
-        "taken": [discounts.count(x) for x in (1, 2, 3)],
-        "available": [
-            zosia.first_discount_limit-discounts.count(1),
-            zosia.second_discount_limit-discounts.count(2),
-            zosia.third_discount_limit-discounts.count(3)]
-    }
-
     # other data
     vegetarians = user_prefs.filter(vegetarian=True).count()
     students = user_prefs.filter(is_student=True).count()
 
-    ctx = {
-        'registeredUsers': prefs_count,
-        'vegetarians': vegetarians,
-        'students': students,
-        'discountsData': json.dumps(discount_values),
-        'userPrefsData': [users_with_payment, users_with_prefs_only, users_without_prefs],
-        'userCostsValues': list(price_values),
-        'userCostsCounts': list(price_counts),
-        'transportLabels': json.dumps(transport_labels),
-        'transportValues': json.dumps(transport_values),
-        'numberOfTransport': len(transport_labels)
-    }
-    return render(request, 'conferences/statistics.html', ctx)
+    return AdminStatistics(
+        num_of_registered_users=prefs_count,
+        num_of_vegetarians=vegetarians,
+        num_of_students=students,
+        discount_data=StatisticsDiscountData(
+            num_of_taken_discounts_per_round=[discounts.count(x) for x in (1, 2, 3)],
+            available_discounts_per_round=[
+                zosia.first_discount_limit - discounts.count(1),
+                zosia.second_discount_limit - discounts.count(2),
+                zosia.third_discount_limit - discounts.count(3),
+            ],
+        ),
+        user_preferences_data=StatisticsUserPreferencesData(
+            num_of_users_with_payment=paid_count,
+            num_of_users_with_prefs_only=prefs_count - paid_count,
+            num_of_users_without_prefs=users_count - prefs_count,
+        ),
+        cost_data=StatisticsCostData(
+            cost_values=list(price_values),
+            cost_counts=list(price_counts),
+        ),
+        transport_data=StatisticsTransportData(
+            transport_labels=transport_labels,
+            transport_values=transport_values,
+        ),
+    ).render(request)
