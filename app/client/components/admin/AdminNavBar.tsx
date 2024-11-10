@@ -1,3 +1,4 @@
+import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import { Context, reverse } from "@reactivated";
 import clsx from "clsx";
 import React, { useContext } from "react";
@@ -149,9 +150,9 @@ export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
   return (
     <nav
       className={clsx(
-        showAsSidebar && "hidden h-full overflow-scroll bg-base-200 lg:block",
-        !showAsSidebar &&
-          "w-full rounded-box border border-base-content bg-base-100",
+        "bg-base-200",
+        showAsSidebar && "hidden h-full overflow-scroll lg:block",
+        !showAsSidebar && "w-full rounded-box border border-base-content",
       )}
     >
       {showAsSidebar && (
@@ -162,13 +163,7 @@ export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
         </h1>
       )}
 
-      <ul
-        className={clsx(
-          "menu w-full rounded-box",
-          showAsSidebar && "lg:menu-md",
-          !showAsSidebar && "lg:menu-lg",
-        )}
-      >
+      <ul className="menu menu-sm w-full rounded-box lg:menu-md">
         {navbarSections.map(({ sectionTitle, links }) => (
           <li key={sectionTitle}>
             <h2
@@ -190,6 +185,14 @@ export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
                         "bg-base-content text-base-100 hover:bg-base-content hover:text-base-100",
                     )}
                   >
+                    {sectionTitle === "Downloads" && (
+                      <ArrowDownTrayIcon
+                        className={clsx(
+                          showAsSidebar && "size-4",
+                          !showAsSidebar && "size-4 lg:size-6",
+                        )}
+                      />
+                    )}
                     {linkTitle}
                   </a>
                 </li>
