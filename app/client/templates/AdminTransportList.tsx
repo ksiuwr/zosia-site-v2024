@@ -3,7 +3,7 @@ import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
 import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
-import { AdminTablePassangersLink } from "@client/components/admin/tables/AdminTablePassangersLink";
+import { AdminTablePassengersLink } from "@client/components/admin/tables/AdminTablePassengersLink";
 import { PageTitle } from "@client/components/PageTitle";
 import { getLocalTime } from "@client/utils/time";
 import { reverse, templates } from "@reactivated";
@@ -33,7 +33,7 @@ export const Template = (props: templates.AdminTransportList) => {
               <td>{`${transport.passengers.length}/${transport.capacity}`}</td>
               <td>
                 <AdminTableActions>
-                  <AdminTablePassangersLink
+                  <AdminTablePassengersLink
                     href={reverse("transport_people", {
                       pk: transport.id,
                     })}

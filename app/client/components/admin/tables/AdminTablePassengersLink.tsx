@@ -1,17 +1,17 @@
 import { UserIcon } from "@heroicons/react/24/solid";
 import React from "react";
 
-interface AdminTablePassangersLinkProps {
+interface AdminTablePassengersLinkProps {
   href: string;
 }
 
-export const AdminTablePassangersLink = ({
+export const AdminTablePassengersLink = ({
   href,
-}: AdminTablePassangersLinkProps) => {
+}: AdminTablePassengersLinkProps) => {
   return (
     <a href={href} className="btn btn-sm flex grow lg:btn-md">
       <UserIcon className="size-4 lg:size-6" />
-      <span className="hidden lg:inline-block">Passangers</span>
+      <span className="hidden lg:inline-block">Passengers</span>
     </a>
   );
 };
