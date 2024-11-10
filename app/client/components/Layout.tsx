@@ -1,6 +1,7 @@
 import { themeInitScript } from "@client/utils/themes";
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import clsx from "clsx";
 import parse from "html-react-parser";
 import React, {
   PropsWithChildren,
@@ -10,11 +11,19 @@ import React, {
 } from "react";
 import { Helmet } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
+import { AdminNavBar } from "./admin/AdminNavBar";
 import { showCustomToast } from "./CustomToast";
 import { Footer } from "./Footer";
 import { Navbar } from "./navbar/Navbar";
 
-export const Layout = ({ children }: PropsWithChildren) => {
+interface LayoutProps {
+  showAdminSidebar?: boolean;
+}
+
+export const Layout = ({
+  showAdminSidebar,
+  children,
+}: PropsWithChildren<LayoutProps>) => {
   const { messages, STATIC_URL } = useContext(Context);
 
   // React query docs recommend keeping the query client in React state
@@ -60,11 +69,23 @@ export const Layout = ({ children }: PropsWithChildren) => {
       </Helmet>
       <Toaster position="top-center" />
       <QueryClientProvider client={queryClient}>
-        <div className="flex h-dvh flex-col">
-          <Navbar />
+        {showAdminSidebar && (
+          <div className="fixed z-50 hidden h-screen w-80 overflow-scroll lg:block">
+            <AdminNavBar showAsSidebar />
+          </div>
+        )}
+
+        <div
+          className={clsx(
+            "flex h-dvh flex-col",
+            showAdminSidebar && "lg:ml-80",
+          )}
+        >
+          <Navbar adminSidebarShown={showAdminSidebar} />
           <main className="grow bg-base-100">{children}</main>
-          <Footer />
+          <Footer adminSidebarShown={showAdminSidebar} />
         </div>
+
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </>

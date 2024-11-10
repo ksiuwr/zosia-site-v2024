@@ -13,23 +13,23 @@ from server.utils.constants import PAYMENT_GROUPS
 
 GROUPS = (
     ('pick', 'Pick users'),
-    ('all_Users', 'All users'),
+    ('all_users', 'All users'),
     ('staff', 'Staff'),
     ('active', 'Active'),
     ('inactive', "Haven't activated their account yet"),
     ('registered', 'Registered to zosia'),
-    ('payed', 'Payed for zosia'),
-    ('not_Payed', "Didn't pay for zosia"),
+    ('paid', 'Paid for zosia'),
+    ('not_paid', "Didn't pay for zosia"),
 )
 
 
 class MailForm(forms.Form):
     subject = forms.CharField()
     text = forms.CharField(widget=forms.Textarea)
-    select_groups = forms.ChoiceField(choices=GROUPS)
+    select_groups = forms.ChoiceField(choices=GROUPS, initial=GROUPS[0][0])
     pick = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(), to_field_name="email", required=False)
-    all_Users = forms.ModelMultipleChoiceField(
+    all_users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(), to_field_name="email", required=False)
     staff = forms.ModelMultipleChoiceField(
         queryset=User.objects.filter(is_staff=True),
@@ -43,16 +43,16 @@ class MailForm(forms.Form):
     registered = forms.ModelMultipleChoiceField(
         queryset=User.objects.filter(preferences__isnull=False).distinct(),
         to_field_name="email", required=False)
-    payed = forms.ModelMultipleChoiceField(
+    paid = forms.ModelMultipleChoiceField(
         queryset=User.objects.filter(preferences__payment_accepted=True).distinct(),
         to_field_name="email", required=False)
-    not_Payed = forms.ModelMultipleChoiceField(
+    not_paid = forms.ModelMultipleChoiceField(
         queryset=User.objects.filter(preferences__payment_accepted=False).distinct(),
         to_field_name="email", required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["all_Users"].initial = (
+        self.fields["all_users"].initial = (
             User.objects.all().values_list('email', flat=True)
         )
         self.fields["staff"].initial = (
@@ -68,11 +68,11 @@ class MailForm(forms.Form):
             User.objects.filter(preferences__isnull=False).distinct()
                 .values_list('email', flat=True)
         )
-        self.fields["payed"].initial = (
+        self.fields["paid"].initial = (
             User.objects.filter(preferences__payment_accepted=True).distinct()
                 .values_list('email', flat=True)
         )
-        self.fields["not_Payed"].initial = (
+        self.fields["not_paid"].initial = (
             User.objects.filter(preferences__payment_accepted=False).distinct()
                 .values_list('email', flat=True)
         )

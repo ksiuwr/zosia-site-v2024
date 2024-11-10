@@ -1,8 +1,9 @@
-import { Checkbox, Input, Select, Textarea } from "@headlessui/react";
+import { Checkbox, Input, Textarea } from "@headlessui/react";
 import { FieldHandler, Widget } from "@reactivated";
 import React from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
 import { DjangoFormsWidgetsCheckboxInput } from "reactivated/dist/generated";
+import { BasicListbox } from "./widgets/BasicListbox";
 
 interface BasicWidgetProps {
   field: FieldHandler;
@@ -22,6 +23,7 @@ export const BasicWidget = ({
     case "django.forms.widgets.TextInput":
     case "django.forms.widgets.EmailInput":
     case "django.forms.widgets.PasswordInput":
+    case "django.forms.widgets.NumberInput":
       return (
         <Input
           type={field.widget.type}
@@ -60,24 +62,23 @@ export const BasicWidget = ({
 
     case "django.forms.widgets.Select":
       return (
-        <Select
+        <BasicListbox
           name={field.name}
-          className="select select-bordered w-full"
-          required={field.widget.required}
           value={field.value ?? ""}
-          onChange={(e) => field.handler(e.target.value)}
-        >
-          {field.widget.optgroups.map((optgroup) => {
-            const currentOption = optgroup[1][0];
-            const optgroupValue = (currentOption.value ?? "").toString();
-
-            return (
-              <option key={optgroupValue} value={optgroupValue}>
-                {currentOption.label}
-              </option>
-            );
-          })}
-        </Select>
+          onChange={field.handler}
+          optgroups={field.widget.optgroups.map((optgroup) => optgroup[1][0])}
+          multiple={false}
+        />
+      );
+    case "django.forms.widgets.SelectMultiple":
+      return (
+        <BasicListbox
+          name={field.name}
+          value={field.value ?? []}
+          onChange={field.handler}
+          optgroups={field.widget.optgroups.map((optgroup) => optgroup[1][0])}
+          multiple={true}
+        />
       );
     default:
       return <Widget field={field} />;

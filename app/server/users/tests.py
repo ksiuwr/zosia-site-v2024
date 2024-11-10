@@ -194,8 +194,6 @@ class UserPreferencesIndexTestCase(UserPreferencesTestCase):
         login_as_user(self.staff, self.client)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(list(context['objects']), list(UserPreferences.objects.all()))
 
     def test_index_get_staff_user_multiple_zosias(self):
         another_zosia = create_zosia()
@@ -205,9 +203,6 @@ class UserPreferencesIndexTestCase(UserPreferencesTestCase):
         login_as_user(self.staff, self.client)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(list(context['objects']),
-                         list(UserPreferences.objects.filter(zosia=self.zosia).all()))
 
 
 class UserPreferencesAdminEditTestCase(UserPreferencesTestCase):
@@ -272,9 +267,6 @@ class UserPreferencesEditTestCase(UserPreferencesTestCase):
         login_as_user(self.staff, self.client)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['object'], self.user_prefs)
-        self.assertEqual(context['form'].__class__, UserPreferencesAdminForm)
 
     def test_post_staff_user_will_change_prefs(self):
         login_as_user(self.staff, self.client)

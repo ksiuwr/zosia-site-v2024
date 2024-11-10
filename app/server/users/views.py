@@ -27,6 +27,10 @@ from .templates import (
     AccountResetPasswordComplete,
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
+    AdminUsersPreferences,
+    AdminUsersPreferencesEdit,
+    AdminUsersSendEmail,
+    AdminUsersSendEmailComplete,
     Login,
     Profile,
     Register,
@@ -187,19 +191,17 @@ class ReactResetPasswordCompleteView(PasswordResetCompleteView):
 @require_http_methods(['GET', 'POST'])
 def mail_to_all(request):
     form = forms.MailForm(request.POST or None)
-    print(request.method)
+
     if request.method == 'POST':
         print(form.errors)
         if form.is_valid():
             form.send_mail()
             text = form.cleaned_data.get('text')
             subject = form.cleaned_data.get('subject')
-            receivers = form.receivers()
-            ctx = {'text': text, 'subject': subject, 'receivers': receivers}
-            return render(request, 'users/mail_sent.html', ctx)
+            receivers = map(lambda user: user.email, form.receivers()) 
+            return AdminUsersSendEmailComplete(text=text, subject=subject, receivers=receivers).render(request)
 
-    ctx = {'form': form}
-    return render(request, 'users/mail.html', ctx)
+    return AdminUsersSendEmail(form=form).render(request)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -269,32 +271,35 @@ def user_preferences_index(request):
         .filter(zosia=zosia).select_related('user') \
         .order_by('pk') \
         .all()
-    ctx = {
-        'objects': user_preferences,
-        'change_bonus': ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS,
-        'toggle_payment': ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT,
-        'min_bonus': MIN_BONUS_MINUTES,
-        'max_bonus': MAX_BONUS_MINUTES,
-        'bonus_step': BONUS_STEP,
-    }
 
-    return render(request, 'users/user_preferences_index.html', ctx)
+    price_for_user = list(
+        map(lambda user_pref: {"user_id": user_pref.user.id, "price": user_pref.price}, user_preferences)
+    )
+
+    return AdminUsersPreferences(
+        user_preferences=user_preferences,
+        price_for_user=price_for_user,
+        change_bonus_command=ADMIN_USER_PREFERENCES_COMMAND_CHANGE_BONUS,
+        toggle_payment_command=ADMIN_USER_PREFERENCES_COMMAND_TOGGLE_PAYMENT,
+        min_bonus_minutes=MIN_BONUS_MINUTES,
+        max_bonus_minutes=MAX_BONUS_MINUTES,
+        bonus_step=BONUS_STEP
+    ).render(request)
 
 
 @staff_member_required()
 @require_http_methods(['GET', 'POST'])
 def user_preferences_edit(request, pk=None):
-    ctx = {}
     kwargs = {}
+    user = None
 
     if pk is not None:
         user_preferences = get_object_or_404(UserPreferences, pk=pk)
-        ctx['object'] = user_preferences
+        user = user_preferences.user
         kwargs['instance'] = user_preferences
 
     form = UserPreferencesAdminForm(request.POST or None, **kwargs)
-    ctx['form'] = form
-
+    
     if request.method == 'POST':
         if form.is_valid():
             form.save()
@@ -304,7 +309,7 @@ def user_preferences_edit(request, pk=None):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'users/user_preferences_edit.html', ctx)
+    return AdminUsersPreferencesEdit(form=form, user=user).render(request)
 
 
 @staff_member_required()

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
 import { DjangoFormsWidgetsSelect } from "reactivated/dist/generated";
+import { BasicListbox } from "../forms/widgets/BasicListbox";
 
 interface LectureDurationSelectProps {
   field: WidgetHandler<DjangoFormsWidgetsSelect>;
@@ -31,7 +32,10 @@ export const LectureDurationSelect = ({
       const res = await zosiaApi.get(zosiaApiRoutes.addLectureDurations, {
         params: { lecture_type: lecture },
       });
-      return res.data as LectureDurations;
+
+      return {
+        durations: res.data.durations.map(String) as string[],
+      };
     },
   });
 
@@ -49,19 +53,21 @@ export const LectureDurationSelect = ({
       </Select>
     );
 
+  if (field.value && !data.durations.includes(field.value)) {
+    // If the currently selected duration is not one of available durations, reset it to ""
+    field.handler("");
+  }
+
   return (
-    <Select
+    <BasicListbox
       name={field.name}
-      className="select select-bordered w-full"
-      required={field.widget.required}
       value={field.value ?? ""}
-      onChange={(e) => field.handler(e.target.value)}
-    >
-      {data.durations.map((duration) => (
-        <option key={duration} value={duration}>
-          {duration}
-        </option>
-      ))}
-    </Select>
+      onChange={field.handler}
+      optgroups={data.durations.map((duration) => ({
+        value: duration,
+        label: duration,
+      }))}
+      multiple={false}
+    />
   );
 };
