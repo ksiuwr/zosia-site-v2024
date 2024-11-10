@@ -33,3 +33,8 @@ class BoardgamesAdd(NamedTuple):
 class BoardgamesVote(NamedTuple):
     boardgames: List[Pick[Boardgame, Literal["id", "name", "url"]]]
     boardgame_ids_vote_for: List[int]
+
+
+@template
+class AdminBoardgamesAccept(NamedTuple):
+    boardgames: List[Pick[Boardgame, Literal["id", "name", "url", "accepted", "user.first_name", "user.last_name"]]]

@@ -23,4 +23,5 @@ export const zosiaApiRoutes = {
   adminSponsorToggleActive: reverse("sponsors_toggle_active"),
   adminLecturesToggleAccept: reverse("lectures_toggle_accept"),
   adminOrganizationsToggleAccept: reverse("toggle_organization"),
+  adminBoardgamesToggleAccept: reverse("boardgames_toggle_accept"),
 };

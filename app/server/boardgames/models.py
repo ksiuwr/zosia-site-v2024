@@ -16,6 +16,7 @@ class Boardgame(models.Model):
 
     def toggle_accepted(self):
         self.accepted = not self.accepted
+        self.save()
 
 
 class Vote(models.Model):
