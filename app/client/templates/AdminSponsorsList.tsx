@@ -1,10 +1,11 @@
+import { AdminAcceptedCheckbox } from "@client/components/admin/AdminAcceptedCheckbox";
 import { AdminCenteredContentContainer } from "@client/components/admin/layout/AdminCenteredContentContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
-import { AdminSponsorsActiveCheckbox } from "@client/components/admin/sponsors/AdminSponsorsActiveCheckbox";
 import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { PageTitle } from "@client/components/PageTitle";
+import { zosiaApiRoutes } from "@client/utils/zosiaApi";
 import { reverse, templates } from "@reactivated";
 import clsx from "clsx";
 import React from "react";
@@ -45,9 +46,11 @@ export const Template = (props: templates.AdminSponsorsList) => {
                   </span>
                 </td>
                 <td>
-                  <AdminSponsorsActiveCheckbox
-                    sponsorId={sponsor.id}
-                    initialIsActive={sponsor.is_active}
+                  <AdminAcceptedCheckbox
+                    id={sponsor.id}
+                    initialIsAccepted={sponsor.is_active}
+                    apiRoute={zosiaApiRoutes.adminSponsorToggleActive}
+                    errorMessage="Error while toggling sponsor active state."
                   />
                 </td>
                 <td>

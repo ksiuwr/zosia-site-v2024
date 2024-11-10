@@ -1,11 +1,12 @@
+import { AdminAcceptedCheckbox } from "@client/components/admin/AdminAcceptedCheckbox";
 import { AdminCenteredContainer } from "@client/components/admin/layout/AdminCenteredContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
-import { AdminLecturesAcceptedCheckbox } from "@client/components/admin/lectures/AdminLecturesAcceptedCheckbox";
 import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { AdminTablePopover } from "@client/components/admin/tables/AdminTablePopover";
 import { PageTitle } from "@client/components/PageTitle";
+import { zosiaApiRoutes } from "@client/utils/zosiaApi";
 import { reverse, templates } from "@reactivated";
 import React from "react";
 
@@ -61,9 +62,11 @@ export const Template = (props: templates.AdminLecturesList) => {
                 }
               </td>
               <td>
-                <AdminLecturesAcceptedCheckbox
-                  lectureId={lecture.id}
-                  initialIsActive={lecture.accepted}
+                <AdminAcceptedCheckbox
+                  id={lecture.id}
+                  initialIsAccepted={lecture.accepted}
+                  apiRoute={zosiaApiRoutes.adminLecturesToggleAccept}
+                  errorMessage="Error while toggling lecture accepted state."
                 />
               </td>
               <td>

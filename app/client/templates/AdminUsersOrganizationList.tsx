@@ -1,10 +1,11 @@
+import { AdminAcceptedCheckbox } from "@client/components/admin/AdminAcceptedCheckbox";
 import { AdminCenteredContentContainer } from "@client/components/admin/layout/AdminCenteredContentContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
-import { AdminOrganizationsAcceptedCheckbox } from "@client/components/admin/organizations/AdminOrganizationsAcceptedCheckbox";
 import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { PageTitle } from "@client/components/PageTitle";
+import { zosiaApiRoutes } from "@client/utils/zosiaApi";
 import { reverse, templates } from "@reactivated";
 import React from "react";
 
@@ -30,9 +31,11 @@ export const Template = (props: templates.AdminUsersOrganizationList) => {
               <td>{organization.name}</td>
               <td>{`${organization.user?.first_name || ""} ${organization.user?.last_name || ""}`}</td>
               <td>
-                <AdminOrganizationsAcceptedCheckbox
+                <AdminAcceptedCheckbox
+                  id={organization.id}
                   initialIsAccepted={organization.accepted}
-                  organizationId={organization.id}
+                  apiRoute={zosiaApiRoutes.adminOrganizationsToggleAccept}
+                  errorMessage="Error while toggling organization accepted state."
                 />
               </td>
               <td>
