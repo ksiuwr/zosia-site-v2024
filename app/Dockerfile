@@ -58,3 +58,5 @@ COPY scripts ./scripts
 # Build frontend
 RUN python manage.py generate_client_assets
 RUN python manage.py build
+
+ENTRYPOINT [ "./scripts/start_prod_server.sh" ]
