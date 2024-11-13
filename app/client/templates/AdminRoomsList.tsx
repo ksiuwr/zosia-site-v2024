@@ -9,9 +9,12 @@ import React from "react";
 export const Template = (props: templates.AdminRoomsList) => {
   return (
     <AdminLayout>
-      <PageTitle>Rooms</PageTitle>
+      <PageTitle>Rooms Admin</PageTitle>
       <AdminCenteredContainer>
-        <Rooms initialRoomsData={createRoomDataFromTemplateProps(props)} />
+        <Rooms
+          initialRoomsData={createRoomDataFromTemplateProps(props)}
+          isAdmin
+        />
       </AdminCenteredContainer>
     </AdminLayout>
   );

@@ -22,6 +22,7 @@ export const Rooms = ({ initialRoomsData, isAdmin }: RoomsProps) => {
         onHideFullRoomsChange={setHideFullRooms}
         sortRoomsBy={sortRoomsBy}
         onSortRoomsByChange={setSortRoomsBy}
+        isAdmin={isAdmin}
       />
       <RoomCards
         initialRoomData={initialRoomsData}
