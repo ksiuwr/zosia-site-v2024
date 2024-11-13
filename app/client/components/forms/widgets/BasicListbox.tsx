@@ -70,10 +70,10 @@ export const BasicListbox = ({
             <ListboxOption
               key={optgroupValue}
               value={optgroupValue}
-              className="group btn no-animation btn-block justify-start rounded-none font-normal data-[selected]:btn-success data-[focus]:btn-active"
+              className="group btn no-animation btn-block flex flex-nowrap justify-start rounded-none text-start font-normal data-[selected]:btn-success data-[focus]:btn-active"
             >
               {currentOption.label}
-              <CheckIcon className="invisible size-6 group-data-[selected]:visible" />
+              <CheckIcon className="hidden size-6 group-data-[selected]:inline-block" />
             </ListboxOption>
           );
         })}

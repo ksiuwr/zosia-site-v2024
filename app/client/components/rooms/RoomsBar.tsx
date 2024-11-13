@@ -1,6 +1,7 @@
-import { Checkbox, Field, Input, Label, Select } from "@headlessui/react";
+import { Checkbox, Field, Input, Label } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React from "react";
+import { BasicListbox } from "../forms/widgets/BasicListbox";
 
 interface RoomsBarProps {
   searchText: string;
@@ -46,15 +47,17 @@ export const RoomsBar = ({
         />
       </Field>
       <Field className="flex items-center">
-        <Label className="pr-3">Sort by</Label>
-        <Select
-          className="select select-bordered"
+        <Label className="whitespace-nowrap pr-3">Sort by</Label>
+        <BasicListbox
+          name="sortRoomsBy"
           value={sortRoomsBy}
-          onChange={(e) => onSortRoomsByChange(e.target.value as RoomsSortBy)}
-        >
-          <option value="roomNumber">Room number</option>
-          <option value="fullness">Fullness</option>
-        </Select>
+          optgroups={[
+            { value: "roomNumber", label: "Room number" },
+            { value: "fullness", label: "Fullness" },
+          ]}
+          onChange={(newValue) => onSortRoomsByChange(newValue as RoomsSortBy)}
+          multiple={false}
+        />
       </Field>
     </div>
   );
