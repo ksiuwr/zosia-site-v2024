@@ -1,7 +1,12 @@
 #!/bin/sh
 set -eu
 
-PROJECT_ID="<put Google Cloud Project ID here>"
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <GCP Project ID>"
+    exit 1
+fi
+
+PROJECT_ID="$1"
 REPO_NAME=zosia-repo
 REGION=europe-central2
 REPO_HOSTNAME=$REGION-docker.pkg.dev
@@ -18,9 +23,11 @@ docker build --target prod -t $IMAGE_URL .
 docker push $IMAGE_URL
 
 # Run the migration job
+gcloud run jobs update migrate --region=$REGION --image $IMAGE_URL
 gcloud run jobs execute migrate --wait --region=$REGION
 
 # Run the collectstatic job which will collect all the static files into GCS bucket
+gcloud run jobs update collectstatic --region=$REGION --image $IMAGE_URL
 gcloud run jobs execute collectstatic --wait --region=$REGION
 
 # Deploy new service revision with the new image
