@@ -16,7 +16,7 @@ from django.views.decorators.vary import vary_on_cookie
 from server.conferences.models import Zosia
 from .forms import UploadFileForm
 from .models import Room
-from .templates import Rooms
+from .templates import AdminRoomsList, Rooms
 from server.users.models import UserPreferences
 from server.utils.views import csv_response, validation_format
 
@@ -120,6 +120,15 @@ def handle_uploaded_file(csvfile):
             "Could not add rooms, check whether the file is properly formed and all values are "
             "correct.",
             code="invalid")
+
+
+@staff_member_required
+@require_http_methods(['GET'])
+def admin_rooms_list(request):
+    rooms = Room.objects.all_visible().prefetch_related('members').all()
+    rooms = sorted(rooms, key=lambda x: x.pk)
+
+    return AdminRoomsList(rooms=rooms).render(request)
 
 
 @staff_member_required

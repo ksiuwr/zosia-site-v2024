@@ -74,7 +74,9 @@ export const convertRoomAPIDataToRoomData = (room: RoomAPIData): RoomData => {
   };
 };
 
-export const createRoomDataFromTemplateProps = (props: templates.Rooms) => {
+export const createRoomDataFromTemplateProps = (
+  props: templates.Rooms | templates.AdminRoomsList,
+) => {
   return props.rooms.map((room) => ({
     id: room.id,
     name: room.name,
@@ -92,6 +94,7 @@ export const createRoomDataFromTemplateProps = (props: templates.Rooms) => {
             lastName: room.lock.user.last_name,
           },
           password:
+            "user_room_lock" in props &&
             props.user_room_lock?.id === room.lock.id
               ? props.user_room_lock.password
               : undefined,

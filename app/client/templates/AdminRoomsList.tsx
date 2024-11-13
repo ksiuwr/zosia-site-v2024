@@ -1,18 +1,18 @@
-import { CenteredContainer } from "@client/components/containers/CenteredContainer";
-import { Layout } from "@client/components/Layout";
+import { AdminCenteredContainer } from "@client/components/admin/layout/AdminCenteredContainer";
+import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
 import { PageTitle } from "@client/components/PageTitle";
 import { Rooms } from "@client/components/rooms/Rooms";
 import { createRoomDataFromTemplateProps } from "@client/utils/roomData";
 import { templates } from "@reactivated";
 import React from "react";
 
-export const Template = (props: templates.Rooms) => {
+export const Template = (props: templates.AdminRoomsList) => {
   return (
-    <Layout>
+    <AdminLayout>
       <PageTitle>Rooms</PageTitle>
-      <CenteredContainer>
+      <AdminCenteredContainer>
         <Rooms initialRoomsData={createRoomDataFromTemplateProps(props)} />
-      </CenteredContainer>
-    </Layout>
+      </AdminCenteredContainer>
+    </AdminLayout>
   );
 };
