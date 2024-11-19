@@ -45,7 +45,7 @@ jobs:
             echo ${GCP_PROJECT_KEY_BASE64_ENCODED} | base64 --decode --ignore-garbage > $HOME/gcloud-service-key.json
             gcloud auth activate-service-account --key-file=$HOME/gcloud-service-key.json
 
-            ./app/deploy.sh ${GCP_PROJECT_ID}
+            cd ./app && ./deploy.sh ${GCP_PROJECT_ID}
       # - run:
       #     name: Purge cache
       #     command: |
