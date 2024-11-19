@@ -24,6 +24,7 @@ export const BasicWidget = ({
     case "django.forms.widgets.EmailInput":
     case "django.forms.widgets.PasswordInput":
     case "django.forms.widgets.NumberInput":
+    case "django.forms.widgets.URLInput":
       return (
         <Input
           type={field.widget.type}

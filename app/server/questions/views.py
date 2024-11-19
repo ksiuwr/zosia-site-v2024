@@ -5,7 +5,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_cookie
 
-from .templates import QuestionsAndAnswers
+from .templates import AdminQuestionsList, AdminQuestionsUpdate, QuestionsAndAnswers
 from .forms import QAForm
 from .models import QA
 from server.utils.forms import errors_format
@@ -23,8 +23,7 @@ def index(request):
 @staff_member_required()
 def index_for_staff(request):
     qas = QA.objects.all().order_by('-priority')
-    ctx = {'questions': qas}
-    return render(request, 'questions/index_staff.html', ctx)
+    return AdminQuestionsList(questions=qas).render(request)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -46,8 +45,7 @@ def update(request, question_id=None):
         else:
             messages.error(request, errors_format(form))
 
-    ctx = {'form': form, 'question': question}
-    return render(request, 'questions/update.html', ctx)
+    return AdminQuestionsUpdate(form=form, editing_existing_question=question is not None).render(request)
 
 
 @require_http_methods(['GET'])
@@ -55,4 +53,5 @@ def update(request, question_id=None):
 def delete(request, question_id):
     question = get_object_or_404(QA, pk=question_id)
     question.delete()
+    messages.success(request, 'Question deleted successfully')
     return redirect('questions_index_staff')

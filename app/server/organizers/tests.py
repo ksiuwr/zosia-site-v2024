@@ -59,15 +59,11 @@ class ViewsTestCase(TestCase):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('organizers_index'), follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(list(context['objects']), list(OrganizerContact.objects.all()))
 
     def test_add_get_staff_user(self):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('organizers_add'), follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, OrganizerForm)
 
     def test_edit_get_staff_user(self):
         login_as_user(self.staff, self.client)
@@ -77,7 +73,3 @@ class ViewsTestCase(TestCase):
                                            kwargs={'contact_id': organizer.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, OrganizerForm)
-        self.assertIsNone(context['form'].fields.get('user'))
-        self.assertEqual(context['object'], organizer)

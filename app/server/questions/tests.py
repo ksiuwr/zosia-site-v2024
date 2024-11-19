@@ -44,15 +44,11 @@ class ViewsTestCase(TestCase):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('questions_index_staff'), follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(list(context['questions']), list(QA.objects.all().order_by('-priority')))
 
     def test_add_get_staff_user(self):
         login_as_user(self.staff, self.client)
         response = self.client.get(reverse('questions_add'), follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, QAForm)
 
     def test_add_post(self):
         questions = QA.objects.count()
@@ -70,6 +66,3 @@ class ViewsTestCase(TestCase):
                                            kwargs={'question_id': qa.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['form'].__class__, QAForm)
-        self.assertEqual(context['question'], qa)

@@ -1,12 +1,7 @@
 import { CenteredContentContainer } from "@client/components/containers/CenteredContentContainer";
+import { CustomDisclosure } from "@client/components/CustomDisclosure";
 import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { templates } from "@reactivated";
 import React from "react";
 
@@ -17,16 +12,14 @@ export const Template = (props: templates.QuestionsAndAnswers) => {
       <CenteredContentContainer>
         <div className="my-5 w-full">
           {props.questions_and_answers.map((questionWithAnswer) => (
-            <div key={questionWithAnswer.id} className="mx-auto my-3 w-full">
-              <Disclosure>
-                <DisclosureButton className="group btn btn-outline no-animation btn-block flex h-fit flex-nowrap justify-between gap-5 py-6 text-start lg:btn-lg data-[open]:rounded-b-none">
-                  {questionWithAnswer.question}
-                  <ChevronDownIcon className="size-4 min-w-4 stroke-current group-data-[open]:rotate-180 [&>path]:stroke-[2]" />
-                </DisclosureButton>
-                <DisclosurePanel className="rounded-b-xl border-x border-b border-base-content bg-base-200 px-5 py-4">
-                  {questionWithAnswer.answer}
-                </DisclosurePanel>
-              </Disclosure>
+            <div
+              key={questionWithAnswer.id}
+              className="mx-auto my-2 w-full rounded-lg even:bg-base-200"
+            >
+              <CustomDisclosure
+                buttonLabel={questionWithAnswer.question}
+                panelContent={questionWithAnswer.answer}
+              />
             </div>
           ))}
         </div>

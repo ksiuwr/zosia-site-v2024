@@ -1,4 +1,5 @@
 import React from "react";
+import { AdminTableCheckbox } from "../tables/AdminTableCheckbox";
 import { useTogglePaymentAcceptedMutation } from "./AdminUsersMutations";
 
 interface AdminUsersPreferencesPaymentStatus {
@@ -23,16 +24,11 @@ export const AdminUsersPreferencesPaymentStatus = ({
     onPaymentAcceptedChange,
   );
 
-  if (togglePaymentAcceptedMutation.isPending) {
-    return <span className="loading loading-spinner size-5 lg:size-7"></span>;
-  }
-
   return (
-    <input
-      type="checkbox"
-      className={`checkbox mx-auto size-5 checked:checkbox-success lg:size-7`}
-      checked={paymentAccepted}
-      onChange={() => togglePaymentAcceptedMutation.mutate(userPreferencesId)}
+    <AdminTableCheckbox
+      isChecked={paymentAccepted}
+      isPending={togglePaymentAcceptedMutation.isPending}
+      onToggle={() => togglePaymentAcceptedMutation.mutate(userPreferencesId)}
     />
   );
 };

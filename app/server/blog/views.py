@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import gettext_lazy as _
 
 from .forms import BlogPostForm
 from .models import BlogPost
-from .templates import Blog
+from .templates import AdminBlogList, AdminBlogUpdate, Blog
 
 
 @require_http_methods(['GET'])
@@ -18,20 +18,19 @@ def index(request):
 @require_http_methods(['GET', 'POST'])
 def create(request):
     form = BlogPostForm(request.POST or None)
-    ctx = {'form': form}
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect('blog_index')
-    return render(request, 'blog/create.html', ctx)
+            return redirect('blog_list')
+
+    return AdminBlogUpdate(form=form).render(request)
 
 
 @staff_member_required
 @require_http_methods(['GET', 'POST'])
 def list(request):
-    ctx = {'posts': BlogPost.objects.select_related('author').all()}
-    return render(request, 'blog/list.html', ctx)
+    return AdminBlogList(posts=BlogPost.objects.select_related('author').all()).render(request)
 
 
 @staff_member_required
@@ -49,5 +48,4 @@ def edit(request, pk=None):
         messages.success(request, _('Post updated'))
         return redirect('blog_list')
 
-    ctx = {'form': form, 'post': post}
-    return render(request, 'blog/create.html', ctx)
+    return AdminBlogUpdate(form=form, editing_existing_post=post is not None).render(request)

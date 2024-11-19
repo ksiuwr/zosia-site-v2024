@@ -1,3 +1,4 @@
+import json
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -7,11 +8,10 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from .templates import AddLecture, Lectures
+from .templates import AddLecture, AdminLecturesList, AdminLecturesUpdate, AdminScheduleUpdate, Lectures, Schedule as ScheduleTemplate
 from server.conferences.models import Zosia
 from .forms import LectureAdminForm, LectureForm, ScheduleForm
 from .models import Lecture, Schedule
-from server.users.models import User
 from server.utils.forms import errors_format, get_durations
 
 
@@ -40,8 +40,7 @@ def display_all_staff(request):
     zosia = Zosia.objects.find_active()
     lectures = Lecture.objects.select_related('author').prefetch_related('supporting_authors') \
         .filter(zosia=zosia)
-    ctx = {'objects': lectures}
-    return render(request, 'lectures/all.html', ctx)
+    return AdminLecturesList(lectures=lectures).render(request)
 
 
 @staff_member_required()
@@ -53,8 +52,7 @@ def toggle_accept(request):
     lecture_id = request.POST.get('key', None)
     lecture = get_object_or_404(Lecture, pk=lecture_id)
     lecture.toggle_accepted()
-    return JsonResponse({'msg': "{} changed status!".format(
-        escape(lecture.title))})
+    return JsonResponse({'msg': "Lecture \"{}\" changed status!".format(escape(lecture.title)), "isActive": lecture.accepted})
 
 
 @login_required()
@@ -98,15 +96,13 @@ def lecture_update(request, lecture_id=None):
     """
     zosia = Zosia.objects.find_active()
     kwargs = {}
-    ctx = {}
+    lecture = None
 
     if lecture_id:
         lecture = get_object_or_404(Lecture, pk=lecture_id)
         kwargs['instance'] = lecture
-        ctx['object'] = lecture
 
     form = LectureAdminForm(request.POST or None, **kwargs)
-    ctx['form'] = form
 
     if request.method == 'POST':
         if form.is_valid():
@@ -119,15 +115,14 @@ def lecture_update(request, lecture_id=None):
         else:
             messages.error(request, errors_format(form))
 
-    return render(request, 'lectures/add.html', ctx)
+    return AdminLecturesUpdate(form=form, editing_existing_lecture=lecture is not None).render(request)
 
 
 def schedule_display(request):
     zosia = Zosia.objects.find_active()
     try:
         schedule = Schedule.objects.get(zosia=zosia)
-        ctx = {'schedule': schedule}
-        return render(request, 'lectures/schedule.html', ctx)
+        return ScheduleTemplate(schedule_json_data=json.dumps(schedule.schedule_data)).render(request)
     except Schedule.DoesNotExist:
         messages.warning(request, _("Schedule is not defined yet."))
         return redirect('lectures_index')
@@ -138,11 +133,13 @@ def schedule_update(request):
     zosia = Zosia.objects.find_active()
     schedule, _ = Schedule.objects.get_or_create(zosia=zosia)
     form = ScheduleForm(request.POST or None, instance=schedule)
-    ctx = {'form': form, 'zosia': zosia}
+
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-    return render(request, 'lectures/schedule_add.html', ctx)
+            return redirect('lectures_schedule')
+
+    return AdminScheduleUpdate(form=form).render(request)
 
 
 def load_durations(request):

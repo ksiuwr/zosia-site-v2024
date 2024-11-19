@@ -23,7 +23,7 @@ const navbarSections: AdminNavBarSection[] = [
     sectionTitle: "Organizers",
     links: [
       {
-        linkTitle: "List and edit organizers",
+        linkTitle: "List organizers",
         href: reverse("organizers_index"),
       },
       { linkTitle: "Add organizers", href: reverse("organizers_add") },

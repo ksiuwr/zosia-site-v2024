@@ -20,4 +20,6 @@ export const zosiaApiRoutes = {
   lockRoom: (roomId: number) => `api/v2/rooms/${roomId}/lock/`,
 
   adminUserPreferencesEdit: reverse("user_preferences_admin_edit"),
+  adminSponsorToggleActive: reverse("sponsors_toggle_active"),
+  adminLecturesToggleAccept: reverse("lectures_toggle_accept"),
 };
