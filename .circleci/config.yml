@@ -38,6 +38,7 @@ jobs:
       - image: cimg/gcp:2024.08
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Run deploy.sh script
           command: |
