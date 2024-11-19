@@ -8,7 +8,7 @@ fi
 
 PROJECT_ID="$1"
 REPO_NAME=zosia-repo
-REGION=europe-central2
+REGION=europe-west4
 REPO_HOSTNAME=$REGION-docker.pkg.dev
 IMAGE_NAME=zosia_prod
 
@@ -16,6 +16,7 @@ IMAGE_URL=$REPO_HOSTNAME/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
 
 # Configure gcloud and docker to be able to push to the Google Container Registry
 gcloud config set project $PROJECT_ID
+gcloud config set compute/zone $REGION
 gcloud auth configure-docker $REPO_HOSTNAME
 
 # Build and push the image
