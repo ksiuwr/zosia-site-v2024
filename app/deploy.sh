@@ -27,12 +27,13 @@ echo "[3] Running migrations"
 gcloud run jobs update migrate --region=$REGION --image $IMAGE_URL
 gcloud run jobs execute migrate --wait --region=$REGION
 
-# Run the collectstatic job which will collect all the static files into GCS bucket
-echo "[4] Collecting static files"
+echo "[4] Collecting static files into a GCS bucket"
 gcloud run jobs update collectstatic --region=$REGION --image $IMAGE_URL
 gcloud run jobs execute collectstatic --wait --region=$REGION
 
-# Deploy new service revision with the new image
-echo "[5] Deploying the new image"
+echo "[5] Updating createsuperuser job to use the new image"
+gcloud run jobs update createsuperuser --region=$REGION --image $IMAGE_URL
+
+echo "[6] Deploying the new image"
 gcloud run services update zosia --region $REGION --image $IMAGE_URL
 
