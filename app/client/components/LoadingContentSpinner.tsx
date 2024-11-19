@@ -8,9 +8,9 @@ export const LoadingContentSpinner = ({
   isLoading,
   children,
 }: PropsWithChildren<LoadingContentSpinnerProps>) => {
-  if (isLoading) {
-    return <span className="loading loading-spinner"></span>;
-  } else {
-    return children;
-  }
+  return isLoading ? (
+    <span className="loading loading-spinner" />
+  ) : (
+    <>{children}</>
+  );
 };
