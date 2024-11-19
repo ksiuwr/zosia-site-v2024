@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs18-alpine AS base
+FROM nikolaik/python-nodejs:python3.12-nodejs22-alpine AS base
 
 # Env variables
 ENV PYTHONUNBUFFERED=1
