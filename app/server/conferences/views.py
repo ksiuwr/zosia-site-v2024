@@ -12,7 +12,25 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import PlaceForm, TransportForm, ZosiaForm
 from .models import Place, Transport, Zosia
-from .templates import AdminPanelHome, HomePage, TermsAndConditions, PrivacyPolicy, SignupRules
+from .templates import (
+    AdminConferencesList,
+    AdminConferencesUpdate,
+    AdminPanelHome,
+    AdminPlacesList,
+    AdminPlacesUpdate,
+    AdminStatistics,
+    AdminTransportList,
+    AdminTransportPassangers,
+    AdminTransportUpdate,
+    HomePage,
+    StatisticsCostData,
+    StatisticsDiscountData,
+    StatisticsTransportData,
+    StatisticsUserPreferencesData,
+    TermsAndConditions,
+    PrivacyPolicy,
+    SignupRules,
+)
 from server.lectures.models import Lecture
 from server.organizers.models import OrganizerContact
 from server.sponsors.models import Sponsor
@@ -133,8 +151,7 @@ def admin_panel(request):
 def transport(request):
     zosia = Zosia.objects.find_active()
     transports = Transport.objects.filter(zosia=zosia)
-    ctx = {'zosia': zosia, 'transports': transports}
-    return render(request, 'conferences/transport.html', ctx)
+    return AdminTransportList(transports=transports).render(request)
 
 
 @staff_member_required
@@ -142,8 +159,7 @@ def transport(request):
 def transport_people(request, pk):
     transport_obj = get_object_or_404(Transport, pk=pk)
     users = UserPreferences.objects.select_related('user').filter(transport=transport_obj)
-    ctx = {'transport': transport_obj, 'users': users}
-    return render(request, 'conferences/transport_people.html', ctx)
+    return AdminTransportPassangers(transport=transport_obj, users=users).render(request)
 
 
 @staff_member_required
@@ -162,16 +178,15 @@ def transport_add(request, pk=None):
         form.save()
         messages.success(request, _('Transport has been saved'))
         return redirect('transport')
-    ctx = {'form': form, 'object': instance}
-    return render(request, 'conferences/transport_add.html', ctx)
+    
+    return AdminTransportUpdate(form=form, edit_mode=instance is not None).render(request)
 
 
 @staff_member_required
 @require_http_methods(['GET'])
 def conferences(request):
     all_conferences = Zosia.objects.all()
-    ctx = {'conferences': all_conferences}
-    return render(request, 'conferences/conferences.html', ctx)
+    return AdminConferencesList(conferences=all_conferences).render(request)
 
 
 @staff_member_required
@@ -189,16 +204,14 @@ def update_zosia(request, pk=None):
         messages.success(request, _('Zosia has been saved'))
         return redirect('conferences')
 
-    ctx = {'form': form, 'zosia': zosia}
-    return render(request, 'conferences/conference_add.html', ctx)
+    return AdminConferencesUpdate(form=form, edit_mode=zosia is not None).render(request)
 
 
 @staff_member_required
 @require_http_methods(['GET'])
 def place(request):
     places = Place.objects.filter()
-    ctx = {'places': places}
-    return render(request, 'conferences/place.html', ctx)
+    return AdminPlacesList(places=places).render(request)
 
 
 @staff_member_required
@@ -215,8 +228,8 @@ def place_add(request, pk=None):
         form.save()
         messages.success(request, _('Place has been saved'))
         return redirect('place')
-    ctx = {'form': form, 'object': instance}
-    return render(request, 'conferences/place_add.html', ctx)
+
+    return AdminPlacesUpdate(form=form, edit_mode=instance is not None).render(request)
 
 
 @staff_member_required
@@ -278,10 +291,6 @@ def statistics(request):
     prefs_count = user_prefs.count()
     paid_count = user_prefs.filter(payment_accepted=True).count()
 
-    users_with_payment = paid_count
-    users_with_prefs_only = prefs_count - paid_count
-    users_without_prefs = users_count - prefs_count
-
     # data for second chart
     if len(user_prefs):
         price_items = Counter([t.price for t in user_prefs]).items()
@@ -292,45 +301,44 @@ def statistics(request):
     # data for transport info chart
     transport_list = Transport.objects.all()
     transport_labels = []
-    transport_values = {'paid': [], 'notPaid': [], 'empty': []}
+    transport_values = {'paid': [], 'not_paid': [], 'empty': []}
     for t in transport_list:
         transport_labels.append(f'{t}')
         transport_values['paid'].append(t.paid_passengers_count)
-        transport_values['notPaid'].append(t.passengers_count - t.paid_passengers_count)
+        transport_values['not_paid'].append(t.passengers_count - t.paid_passengers_count)
         transport_values['empty'].append(t.free_seats)
 
     # discount
     discounts = list(
         user_prefs.filter(discount_round__gt=0).values_list('discount_round', flat=True))
 
-    # discount_values = {
-    #     "round_1": (discounts.count(1), zosia.first_discount_limit),
-    #     "round_2": (discounts.count(2), zosia.second_discount_limit),
-    #     "round_3": (discounts.count(3), zosia.third_discount_limit)
-    #     }
-
-    discount_values = {
-        "taken": [discounts.count(x) for x in (1, 2, 3)],
-        "available": [
-            zosia.first_discount_limit-discounts.count(1),
-            zosia.second_discount_limit-discounts.count(2),
-            zosia.third_discount_limit-discounts.count(3)]
-    }
-
     # other data
     vegetarians = user_prefs.filter(vegetarian=True).count()
     students = user_prefs.filter(is_student=True).count()
 
-    ctx = {
-        'registeredUsers': prefs_count,
-        'vegetarians': vegetarians,
-        'students': students,
-        'discountsData': json.dumps(discount_values),
-        'userPrefsData': [users_with_payment, users_with_prefs_only, users_without_prefs],
-        'userCostsValues': list(price_values),
-        'userCostsCounts': list(price_counts),
-        'transportLabels': json.dumps(transport_labels),
-        'transportValues': json.dumps(transport_values),
-        'numberOfTransport': len(transport_labels)
-    }
-    return render(request, 'conferences/statistics.html', ctx)
+    return AdminStatistics(
+        num_of_registered_users=prefs_count,
+        num_of_vegetarians=vegetarians,
+        num_of_students=students,
+        discount_data=StatisticsDiscountData(
+            num_of_taken_discounts_per_round=[discounts.count(x) for x in (1, 2, 3)],
+            available_discounts_per_round=[
+                zosia.first_discount_limit - discounts.count(1),
+                zosia.second_discount_limit - discounts.count(2),
+                zosia.third_discount_limit - discounts.count(3),
+            ],
+        ),
+        user_preferences_data=StatisticsUserPreferencesData(
+            num_of_users_with_payment=paid_count,
+            num_of_users_with_prefs_only=prefs_count - paid_count,
+            num_of_users_without_prefs=users_count - prefs_count,
+        ),
+        cost_data=StatisticsCostData(
+            cost_values=list(price_values),
+            cost_counts=list(price_counts),
+        ),
+        transport_data=StatisticsTransportData(
+            transport_labels=transport_labels,
+            transport_values=transport_values,
+        ),
+    ).render(request)

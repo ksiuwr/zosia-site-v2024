@@ -4,32 +4,29 @@ import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { PageTitle } from "@client/components/PageTitle";
-import { getLocalDateTime } from "@client/utils/time";
 import { reverse, templates } from "@reactivated";
 import React from "react";
 
-export const Template = (props: templates.AdminBlogList) => {
+export const Template = (props: templates.AdminPlacesList) => {
   return (
     <AdminLayout>
-      <PageTitle>Blog posts</PageTitle>
+      <PageTitle>Places</PageTitle>
       <AdminCenteredContentContainer>
         <AdminTable
-          headerNames={["Author", "Title", "Publication date", "Actions"]}
+          headerNames={["Place", "Actions"]}
           addEntryLink={{
-            href: reverse("blog_create"),
-            label: "Add blog post",
+            href: reverse("place_add"),
+            label: "Add place",
           }}
         >
-          {props.posts.map((post) => (
-            <tr key={post.id}>
-              <td>{`${post.author?.first_name} ${post.author?.last_name}`}</td>
-              <td>{post.title}</td>
-              <td>{getLocalDateTime(new Date(post.publication))}</td>
+          {props.places.map((place) => (
+            <tr key={place.id}>
+              <td>{place.name}</td>
               <td>
                 <AdminTableActions>
                   <AdminTableEditLink
-                    href={reverse("blog_edit", {
-                      pk: post.id,
+                    href={reverse("place_update", {
+                      pk: place.id,
                     })}
                   />
                 </AdminTableActions>

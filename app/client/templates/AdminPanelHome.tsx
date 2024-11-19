@@ -9,7 +9,9 @@ export const Template = () => {
     <Layout>
       <PageTitle>Admin Panel</PageTitle>
       <CenteredContentContainer>
-        <AdminNavBar />
+        <div className="mb-6">
+          <AdminNavBar />
+        </div>
       </CenteredContentContainer>
     </Layout>
   );

@@ -52,7 +52,7 @@ def toggle_accept(request):
     lecture_id = request.POST.get('key', None)
     lecture = get_object_or_404(Lecture, pk=lecture_id)
     lecture.toggle_accepted()
-    return JsonResponse({'msg': "Lecture \"{}\" changed status!".format(escape(lecture.title)), "isActive": lecture.accepted})
+    return JsonResponse({'msg': "Lecture \"{}\" changed status!".format(escape(lecture.title)), "isAccepted": lecture.accepted})
 
 
 @login_required()

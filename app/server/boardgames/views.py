@@ -13,7 +13,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Count
 from urllib.request import urlopen
 
-from .templates import BoardgamesAdd, BoardgamesHome, BoardgamesMyGames, BoardgamesVote
+from .templates import AdminBoardgamesAccept, BoardgamesAdd, BoardgamesHome, BoardgamesMyGames, BoardgamesVote
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
@@ -179,31 +179,17 @@ def vote_edit(request):
 def accept(request):
     boardgames = Boardgame.objects.all()
     boardgames = sorted(boardgames, key=lambda x: x.accepted, reverse=True)
-    ctx = {'boardgames': boardgames}
-    return render(request, 'boardgames/accept.html', ctx)
-
-
-def toggle_accepted(boardgame_id):
-    boardgame = get_object_or_404(Boardgame, pk=boardgame_id)
-    boardgame.toggle_accepted()
-    boardgame.save()
+    return AdminBoardgamesAccept(boardgames=boardgames).render(request)
 
 
 @staff_member_required
 @require_http_methods(['POST'])
-def accept_edit(request):
-    accepted = Boardgame.objects.filter(
-        accepted=True).values_list('id', flat=True)
-    old_ids = list(accepted)
-    new_ids = json.loads(request.POST.get('new_ids'))
-    common_ids = [x for x in old_ids if x in new_ids]
-    old_ids = [x for x in old_ids if x not in common_ids]
-    new_ids = [x for x in new_ids if x not in common_ids]
-    for x in old_ids:
-        toggle_accepted(x)
-    for x in new_ids:
-        toggle_accepted(x)
-    return JsonResponse({'old_ids': old_ids, 'new_ids': new_ids})
+def toggle_accepted(request):
+    boardgame_id = request.POST.get('key')
+    boardgame = get_object_or_404(Boardgame, pk=boardgame_id)
+    boardgame.toggle_accepted()
+
+    return JsonResponse({'msg': "Boardgame \"{}\" changed status!".format(escape(boardgame.name)), "isAccepted": boardgame.accepted})
 
 
 @login_required

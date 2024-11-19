@@ -25,9 +25,17 @@ export const BasicWidget = ({
     case "django.forms.widgets.PasswordInput":
     case "django.forms.widgets.NumberInput":
     case "django.forms.widgets.URLInput":
+    case "django.forms.widgets.DateInput":
+    case "django.forms.widgets.DateTimeInput":
       return (
         <Input
-          type={field.widget.type}
+          type={
+            field.tag === "django.forms.widgets.DateInput"
+              ? "date"
+              : field.tag === "django.forms.widgets.DateTimeInput"
+                ? "datetime-local"
+                : field.widget.type
+          }
           name={field.name}
           className="input input-bordered w-full"
           required={field.widget.required}
@@ -71,6 +79,7 @@ export const BasicWidget = ({
           multiple={false}
         />
       );
+
     case "django.forms.widgets.SelectMultiple":
       return (
         <BasicListbox
@@ -81,6 +90,7 @@ export const BasicWidget = ({
           multiple={true}
         />
       );
+
     default:
       return <Widget field={field} />;
   }

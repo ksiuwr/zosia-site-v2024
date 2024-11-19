@@ -1,10 +1,11 @@
 import { AdminCenteredContainer } from "@client/components/admin/layout/AdminCenteredContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
+import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
+import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { AdminUsersPreferencesBonus } from "@client/components/admin/users/AdminUsersPreferencesBonus";
 import { AdminUsersPreferencesImportPayments } from "@client/components/admin/users/AdminUsersPreferencesImportPayments";
 import { AdminUsersPreferencesPaymentStatus } from "@client/components/admin/users/AdminUsersPreferencesPaymentStatus";
 import { PageTitle } from "@client/components/PageTitle";
-import { PencilIcon } from "@heroicons/react/24/outline";
 import { reverse, templates } from "@reactivated";
 import React, { useState } from "react";
 
@@ -93,29 +94,22 @@ export const Template = (props: templates.AdminUsersPreferences) => {
           <table className="table table-zebra table-xs my-6 lg:table-lg lg:table-fixed">
             <thead>
               <tr>
-                <th className="whitespace-pre-wrap lg:w-1/12">User hash</th>
-                <th className="whitespace-pre-wrap lg:w-2/12">User name</th>
+                <th className="whitespace-pre-wrap lg:w-3/12">
+                  User name (with hash)
+                </th>
                 <th className="whitespace-pre-wrap lg:w-1/12">Price</th>
                 <th className="whitespace-pre-wrap lg:w-1/12">
                   Payment accepted
                 </th>
-                <th className="whitespace-pre-wrap lg:w-7/12">Bonus</th>
+                <th className="whitespace-pre-wrap lg:w-5/12">Bonus</th>
+                <th className="whitespace-pre-wrap lg:w-2/12">Actions</th>
               </tr>
             </thead>
             <tbody>
               {usersPreferences.map((userPreferences) => (
                 <tr key={userPreferences.userHash}>
-                  <td>{userPreferences.userHash.slice(0, 7)}</td>
                   <td>
-                    <a
-                      className="link link-primary"
-                      href={reverse("user_preferences_edit", {
-                        pk: userPreferences.id,
-                      })}
-                    >
-                      <PencilIcon className="mr-1 inline size-4" />
-                      {userPreferences.userName}
-                    </a>
+                    {`${userPreferences.userName} (${userPreferences.userHash.slice(0, 7)})`}
                   </td>
                   <td>{userPreferences.price} PLN</td>
                   <td>
@@ -140,6 +134,15 @@ export const Template = (props: templates.AdminUsersPreferences) => {
                         onBonusChange={onBonusChange}
                       />
                     )}
+                  </td>
+                  <td>
+                    <AdminTableActions>
+                      <AdminTableEditLink
+                        href={reverse("user_preferences_edit", {
+                          pk: userPreferences.id,
+                        })}
+                      />
+                    </AdminTableActions>
                   </td>
                 </tr>
               ))}

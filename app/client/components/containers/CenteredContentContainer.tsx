@@ -11,7 +11,7 @@ export const CenteredContentContainer = ({
 }: PropsWithChildren<CenteredContentContainerProps>) => {
   return (
     <CenteredContainer adminSidebarShown={adminSidebarShown}>
-      <div className="mx-auto mb-8 w-full lg:w-10/12 xl:w-9/12 2xl:w-8/12">
+      <div className="mx-auto w-full lg:w-10/12 xl:w-9/12 2xl:w-8/12">
         {children}
       </div>
     </CenteredContainer>

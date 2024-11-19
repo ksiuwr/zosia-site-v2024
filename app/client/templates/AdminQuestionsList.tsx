@@ -14,7 +14,13 @@ export const Template = (props: templates.AdminQuestionsList) => {
     <AdminLayout>
       <PageTitle>Questions and Answers</PageTitle>
       <AdminCenteredContentContainer>
-        <AdminTable headerNames={["Question", "Priority", "Actions"]}>
+        <AdminTable
+          headerNames={["Question", "Priority", "Actions"]}
+          addEntryLink={{
+            href: reverse("questions_add"),
+            label: "Add question",
+          }}
+        >
           {props.questions.map((question) => (
             <tr key={question.id}>
               <td>

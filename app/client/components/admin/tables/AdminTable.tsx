@@ -1,11 +1,17 @@
+import { PlusIcon } from "@heroicons/react/24/solid";
 import React, { PropsWithChildren } from "react";
 
 interface AdminTableProps {
   headerNames: string[];
+  addEntryLink?: {
+    href: string;
+    label: string;
+  };
 }
 
 export const AdminTable = ({
   headerNames,
+  addEntryLink,
   children,
 }: PropsWithChildren<AdminTableProps>) => {
   return (
@@ -22,6 +28,15 @@ export const AdminTable = ({
         </thead>
         <tbody>{children}</tbody>
       </table>
+      {addEntryLink && (
+        <a
+          href={addEntryLink.href}
+          className="btn btn-success btn-block lg:btn-lg"
+        >
+          <PlusIcon className="size-6" />
+          <span>{addEntryLink.label}</span>
+        </a>
+      )}
     </div>
   );
 };

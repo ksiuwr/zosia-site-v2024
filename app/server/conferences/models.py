@@ -71,7 +71,6 @@ class Zosia(models.Model):
     active = models.BooleanField(
         default=False
     )
-    banner = models.ImageField(blank=True, null=True)
     place = models.ForeignKey(Place, related_name='conferences', on_delete=models.PROTECT)
     description = models.TextField(default='')
 

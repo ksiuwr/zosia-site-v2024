@@ -20,6 +20,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from .templates import (
+    AccountActivated,
     AccountChangePassword,
     AccountChangePasswordDone,
     AccountEdit,
@@ -27,6 +28,8 @@ from .templates import (
     AccountResetPasswordComplete,
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
+    AdminUsersOrganizationList,
+    AdminUsersOrganizationUpdate,
     AdminUsersPreferences,
     AdminUsersPreferencesEdit,
     AdminUsersSendEmail,
@@ -218,19 +221,14 @@ def activate(request, uidb64, token):
         return redirect('index')
 
     current_zosia = Zosia.objects.find_active()
-    ctx = {
-        'zosia': current_zosia,
-        'user': action.user,
-    }
-    return render(request, 'users/activate.html', ctx)
+    return AccountActivated(is_conference_active=current_zosia is not None).render(request)
 
 
 @staff_member_required
 @require_http_methods(['GET'])
 def organizations(request):
-    org = Organization.objects.all()
-    ctx = {'organizations': org}
-    return render(request, 'users/organizations.html', ctx)
+    organizations = Organization.objects.all()
+    return AdminUsersOrganizationList(organizations=organizations).render(request)
 
 
 @staff_member_required
@@ -247,8 +245,8 @@ def update_organization(request, pk=None):
         form.save()
         messages.success(request, _('Organization updated'))
         return redirect('organizations')
-    ctx = {'form': form, 'organization': organization}
-    return render(request, 'users/organization_form.html', ctx)
+
+    return AdminUsersOrganizationUpdate(form=form, edit_mode=organization is not None).render(request)
 
 
 @staff_member_required
@@ -258,8 +256,9 @@ def toggle_organization(request):
     organization = get_object_or_404(Organization, pk=organization_id)
     organization.accepted = not organization.accepted
     organization.save(update_fields=['accepted'])
-    return JsonResponse({'msg': "{} changed status!".format(
-        escape(organization))})
+    return JsonResponse(
+        {'msg': f"Organization \"{escape(organization)}\" changed status!", "isAccepted": organization.accepted}
+    )
 
 
 @staff_member_required()

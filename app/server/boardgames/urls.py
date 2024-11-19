@@ -10,5 +10,5 @@ urlpatterns = [
     path('vote/', views.vote, name='boardgames_vote'),
     path('vote/edit/', views.vote_edit, name='vote_edit'),
     path('accept/', views.accept, name='boardgames_accept'),
-    path('accept/edit/', views.accept_edit, name='accept_edit')
+    path('accept/toggle/', views.toggle_accepted, name='boardgames_toggle_accept')
 ]
