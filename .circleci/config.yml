@@ -58,13 +58,11 @@ workflows:
   version: 2
   build:
     jobs:
-      - deploy
-    # jobs:
-    #   - run_tests
-    #   - deploy:
-    #       requires:
-    #         - run_tests
-    #       filters:
-    #         branches:
-    #           only:
-    #             - master
+      - run_tests
+      - deploy:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only:
+                - master
