@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs18-alpine AS base
+FROM nikolaik/python-nodejs:python3.12-nodejs22-alpine AS base
 
 # Env variables
 ENV PYTHONUNBUFFERED=1
@@ -58,3 +58,5 @@ COPY scripts ./scripts
 # Build frontend
 RUN python manage.py generate_client_assets
 RUN python manage.py build
+
+ENTRYPOINT [ "./scripts/start_prod_server.sh" ]
