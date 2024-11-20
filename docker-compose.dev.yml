@@ -12,15 +12,25 @@ services:
   web:
     build:
       context: ./app
-      dockerfile: dev.Dockerfile
+      dockerfile: Dockerfile
+      target: dev
     image: zosia_dev
     # Main process in container
     command: sleep infinity
     # docker volumes - Host:Container
     volumes:
-      - ./app/src:/code/src
+      - ./app/server:/code/server
+      - ./app/client:/code/client
       - ./app/js:/code/js
       - ./app/static:/code/static
+      # Node modules installed in container need to be visible in host for local development, IDEs etc.
+      # Especially the _reactivated module which is generated on `python manage.py runserver` and contains types for Typescript
+      - ./app/node_modules:/code/node_modules
+      # Package.json and lock file are mounted to allow installing node modules from within the container for conveniance
+      - ./app/package.json:/code/package.json
+      - ./app/package-lock.json:/code/package-lock.json
+      # Tailwind config is mounted to allow changing themes without rebuilding the container
+      - ./app/tailwind.config.ts:/code/tailwind.config.ts
     ports:
       - "8000:8000"
     depends_on:

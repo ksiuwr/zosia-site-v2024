@@ -1,0 +1,36 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('terms/', views.terms_and_conditions, name='terms_and_conditions'),
+    path('privacy/', views.privacy_policy, name='privacy_policy'),
+    path('panel/', views.admin_panel, name='admin'),
+    path('transport/', views.transport, name='transport'),
+    path('transport/add/', views.transport_add, name='transport_add'),
+    path('transport/list/transport_by_user', views.list_csv_transport_by_user,
+            name='list_csv_transport_by_user'),
+    path('transport/list/users_by_transport/all', views.list_csv_all_users_by_transport,
+            name='list_csv_all_users_by_transport'),
+    path('transport/list/users_by_transport/paid', views.list_csv_paid_users_by_transport,
+            name='list_csv_paid_users_by_transport'),
+    path('transport/list/users_by_transport/paid/students',
+            views.list_csv_paid_students_by_transport,
+            name='list_csv_paid_students_by_transport'),
+    path('transport/list/users_by_transport/paid/non_students',
+            views.list_csv_paid_non_students_by_transport,
+            name='list_csv_paid_non_students_by_transport'),
+    path('transport/<int:pk>/update/', views.transport_add, name='transport_update'),
+    path('transport/<int:pk>/people/', views.transport_people, name='transport_people'),
+    path('conferences/', views.conferences, name='conferences'),
+    path('conferences/add/', views.update_zosia, name='zosia_add'),
+    path('conferences/<int:pk>/update/', views.update_zosia, name='zosia_update'),
+    path('conferences/export/shirts/', views.export_shirts, name='export_shirts'),
+    path('conferences/export/data/', views.export_data, name='export_data'),
+    path('place/', views.place, name='place'),
+    path('place/add/', views.place_add, name='place_add'),
+    path('place/<int:pk>/update/', views.place_add, name='place_update'),
+    path('statistics/', views.statistics, name='statistics'),
+    path('signup_rules/', views.sign_up_rules_for_invited, name='invited'),
+]

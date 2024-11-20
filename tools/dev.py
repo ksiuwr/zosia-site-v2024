@@ -53,11 +53,11 @@ def docker_exec(command: List[str], container: str) -> None:
 
 
 def docker_shell(command: List[str]) -> None:
-    docker_exec(["/bin/bash", "-c", subp.list2cmdline(command)], WEB_CONTAINER_NAME)
+    docker_exec(["/bin/sh", "-c", subp.list2cmdline(command)], WEB_CONTAINER_NAME)
 
 
 def docker_python(command: List[str]) -> None:
-    docker_shell(["python", "src/manage.py"] + command)
+    docker_shell(["python", "manage.py"] + command)
 
 
 def docker_compose_run(command: List[str], with_project: bool = True) -> None:
@@ -69,11 +69,18 @@ def docker_compose_run(command: List[str], with_project: bool = True) -> None:
 
 
 def web_install() -> None:
-    docker_shell(["yarn", "install"])
+    docker_shell(["npm", "install"])
 
 
-def web_build() -> None:
-    docker_shell(["yarn", "build"])
+def web_build(with_collect_static: bool = True) -> None:
+    # Builds Reactivated files for frontend
+    print(f"{Colour.PURPLE}-- Building frontend --{Colour.NORMAL}")
+
+    docker_shell(["python", "manage.py", "generate_client_assets"])
+    docker_shell(["python", "manage.py", "build"])
+
+    if with_collect_static:
+        docker_shell(["python", "manage.py", "collectstatic", "--noinput"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -81,7 +88,6 @@ def setup(is_no_cache: bool, display_remind: bool = False) -> None:
     docker_compose_run(["build"] + no_cache_opt, with_project=False)
     docker_compose_run(["up", "-d"])
     web_install()
-    web_build()
 
     if display_remind:
         remind_quit()
@@ -91,15 +97,19 @@ def shutdown():
     docker_compose_run(["down"])
 
 
-def run_server(display_remind: bool = False) -> None:
-    docker_python(["runserver", "0.0.0.0:8000"])
+def run_server(display_remind: bool = False, run_frontend_in_production_mode: bool = False) -> None:
+    if run_frontend_in_production_mode:
+        web_build()
+        docker_shell(["NODE_ENV=production", "gunicorn", "--bind", ":8000", "server.wsgi:application"])
+    else:
+        docker_python(["runserver", "0.0.0.0:8000"])
     print(f"{Colour.PURPLE}-- Exiting server --{Colour.NORMAL}")
 
     if display_remind:
         remind_quit()
 
 
-def run_tests(modules: Optional[List[str]], is_verbose: bool):
+def run_tests(modules: Optional[List[str]], is_verbose: bool, build_frontend: bool = True) -> None:
     command = ["test"]
 
     if modules:
@@ -107,6 +117,15 @@ def run_tests(modules: Optional[List[str]], is_verbose: bool):
 
     if is_verbose:
         command += ["-v", "2"]
+
+    if build_frontend:
+        print(
+            f"{Colour.YELLOW}In order to run tests frontend is automatically built.",
+            f"You can run tests without building frontend by running: `dev.py test --no-build-frontend` "
+            f"if you built it earlier with `dev.py web build`{Colour.NORMAL}",
+            sep="\n",
+        )
+        web_build(False)
 
     docker_python(command)
 
@@ -147,6 +166,10 @@ def cli():
     run_app_parser.add_argument(
         "-k", "--keep-alive", action="store_true",
         help="keep containers running after exiting server")
+    run_app_parser.add_argument(
+        "-p", "--prod-frontend", action="store_true",
+        help="run frontend in production mode"
+    )
 
     start_parser = subparsers.add_parser(
         "start", aliases=["setup", "s"],
@@ -165,6 +188,10 @@ def cli():
         "-M", "--module", action="append",
         help="module or directory to run tests from [option can be repeated]")
     test_parser.add_argument(
+        "-n", "--no-build-frontend", action="store_false",
+        help="do not build frontend before running tests"
+    )
+    test_parser.add_argument(
         "-v", "--verbose", action="store_true",
         help="add verbose option to test command")
 
@@ -182,8 +209,8 @@ def cli():
         help="do not use cache when building container images")
 
     bash_parser = subparsers.add_parser(
-        "bash", aliases=["shell", "sh"],
-        help=f"run Bash shell inside website container")
+        "shell", aliases=["sh"],
+        help=f"run sh shell inside website container")
 
     postgres_parser = subparsers.add_parser(
         "postgres", aliases=["psql"], add_help=False,
@@ -213,6 +240,9 @@ def cli():
         "serve", aliases=["server", "sv"],
         help="run Django development server inside the container "
              "(localhost, port 8000, http://localhost:8000/)")
+    serve_parser.add_argument(
+        "-p", "--prod-frontend", action="store_true",
+        help="Run frontend in production mode")
 
     web_parser = subparsers.add_parser(
         "web", aliases=["javascript", "js"],
@@ -227,9 +257,6 @@ def cli():
     web_subparsers.add_parser(
         "build", aliases=["b"], add_help=False,
         help=f"build web app {FILE_SYSTEM_NOTE}")
-    web_subparsers.add_parser(
-        "watch", aliases=["w"], add_help=False,
-        help=f"rebuild web app on file change {FILE_SYSTEM_NOTE}")
 
     python_parser = subparsers.add_parser(
         "python", aliases=["py"],
@@ -258,7 +285,7 @@ def cli():
         print(f"{Colour.BLUE}-- Run migrations --{Colour.NORMAL}")
         migrate(args.create_admin, args.create_data)
         print(f"{Colour.BLUE}-- Run webserver --{Colour.NORMAL}")
-        run_server(args.keep_alive)
+        run_server(args.keep_alive, args.prod_frontend)
 
         if not args.keep_alive:
             print(f"{Colour.BLUE}-- Quit containers --{Colour.NORMAL}")
@@ -279,10 +306,10 @@ def cli():
         shutdown()
 
     elif args.command in ["test", "t"]:
-        run_tests(args.module, args.verbose)
+        run_tests(args.module, args.verbose, args.no_build_frontend)
 
-    elif args.command in ["bash", "shell", "sh"]:
-        docker_exec(["/bin/bash"], WEB_CONTAINER_NAME)
+    elif args.command in ["shell", "sh"]:
+        docker_exec(["/bin/sh"], WEB_CONTAINER_NAME)
 
     elif args.command in ["postgres", "psql"]:
         docker_exec(["psql", "-U", "zosia"], DB_CONTAINER_NAME)
@@ -296,15 +323,13 @@ def cli():
             migrations_parser.print_help()
 
     elif args.command in ["server", "serve", "sv"]:
-        run_server(True)
+        run_server(True, args.prod_frontend)
 
     elif args.command in ["web", "javascript", "js"]:
         if args.action in ["install", "i"]:
             web_install()
         elif args.action in ["build", "b"]:
             web_build()
-        elif args.action in ["watch", "w"]:
-            docker_shell(["yarn", "watch"])
         else:
             web_parser.print_help()
 
