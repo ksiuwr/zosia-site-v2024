@@ -5,11 +5,11 @@ import { LockClosedIcon as LockClosedIconSolid } from "@heroicons/react/24/solid
 import { Context } from "@reactivated";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
-import { JoinLockedRoomDialog } from "./JoinLockedRoomDialog";
+import { useRoomMutations } from "../api/RoomMutations";
+import { JoinLockedRoomDialog } from "../JoinLockedRoomDialog";
 import { RoomActions } from "./RoomActions";
 import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
-import { useRoomMutations } from "./RoomMutations";
 
 interface RoomCardProps {
   roomData: RoomData;

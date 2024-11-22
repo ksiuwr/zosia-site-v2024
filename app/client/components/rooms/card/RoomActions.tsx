@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import React from "react";
-import { LoadingContentSpinner } from "../LoadingContentSpinner";
+import { LoadingContentSpinner } from "../../LoadingContentSpinner";
 
 const ICON_CSS = "size-5";
 

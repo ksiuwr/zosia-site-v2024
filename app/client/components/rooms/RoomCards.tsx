@@ -9,8 +9,8 @@ import { Context } from "@reactivated";
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { Alert } from "../alert/Alert";
-import { ApiErrorMessage } from "./ApiErrorMessage";
-import { RoomCard } from "./RoomCard";
+import { ApiErrorMessage } from "./api/ApiErrorMessage";
+import { RoomCard } from "./card/RoomCard";
 import { RoomsSortBy } from "./RoomsBar";
 
 interface RoomCardsProps {

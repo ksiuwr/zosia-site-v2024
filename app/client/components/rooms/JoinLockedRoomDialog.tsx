@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 import React from "react";
 import { CustomDialog } from "../CustomDialog";
 import { LoadingContentSpinner } from "../LoadingContentSpinner";
-import { ApiErrorMessage } from "./ApiErrorMessage";
+import { ApiErrorMessage } from "./api/ApiErrorMessage";
 
 interface JoinLockedRoomDialogProps {
   roomName: string;

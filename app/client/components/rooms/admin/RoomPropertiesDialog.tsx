@@ -1,7 +1,7 @@
 import { LoadingContentSpinner } from "@client/components/LoadingContentSpinner";
 import React, { useState } from "react";
 import { CustomDialog } from "../../CustomDialog";
-import { useRoomMutations } from "../RoomMutations";
+import { useRoomMutations } from "../api/RoomMutations";
 import { RoomPropertiesFormFieldCheckbox } from "./RoomPropertiesFormFieldCheckbox";
 import { RoomPropertiesFormFieldInput } from "./RoomPropertiesFormFieldInput";
 

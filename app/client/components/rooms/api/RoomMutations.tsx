@@ -10,7 +10,7 @@ import { Context } from "@reactivated";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import React, { useContext } from "react";
-import { showCustomToast } from "../CustomToast";
+import { showCustomToast } from "../../CustomToast";
 import { ApiErrorMessage } from "./ApiErrorMessage";
 
 export const useRoomMutations = (roomId: number, roomName: string) => {
