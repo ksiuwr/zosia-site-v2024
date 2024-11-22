@@ -29,6 +29,7 @@ export const Rooms = ({ initialRoomsData, isAdmin }: RoomsProps) => {
         searchText={searchText}
         hideFullRooms={hideFullRooms}
         sortRoomsBy={sortRoomsBy}
+        isAdmin={isAdmin}
       />
     </>
   );

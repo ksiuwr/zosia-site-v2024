@@ -20,6 +20,8 @@ interface RoomCardsProps {
   searchText: string;
   hideFullRooms: boolean;
   sortRoomsBy: RoomsSortBy;
+
+  isAdmin?: boolean;
 }
 
 export const RoomCards = ({
@@ -27,6 +29,7 @@ export const RoomCards = ({
   searchText,
   hideFullRooms,
   sortRoomsBy,
+  isAdmin,
 }: RoomCardsProps) => {
   const { user } = useContext(Context);
 
@@ -118,6 +121,7 @@ export const RoomCards = ({
           key={room.id}
           roomData={room}
           userIsInSomeRoomAlready={userRoom !== undefined}
+          isAdmin={isAdmin}
         ></RoomCard>
       ))}
     </div>

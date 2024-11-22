@@ -1,16 +1,13 @@
-import {
-  ArrowRightEndOnRectangleIcon,
-  ArrowRightStartOnRectangleIcon,
-  LockClosedIcon,
-  LockOpenIcon,
-} from "@heroicons/react/24/outline";
-import clsx from "clsx";
+import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { LoadingContentSpinner } from "../../LoadingContentSpinner";
+import { RoomActionsAdmin } from "./RoomActionsAdmin";
+import { RoomActionsMyRoom } from "./RoomActionsMyRoom";
 
-const ICON_CSS = "size-5";
+export const ROOM_ACTION_ICON_CSS = "size-5";
 
 interface RoomActionsProps {
+  isAdmin?: boolean;
   isMyRoom: boolean;
   isLocked: boolean;
   canUnlock: boolean;
@@ -19,13 +16,19 @@ interface RoomActionsProps {
   leaveRoom: () => void;
   lockRoom: () => void;
   unlockRoom: () => void;
+  deleteRoom: () => void;
+  editRoom: () => void;
+
   enterRoomPending: boolean;
   leaveRoomPending: boolean;
   lockRoomPending: boolean;
   unlockRoomPending: boolean;
+  deleteRoomPending: boolean;
+  editRoomPending: boolean;
 }
 
 export const RoomActions = ({
+  isAdmin,
   isMyRoom,
   isLocked,
   canUnlock,
@@ -34,54 +37,40 @@ export const RoomActions = ({
   leaveRoom,
   lockRoom,
   unlockRoom,
+  deleteRoom,
+  editRoom,
   enterRoomPending,
   leaveRoomPending,
   lockRoomPending,
   unlockRoomPending,
+  deleteRoomPending,
+  editRoomPending,
 }: RoomActionsProps) => {
-  if (isMyRoom) {
-    const showUnlockButton = isLocked && canUnlock;
-    const showLockButton = !isLocked;
+  console.log(isAdmin);
 
+  if (isAdmin) {
     return (
-      <div className="flex grow gap-x-1 lg:gap-x-4">
-        {showUnlockButton && (
-          <button
-            className="btn btn-warning basis-1/2"
-            onClick={unlockRoom}
-            disabled={unlockRoomPending}
-          >
-            <LoadingContentSpinner isLoading={unlockRoomPending}>
-              Unlock <LockOpenIcon className={ICON_CSS} />
-            </LoadingContentSpinner>
-          </button>
-        )}
+      <RoomActionsAdmin
+        deleteRoom={deleteRoom}
+        editRoom={editRoom}
+        deleteRoomPending={deleteRoomPending}
+        editRoomPending={editRoomPending}
+      />
+    );
+  }
 
-        {showLockButton && (
-          <button
-            className="btn btn-warning basis-1/2"
-            onClick={lockRoom}
-            disabled={lockRoomPending}
-          >
-            <LoadingContentSpinner isLoading={lockRoomPending}>
-              Lock <LockClosedIcon className={ICON_CSS} />
-            </LoadingContentSpinner>
-          </button>
-        )}
-
-        <button
-          className={clsx(
-            "btn btn-error grow",
-            (showUnlockButton || showLockButton) && "basis-1/2",
-          )}
-          onClick={leaveRoom}
-          disabled={leaveRoomPending}
-        >
-          <LoadingContentSpinner isLoading={leaveRoomPending}>
-            Leave <ArrowRightStartOnRectangleIcon className={ICON_CSS} />
-          </LoadingContentSpinner>
-        </button>
-      </div>
+  if (isMyRoom) {
+    return (
+      <RoomActionsMyRoom
+        isLocked={isLocked}
+        canUnlock={canUnlock}
+        leaveRoom={leaveRoom}
+        lockRoom={lockRoom}
+        unlockRoom={unlockRoom}
+        leaveRoomPending={leaveRoomPending}
+        lockRoomPending={lockRoomPending}
+        unlockRoomPending={unlockRoomPending}
+      />
     );
   }
 
@@ -92,7 +81,7 @@ export const RoomActions = ({
       onClick={enterRoom}
     >
       <LoadingContentSpinner isLoading={enterRoomPending}>
-        Enter <ArrowRightEndOnRectangleIcon className={ICON_CSS} />
+        Enter <ArrowRightEndOnRectangleIcon className={ROOM_ACTION_ICON_CSS} />
       </LoadingContentSpinner>
     </button>
   );

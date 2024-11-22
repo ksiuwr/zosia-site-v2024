@@ -14,6 +14,7 @@ import { RoomMembersCount } from "./RoomMembersCount";
 interface RoomCardProps {
   roomData: RoomData;
   userIsInSomeRoomAlready: boolean;
+  isAdmin?: boolean;
 }
 
 export const RoomCard = ({
@@ -28,6 +29,7 @@ export const RoomCard = ({
     hidden,
   },
   userIsInSomeRoomAlready,
+  isAdmin,
 }: RoomCardProps) => {
   const { user } = useContext(Context);
 
@@ -36,7 +38,9 @@ export const RoomCard = ({
     leaveRoomMutation,
     lockRoomMutation,
     unlockRoomMutation,
-  } = useRoomMutations(id, name);
+    deleteRoomMutation,
+    editRoomMutation,
+  } = useRoomMutations(id);
 
   const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] = useState(false);
 
@@ -59,6 +63,8 @@ export const RoomCard = ({
   const leaveRoom = () => leaveRoomMutation.mutate();
   const lockRoom = () => lockRoomMutation.mutate();
   const unlockRoom = () => unlockRoomMutation.mutate();
+  const deleteRoom = () => deleteRoomMutation.mutate();
+  const editRoom = () => alert("TODO: Edit room");
 
   return (
     <div
@@ -102,6 +108,7 @@ export const RoomCard = ({
             description={description}
           />
           <RoomActions
+            isAdmin={isAdmin}
             isMyRoom={isMyRoom}
             isLocked={isLocked}
             canUnlock={canUnlock}
@@ -110,10 +117,14 @@ export const RoomCard = ({
             leaveRoom={leaveRoom}
             lockRoom={lockRoom}
             unlockRoom={unlockRoom}
+            deleteRoom={deleteRoom}
+            editRoom={editRoom}
             enterRoomPending={joinRoomMutation.isPending}
             leaveRoomPending={leaveRoomMutation.isPending}
             lockRoomPending={lockRoomMutation.isPending}
             unlockRoomPending={unlockRoomMutation.isPending}
+            deleteRoomPending={deleteRoomMutation.isPending}
+            editRoomPending={editRoomMutation.isPending}
           />
         </div>
       </div>
