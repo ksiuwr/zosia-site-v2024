@@ -25,6 +25,7 @@ export const RoomCard = ({
     lock,
     availableBedsSingle,
     availableBedsDouble,
+    hidden,
   },
   userIsInSomeRoomAlready,
 }: RoomCardProps) => {
@@ -64,12 +65,14 @@ export const RoomCard = ({
       className={clsx(
         "card card-bordered card-compact border-base-content bg-base-100 lg:card-normal",
         isMyRoom && "order-first col-span-2 bg-base-300",
+        hidden && "glass bg-base-content text-base-100",
       )}
     >
       <div className="card-body justify-between">
         <div className="flex justify-between gap-x-4">
           <h2 className="card-title flex-col items-start lg:flex-row">
-            {isMyRoom && <span>Your room: </span>} <span>{name}</span>{" "}
+            {isMyRoom && <span>Your room: </span>}{" "}
+            <span>{`${name}${hidden ? " (hidden room)" : ""} `}</span>
             {isLocked && <LockClosedIconSolid className="size-6" />}
           </h2>
           <RoomMembersCount

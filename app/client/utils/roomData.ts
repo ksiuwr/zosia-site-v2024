@@ -19,6 +19,7 @@ export interface RoomApiData {
   } | null;
   available_beds_single: number;
   available_beds_double: number;
+  hidden: boolean;
 }
 
 /** Data used to create a new room */
@@ -51,6 +52,7 @@ export interface RoomData {
   };
   availableBedsSingle: number;
   availableBedsDouble: number;
+  hidden: boolean;
 }
 
 export interface RoomMember {
@@ -82,12 +84,13 @@ export const convertRoomApiDataToRoomData = (room: RoomApiData): RoomData => {
       : undefined,
     availableBedsSingle: room.available_beds_single,
     availableBedsDouble: room.available_beds_double,
+    hidden: room.hidden,
   };
 };
 
 export const createRoomDataFromTemplateProps = (
   props: templates.Rooms | templates.AdminRoomsList,
-) => {
+): RoomData[] => {
   return props.rooms.map((room) => ({
     id: room.id,
     name: room.name,
@@ -114,5 +117,6 @@ export const createRoomDataFromTemplateProps = (
       : undefined,
     availableBedsSingle: room.available_beds_single,
     availableBedsDouble: room.available_beds_double,
+    hidden: room.hidden,
   }));
 };

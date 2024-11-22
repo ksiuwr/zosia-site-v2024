@@ -12,6 +12,7 @@ ROOM_DATA = List[
             "description",
             "available_beds_single",
             "available_beds_double",
+            "hidden",
             "members.id",
             "members.first_name",
             "members.last_name",
