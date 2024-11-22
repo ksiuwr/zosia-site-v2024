@@ -46,8 +46,6 @@ export const RoomActions = ({
   deleteRoomPending,
   editRoomPending,
 }: RoomActionsProps) => {
-  console.log(isAdmin);
-
   if (isAdmin) {
     return (
       <RoomActionsAdmin

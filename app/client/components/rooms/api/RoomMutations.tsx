@@ -13,7 +13,7 @@ import React, { useContext } from "react";
 import { showCustomToast } from "../../CustomToast";
 import { ApiErrorMessage } from "./ApiErrorMessage";
 
-export const useRoomMutations = (roomId: number) => {
+export const useRoomMutations = (roomId: number, roomName: string) => {
   const { user } = useContext(Context);
 
   const queryClient = useQueryClient();
@@ -23,16 +23,19 @@ export const useRoomMutations = (roomId: number) => {
   };
 
   const onMutationSuccess = (
-    data: AxiosResponse<RoomApiData, unknown>,
     message: string,
+    data?: AxiosResponse<RoomApiData, unknown>,
   ) => {
-    // Update rooms data with this specific room right after getting the response from server.
-    const updatedRoom = convertRoomApiDataToRoomData(data.data);
-    queryClient.setQueryData([ROOM_QUERY_KEY], (oldData: RoomData[]) => {
-      return oldData.map((room) =>
-        room.id === updatedRoom.id ? updatedRoom : room,
-      );
-    });
+    if (data) {
+      // Update rooms data with this specific room right after getting the response from server.
+      const updatedRoom = convertRoomApiDataToRoomData(data.data);
+      queryClient.setQueryData([ROOM_QUERY_KEY], (oldData: RoomData[]) => {
+        return oldData.map((room) =>
+          room.id === updatedRoom.id ? updatedRoom : room,
+        );
+      });
+    }
+
     showCustomToast("success", message);
 
     // Invalidate the rooms data to refetch it from the server and get the most recent data for other rooms.
@@ -58,7 +61,7 @@ export const useRoomMutations = (roomId: number) => {
       );
     },
     onSuccess: (data) =>
-      onMutationSuccess(data, `You've joined room ${data.data.name}.`),
+      onMutationSuccess(`You've joined room ${data.data.name}.`, data),
     onError: onMutationError,
   });
 
@@ -72,7 +75,7 @@ export const useRoomMutations = (roomId: number) => {
       );
     },
     onSuccess: (data) =>
-      onMutationSuccess(data, `You've left room ${data.data.name}.`),
+      onMutationSuccess(`You've left room ${data.data.name}.`, data),
     onError: onMutationError,
   });
 
@@ -84,8 +87,8 @@ export const useRoomMutations = (roomId: number) => {
     },
     onSuccess: (data) =>
       onMutationSuccess(
-        data,
         `You've locked room ${data.data.name}. Share the password with your friends.`,
+        data,
       ),
     onError: onMutationError,
   });
@@ -98,8 +101,8 @@ export const useRoomMutations = (roomId: number) => {
     },
     onSuccess: (data) =>
       onMutationSuccess(
-        data,
         `You've unlocked room ${data.data.name}. Now everybody can join it.`,
+        data,
       ),
     onError: onMutationError,
   });
@@ -109,16 +112,15 @@ export const useRoomMutations = (roomId: number) => {
       return await zosiaApi.post<RoomApiData>(zosiaApiRoutes.rooms, roomData);
     },
     onSuccess: (data) =>
-      onMutationSuccess(data, `You've created room ${data.data.name}.`),
+      onMutationSuccess(`You've created room ${data.data.name}.`, data),
     onError: onMutationError,
   });
 
   const deleteRoomMutation = useMutation({
     mutationFn: async () => {
-      return await zosiaApi.delete<RoomApiData>(zosiaApiRoutes.room(roomId));
+      return await zosiaApi.delete(zosiaApiRoutes.room(roomId));
     },
-    onSuccess: (data) =>
-      onMutationSuccess(data, `You've deleted room ${data.data.name}.`),
+    onSuccess: () => onMutationSuccess(`You've deleted room ${roomName}.`),
     onError: onMutationError,
   });
 
@@ -130,7 +132,7 @@ export const useRoomMutations = (roomId: number) => {
       );
     },
     onSuccess: (data) =>
-      onMutationSuccess(data, `You've edited room ${data.data.name}.`),
+      onMutationSuccess(`You've edited room ${data.data.name}.`, data),
     onError: onMutationError,
   });
 

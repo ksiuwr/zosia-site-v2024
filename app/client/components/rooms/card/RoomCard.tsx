@@ -40,7 +40,7 @@ export const RoomCard = ({
     unlockRoomMutation,
     deleteRoomMutation,
     editRoomMutation,
-  } = useRoomMutations(id);
+  } = useRoomMutations(id, name);
 
   const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] = useState(false);
 
