@@ -115,7 +115,7 @@ export const RoomCards = ({
     <div className="mb-6 flex flex-col gap-5 lg:grid lg:grid-cols-2">
       {sortedResults.map((room) => (
         <RoomCard
-          key={room.name}
+          key={room.id}
           roomData={room}
           userIsInSomeRoomAlready={userRoom !== undefined}
         ></RoomCard>

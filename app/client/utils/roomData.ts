@@ -21,6 +21,17 @@ export interface RoomApiData {
   available_beds_double: number;
 }
 
+/** Data used to create a new room */
+export interface RoomCreateApiData {
+  name: string;
+  description: string;
+  available_beds_single: number;
+  available_beds_double: number;
+  beds_single: number;
+  beds_double: number;
+  hidden: boolean;
+}
+
 interface RoomApiUserData {
   id: number;
   first_name: string;

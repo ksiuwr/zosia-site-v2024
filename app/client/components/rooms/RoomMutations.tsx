@@ -2,6 +2,7 @@ import {
   convertRoomApiDataToRoomData,
   ROOM_QUERY_KEY,
   RoomApiData,
+  RoomCreateApiData,
   RoomData,
 } from "@client/utils/roomData";
 import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
@@ -103,10 +104,20 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
     onError: onMutationError,
   });
 
+  const createRoomMutation = useMutation({
+    mutationFn: async (roomData: RoomCreateApiData) => {
+      return await zosiaApi.post<RoomApiData>(zosiaApiRoutes.rooms, roomData);
+    },
+    onSuccess: (data) =>
+      onMutationSuccess(data, `You've created room ${data.data.name}.`),
+    onError: onMutationError,
+  });
+
   return {
     joinRoomMutation,
     leaveRoomMutation,
     lockRoomMutation,
     unlockRoomMutation,
+    createRoomMutation,
   };
 };

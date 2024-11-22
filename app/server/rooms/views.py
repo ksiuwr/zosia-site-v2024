@@ -61,7 +61,8 @@ def index(request):
         messages.error(request, _('Room registration is over'))
         return redirect(reverse('accounts_profile'))
 
-    rooms = Room.objects.all_visible().prefetch_related('members').all()
+    rooms = Room.objects.all() if preferences.user.is_staff else Room.objects.all_visible()
+    rooms = rooms.prefetch_related('members').all()
     rooms = sorted(rooms, key=lambda x: x.pk)
     user_lock = request.user.locks.all().first()
 
@@ -125,7 +126,7 @@ def handle_uploaded_file(csvfile):
 @staff_member_required
 @require_http_methods(['GET'])
 def admin_rooms_list(request):
-    rooms = Room.objects.all_visible().prefetch_related('members').all()
+    rooms = Room.objects.all().prefetch_related('members').all()
     rooms = sorted(rooms, key=lambda x: x.pk)
 
     return AdminRoomsList(rooms=rooms).render(request)

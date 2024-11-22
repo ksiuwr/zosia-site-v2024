@@ -1,5 +1,7 @@
+import { LoadingContentSpinner } from "@client/components/LoadingContentSpinner";
 import React, { useState } from "react";
 import { CustomDialog } from "../../CustomDialog";
+import { useRoomMutations } from "../RoomMutations";
 import { RoomPropertiesFormFieldCheckbox } from "./RoomPropertiesFormFieldCheckbox";
 import { RoomPropertiesFormFieldInput } from "./RoomPropertiesFormFieldInput";
 
@@ -22,10 +24,19 @@ export const RoomPropertiesDialog = ({
 
   const [roomHidden, setRoomHidden] = useState(false);
 
+  const { createRoomMutation } = useRoomMutations(0, "");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("TODO: Add room");
-    onClose();
+    createRoomMutation.mutate({
+      name: roomName,
+      description: roomDescription,
+      available_beds_single: availableBedsSingle,
+      available_beds_double: availableBedsDouble,
+      beds_single: bedsSingle,
+      beds_double: bedsDouble,
+      hidden: roomHidden,
+    });
   };
 
   return (
@@ -73,8 +84,14 @@ export const RoomPropertiesDialog = ({
           checked={roomHidden}
           onChange={setRoomHidden}
         />
-        <button type="submit" className="btn btn-success btn-lg btn-block">
-          Add room
+        <button
+          type="submit"
+          className="btn btn-success btn-lg btn-block"
+          disabled={createRoomMutation.isPending}
+        >
+          <LoadingContentSpinner isLoading={createRoomMutation.isPending}>
+            Add room
+          </LoadingContentSpinner>
         </button>
       </form>
     </CustomDialog>
