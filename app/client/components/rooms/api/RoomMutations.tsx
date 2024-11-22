@@ -4,6 +4,7 @@ import {
   RoomApiData,
   RoomCreateApiData,
   RoomData,
+  RoomEditApiData,
 } from "@client/utils/roomData";
 import { zosiaApi, zosiaApiRoutes } from "@client/utils/zosiaApi";
 import { Context } from "@reactivated";
@@ -128,7 +129,7 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
   });
 
   const editRoomMutation = useMutation({
-    mutationFn: async (roomData: RoomCreateApiData) => {
+    mutationFn: async (roomData: RoomEditApiData) => {
       return await zosiaApi.put<RoomApiData>(
         zosiaApiRoutes.room(roomId),
         roomData,

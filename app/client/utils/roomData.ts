@@ -19,6 +19,8 @@ export interface RoomApiData {
   } | null;
   available_beds_single: number;
   available_beds_double: number;
+  beds_single: number;
+  beds_double: number;
   hidden: boolean;
 }
 
@@ -31,6 +33,10 @@ export interface RoomCreateApiData {
   beds_single: number;
   beds_double: number;
   hidden: boolean;
+}
+
+export interface RoomEditApiData extends RoomCreateApiData {
+  id: number;
 }
 
 interface RoomApiUserData {
@@ -52,6 +58,8 @@ export interface RoomData {
   };
   availableBedsSingle: number;
   availableBedsDouble: number;
+  bedsSingle: number;
+  bedsDouble: number;
   hidden: boolean;
 }
 
@@ -84,6 +92,8 @@ export const convertRoomApiDataToRoomData = (room: RoomApiData): RoomData => {
       : undefined,
     availableBedsSingle: room.available_beds_single,
     availableBedsDouble: room.available_beds_double,
+    bedsSingle: room.beds_single,
+    bedsDouble: room.beds_double,
     hidden: room.hidden,
   };
 };
@@ -117,6 +127,8 @@ export const createRoomDataFromTemplateProps = (
       : undefined,
     availableBedsSingle: room.available_beds_single,
     availableBedsDouble: room.available_beds_double,
+    bedsSingle: room.beds_single,
+    bedsDouble: room.beds_double,
     hidden: room.hidden,
   }));
 };

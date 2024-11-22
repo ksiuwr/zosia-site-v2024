@@ -1,4 +1,5 @@
 import { LoadingContentSpinner } from "@client/components/LoadingContentSpinner";
+import { RoomData } from "@client/utils/roomData";
 import React, { useState } from "react";
 import { CustomDialog } from "../../CustomDialog";
 import { useRoomMutations } from "../api/RoomMutations";
@@ -6,42 +7,95 @@ import { RoomPropertiesFormFieldCheckbox } from "./RoomPropertiesFormFieldCheckb
 import { RoomPropertiesFormFieldInput } from "./RoomPropertiesFormFieldInput";
 
 interface RoomPropertiesDialogProps {
+  roomData?: RoomData;
   dialogOpen: boolean;
-  onClose: () => void;
+  closeDialog: () => void;
 }
 
 export const RoomPropertiesDialog = ({
+  roomData,
   dialogOpen,
-  onClose,
+  closeDialog,
 }: RoomPropertiesDialogProps) => {
-  const [roomName, setRoomName] = useState("");
-  const [roomDescription, setRoomDescription] = useState("");
+  const [roomName, setRoomName] = useState(roomData ? roomData.name : "");
+  const [roomDescription, setRoomDescription] = useState(
+    roomData ? roomData.description : "",
+  );
 
-  const [availableBedsSingle, setAvailableBedsSingle] = useState(0);
-  const [availableBedsDouble, setAvailableBedsDouble] = useState(0);
-  const [bedsSingle, setBedsSingle] = useState(0);
-  const [bedsDouble, setBedsDouble] = useState(0);
+  const [availableBedsSingle, setAvailableBedsSingle] = useState(
+    roomData ? roomData.availableBedsSingle : 0,
+  );
+  const [availableBedsDouble, setAvailableBedsDouble] = useState(
+    roomData ? roomData.availableBedsDouble : 0,
+  );
+  const [bedsSingle, setBedsSingle] = useState(
+    roomData ? roomData.bedsSingle : 0,
+  );
+  const [bedsDouble, setBedsDouble] = useState(
+    roomData ? roomData.bedsDouble : 0,
+  );
 
-  const [roomHidden, setRoomHidden] = useState(false);
+  const [roomHidden, setRoomHidden] = useState(
+    roomData ? roomData.hidden : false,
+  );
 
-  const { createRoomMutation } = useRoomMutations(0, "");
+  const { createRoomMutation, editRoomMutation } = useRoomMutations(
+    roomData ? roomData.id : -1,
+    roomName,
+  );
+
+  const isInEditMode = roomData !== undefined;
+  const title = isInEditMode ? "Edit room" : "Add room";
+
+  const resetFormState = () => {
+    setRoomName("");
+    setRoomDescription("");
+    setAvailableBedsSingle(0);
+    setAvailableBedsDouble(0);
+    setBedsSingle(0);
+    setBedsDouble(0);
+    setRoomHidden(false);
+  };
+
+  const onMutationSuccess = () => {
+    resetFormState();
+    closeDialog();
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createRoomMutation.mutate({
-      name: roomName,
-      description: roomDescription,
-      available_beds_single: availableBedsSingle,
-      available_beds_double: availableBedsDouble,
-      beds_single: bedsSingle,
-      beds_double: bedsDouble,
-      hidden: roomHidden,
-    });
-    onClose();
+    if (isInEditMode) {
+      editRoomMutation.mutate(
+        {
+          id: roomData.id,
+          name: roomName,
+          description: roomDescription,
+          available_beds_single: availableBedsSingle,
+          available_beds_double: availableBedsDouble,
+          beds_single: bedsSingle,
+          beds_double: bedsDouble,
+          hidden: roomHidden,
+        },
+        { onSuccess: onMutationSuccess },
+      );
+    } else {
+      createRoomMutation.mutate(
+        {
+          name: roomName,
+          description: roomDescription,
+          available_beds_single: availableBedsSingle,
+          available_beds_double: availableBedsDouble,
+          beds_single: bedsSingle,
+          beds_double: bedsDouble,
+          hidden: roomHidden,
+        },
+        { onSuccess: onMutationSuccess },
+      );
+    }
   };
 
   return (
-    <CustomDialog dialogOpen={dialogOpen} onClose={onClose} title="Add room">
+    <CustomDialog dialogOpen={dialogOpen} onClose={closeDialog} title={title}>
       <form onSubmit={handleSubmit}>
         <RoomPropertiesFormFieldInput
           label="Room name"
@@ -91,7 +145,7 @@ export const RoomPropertiesDialog = ({
           disabled={createRoomMutation.isPending}
         >
           <LoadingContentSpinner isLoading={createRoomMutation.isPending}>
-            Add room
+            {title}
           </LoadingContentSpinner>
         </button>
       </form>

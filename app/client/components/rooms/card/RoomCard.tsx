@@ -6,6 +6,7 @@ import { Context } from "@reactivated";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
 import { RoomDeleteConfirmationDialog } from "../admin/RoomDeleteConfirmationDialog";
+import { RoomPropertiesDialog } from "../admin/RoomPropertiesDialog";
 import { useRoomMutations } from "../api/RoomMutations";
 import { JoinLockedRoomDialog } from "../JoinLockedRoomDialog";
 import { RoomActions } from "./RoomActions";
@@ -19,20 +20,22 @@ interface RoomCardProps {
 }
 
 export const RoomCard = ({
-  roomData: {
-    id,
-    name,
-    description,
-    members,
-    lock,
-    availableBedsSingle,
-    availableBedsDouble,
-    hidden,
-  },
+  roomData,
   userIsInSomeRoomAlready,
   isAdmin,
 }: RoomCardProps) => {
   const { user } = useContext(Context);
+
+  const {
+    id,
+    name,
+    members,
+    availableBedsSingle,
+    availableBedsDouble,
+    description,
+    lock,
+    hidden,
+  } = roomData;
 
   const {
     joinRoomMutation,
@@ -48,6 +51,7 @@ export const RoomCard = ({
     roomDeleteConfirmationDialogOpen,
     setRoomDeleteConfirmationDialogOpen,
   ] = useState(false);
+  const [roomEditDialogOpen, setRoomEditDialogOpen] = useState(false);
 
   const allPlaces = availableBedsSingle + availableBedsDouble * 2;
   const availablePlaces = allPlaces - members.length;
@@ -69,7 +73,7 @@ export const RoomCard = ({
   const lockRoom = () => lockRoomMutation.mutate();
   const unlockRoom = () => unlockRoomMutation.mutate();
   const deleteRoom = () => setRoomDeleteConfirmationDialogOpen(true);
-  const editRoom = () => alert("TODO: Edit room");
+  const editRoom = () => setRoomEditDialogOpen(true);
 
   return (
     <div
@@ -145,6 +149,14 @@ export const RoomCard = ({
         dialogOpen={roomDeleteConfirmationDialogOpen}
         closeDialog={() => setRoomDeleteConfirmationDialogOpen(false)}
       />
+      {roomEditDialogOpen && (
+        // We remount the dialog every time it's opened to reset the form state
+        <RoomPropertiesDialog
+          roomData={roomData}
+          dialogOpen={roomEditDialogOpen}
+          closeDialog={() => setRoomEditDialogOpen(false)}
+        />
+      )}
     </div>
   );
 };

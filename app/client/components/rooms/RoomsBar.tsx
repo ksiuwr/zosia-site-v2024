@@ -87,7 +87,7 @@ export const RoomsBar = ({
           </a>
           <RoomPropertiesDialog
             dialogOpen={addRoomDialogOpen}
-            onClose={() => setAddRoomDialogOpen(false)}
+            closeDialog={() => setAddRoomDialogOpen(false)}
           />
         </div>
       )}
