@@ -120,7 +120,10 @@ export const useRoomMutations = (roomId: number, roomName: string) => {
     mutationFn: async () => {
       return await zosiaApi.delete(zosiaApiRoutes.room(roomId));
     },
-    onSuccess: () => onMutationSuccess(`You've deleted room ${roomName}.`),
+    onSuccess: () =>
+      onMutationSuccess(
+        `You've deleted room ${roomName}. You should inform its inhabitants about this.`,
+      ),
     onError: onMutationError,
   });
 

@@ -5,6 +5,7 @@ import { LockClosedIcon as LockClosedIconSolid } from "@heroicons/react/24/solid
 import { Context } from "@reactivated";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
+import { RoomDeleteConfirmationDialog } from "../admin/RoomDeleteConfirmationDialog";
 import { useRoomMutations } from "../api/RoomMutations";
 import { JoinLockedRoomDialog } from "../JoinLockedRoomDialog";
 import { RoomActions } from "./RoomActions";
@@ -43,6 +44,10 @@ export const RoomCard = ({
   } = useRoomMutations(id, name);
 
   const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] = useState(false);
+  const [
+    roomDeleteConfirmationDialogOpen,
+    setRoomDeleteConfirmationDialogOpen,
+  ] = useState(false);
 
   const allPlaces = availableBedsSingle + availableBedsDouble * 2;
   const availablePlaces = allPlaces - members.length;
@@ -63,7 +68,7 @@ export const RoomCard = ({
   const leaveRoom = () => leaveRoomMutation.mutate();
   const lockRoom = () => lockRoomMutation.mutate();
   const unlockRoom = () => unlockRoomMutation.mutate();
-  const deleteRoom = () => deleteRoomMutation.mutate();
+  const deleteRoom = () => setRoomDeleteConfirmationDialogOpen(true);
   const editRoom = () => alert("TODO: Edit room");
 
   return (
@@ -133,6 +138,12 @@ export const RoomCard = ({
         joinRoomMutation={joinRoomMutation}
         dialogOpen={roomPasswordDialogOpen}
         closeDialog={() => setRoomPasswordDialogOpen(false)}
+      />
+      <RoomDeleteConfirmationDialog
+        roomName={name}
+        deleteRoomMutation={deleteRoomMutation}
+        dialogOpen={roomDeleteConfirmationDialogOpen}
+        closeDialog={() => setRoomDeleteConfirmationDialogOpen(false)}
       />
     </div>
   );

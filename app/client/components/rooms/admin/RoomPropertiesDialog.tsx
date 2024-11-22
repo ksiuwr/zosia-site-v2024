@@ -37,6 +37,7 @@ export const RoomPropertiesDialog = ({
       beds_double: bedsDouble,
       hidden: roomHidden,
     });
+    onClose();
   };
 
   return (
