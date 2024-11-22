@@ -4,16 +4,16 @@ import { parseISO } from "date-fns/parseISO";
 export const ROOM_QUERY_KEY = "rooms";
 
 /** Single room data retrieved from server */
-export interface RoomAPIData {
+export interface RoomApiData {
   id: number;
   name: string;
   description: string;
   members: {
-    user: RoomAPIUserData;
+    user: RoomApiUserData;
     joined_at: string;
   }[];
   lock: {
-    user: RoomAPIUserData;
+    user: RoomApiUserData;
     password: string | null;
     expiration_date: string;
   } | null;
@@ -21,7 +21,7 @@ export interface RoomAPIData {
   available_beds_double: number;
 }
 
-interface RoomAPIUserData {
+interface RoomApiUserData {
   id: number;
   first_name: string;
   last_name: string;
@@ -48,7 +48,7 @@ export interface RoomMember {
   lastName: string;
 }
 
-export const convertRoomAPIDataToRoomData = (room: RoomAPIData): RoomData => {
+export const convertRoomApiDataToRoomData = (room: RoomApiData): RoomData => {
   return {
     id: room.id,
     name: room.name,

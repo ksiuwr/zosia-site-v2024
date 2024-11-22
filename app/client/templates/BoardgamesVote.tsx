@@ -11,9 +11,9 @@ export const Template = (props: templates.BoardgamesVote) => {
 
   const onCheckboxChange = (boardGameId: number, checked: boolean) => {
     if (checked) {
-      setVotes([...votes, boardGameId]);
+      setVotes((oldVotes) => [...oldVotes, boardGameId]);
     } else {
-      setVotes(votes.filter((vote) => vote !== boardGameId));
+      setVotes((oldVotes) => oldVotes.filter((vote) => vote !== boardGameId));
     }
   };
 

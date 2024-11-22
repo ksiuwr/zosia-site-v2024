@@ -65,6 +65,7 @@ if "SECRET_KEY" not in os.environ:
 DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get("HOSTS", "staging.zosia.org").split(",")
+CSRF_TRUSTED_ORIGINS = [f"https://*.{host}" for host in ALLOWED_HOSTS]
 
 AUTH_USER_MODEL = "users.User"
 
