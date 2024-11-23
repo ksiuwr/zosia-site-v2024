@@ -32,5 +32,5 @@ urlpatterns = [
     path('place/add/', views.place_add, name='place_add'),
     path('place/<int:pk>/update/', views.place_add, name='place_update'),
     path('statistics/', views.statistics, name='statistics'),
-    path('signup_rules/', views.sign_up_rules_for_invited, name='invited'),
+    path('zapisy/', views.sign_up_rules_for_invited, name='invited'),
 ]

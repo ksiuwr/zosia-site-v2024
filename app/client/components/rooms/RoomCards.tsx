@@ -9,8 +9,8 @@ import { Context } from "@reactivated";
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { Alert } from "../alert/Alert";
-import { ApiErrorMessage } from "./ApiErrorMessage";
-import { RoomCard } from "./RoomCard";
+import { ApiErrorMessage } from "./api/ApiErrorMessage";
+import { RoomCard } from "./card/RoomCard";
 import { RoomsSortBy } from "./RoomsBar";
 
 interface RoomCardsProps {
@@ -20,6 +20,8 @@ interface RoomCardsProps {
   searchText: string;
   hideFullRooms: boolean;
   sortRoomsBy: RoomsSortBy;
+
+  isAdmin?: boolean;
 }
 
 export const RoomCards = ({
@@ -27,6 +29,7 @@ export const RoomCards = ({
   searchText,
   hideFullRooms,
   sortRoomsBy,
+  isAdmin,
 }: RoomCardsProps) => {
   const { user } = useContext(Context);
 
@@ -115,9 +118,10 @@ export const RoomCards = ({
     <div className="mb-6 flex flex-col gap-5 lg:grid lg:grid-cols-2">
       {sortedResults.map((room) => (
         <RoomCard
-          key={room.name}
+          key={room.id}
           roomData={room}
           userIsInSomeRoomAlready={userRoom !== undefined}
+          isAdmin={isAdmin}
         ></RoomCard>
       ))}
     </div>

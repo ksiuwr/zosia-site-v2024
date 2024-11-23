@@ -70,7 +70,7 @@ export const Layout = ({
       <Toaster position="top-center" />
       <QueryClientProvider client={queryClient}>
         {showAdminSidebar && (
-          <div className="fixed z-50 hidden h-screen w-80 overflow-scroll lg:block">
+          <div className="fixed hidden h-screen w-80 overflow-scroll lg:block">
             <AdminNavBar showAsSidebar />
           </div>
         )}

@@ -17,7 +17,7 @@ export const BasicFormWithCustomFields = <T extends FieldMap>({
   children,
 }: PropsWithChildren<BasicFormWithCustomFieldsProps<T>>) => {
   return (
-    <form method="POST" onSubmit={onFormSubmit}>
+    <form method="POST" onSubmit={onFormSubmit} encType="multipart/form-data">
       <CSRFToken />
       {form.nonFieldErrors?.map((error) => (
         <Alert key={error} type="error">

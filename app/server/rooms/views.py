@@ -16,7 +16,7 @@ from django.views.decorators.vary import vary_on_cookie
 from server.conferences.models import Zosia
 from .forms import UploadFileForm
 from .models import Room
-from .templates import Rooms
+from .templates import AdminRoomsImport, AdminRoomsList, Rooms
 from server.users.models import UserPreferences
 from server.utils.views import csv_response, validation_format
 
@@ -61,7 +61,8 @@ def index(request):
         messages.error(request, _('Room registration is over'))
         return redirect(reverse('accounts_profile'))
 
-    rooms = Room.objects.all_visible().prefetch_related('members').all()
+    rooms = Room.objects.all() if preferences.user.is_staff else Room.objects.all_visible()
+    rooms = rooms.prefetch_related('members').all()
     rooms = sorted(rooms, key=lambda x: x.pk)
     user_lock = request.user.locks.all().first()
 
@@ -123,6 +124,15 @@ def handle_uploaded_file(csvfile):
 
 
 @staff_member_required
+@require_http_methods(['GET'])
+def admin_rooms_list(request):
+    rooms = Room.objects.all().prefetch_related('members').all()
+    rooms = sorted(rooms, key=lambda x: x.pk)
+
+    return AdminRoomsList(rooms=rooms).render(request)
+
+
+@staff_member_required
 @require_http_methods(['GET', 'POST'])
 def import_room(request):
     if request.method == 'POST':
@@ -139,8 +149,8 @@ def import_room(request):
                 messages.error(request, _("There were errors when adding rooms"))
             else:
                 messages.success(request, _("Rooms have been successfully added"))
-                return HttpResponseRedirect(reverse('admin'))
+                return HttpResponseRedirect(reverse('admin_rooms_list'))
     else:
         form = UploadFileForm()
 
-    return render(request, 'rooms/import.html', {'form': form})
+    return AdminRoomsImport(form=form).render(request)
