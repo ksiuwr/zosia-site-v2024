@@ -115,6 +115,7 @@ export const RoomCard = ({
             availableBedsSingle={availableBedsSingle}
             availableBedsDouble={availableBedsDouble}
             description={description}
+            hidden={hidden}
           />
           <RoomActions
             isAdmin={isAdmin}
