@@ -1,17 +1,18 @@
 import { Input } from "@headlessui/react";
+import { Context } from "@reactivated";
 import { UseMutationResult } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-import React from "react";
+import React, { useContext } from "react";
 import { CustomDialog } from "../CustomDialog";
 import { LoadingContentSpinner } from "../LoadingContentSpinner";
-import { ApiErrorMessage } from "./ApiErrorMessage";
+import { ApiErrorMessage } from "./api/ApiErrorMessage";
 
 interface JoinLockedRoomDialogProps {
   roomName: string;
   joinRoomMutation: UseMutationResult<
     AxiosResponse<unknown, unknown>,
     Error,
-    string | undefined,
+    { userId: number; password?: string | undefined },
     unknown
   >;
   dialogOpen: boolean;
@@ -24,13 +25,17 @@ export const JoinLockedRoomDialog = ({
   dialogOpen,
   closeDialog,
 }: JoinLockedRoomDialogProps) => {
+  const { user } = useContext(Context);
   const [typedPassword, setTypedPassword] = React.useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (typedPassword !== "") {
-      joinRoomMutation.mutate(typedPassword, { onSuccess: closeDialog });
+      joinRoomMutation.mutate(
+        { userId: user.id, password: typedPassword },
+        { onSuccess: closeDialog },
+      );
     }
   };
 

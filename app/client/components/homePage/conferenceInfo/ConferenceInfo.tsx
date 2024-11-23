@@ -68,7 +68,7 @@ export const ConferenceInfo = ({
               >
                 {placeName}
               </a>
-              <p>{placeAddress}</p>
+              <p className="whitespace-pre-wrap">{placeAddress}</p>
             </div>
           </div>
         </div>

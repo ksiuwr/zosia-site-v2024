@@ -9,7 +9,7 @@ interface EventDatesProps {
 
 export const EventDates = ({ startDate, endDate, title }: EventDatesProps) => {
   return (
-    <div className="text-start">
+    <div className="mx-auto text-start">
       <h3 className="text-center">{`${title}:`}</h3>
       <span>{`Start: ${getLocalDateTime(startDate)}`}</span>
       <br />

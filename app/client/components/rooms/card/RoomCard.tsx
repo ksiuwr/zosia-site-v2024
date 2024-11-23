@@ -5,39 +5,53 @@ import { LockClosedIcon as LockClosedIconSolid } from "@heroicons/react/24/solid
 import { Context } from "@reactivated";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
-import { JoinLockedRoomDialog } from "./JoinLockedRoomDialog";
+import { RoomDeleteConfirmationDialog } from "../admin/RoomDeleteConfirmationDialog";
+import { RoomEditDialog } from "../admin/RoomEditDialog";
+import { useRoomMutations } from "../api/RoomMutations";
+import { JoinLockedRoomDialog } from "../JoinLockedRoomDialog";
 import { RoomActions } from "./RoomActions";
 import { RoomInfoPopover } from "./RoomInfoPopover";
 import { RoomMembersCount } from "./RoomMembersCount";
-import { useRoomMutations } from "./RoomMutations";
 
 interface RoomCardProps {
   roomData: RoomData;
   userIsInSomeRoomAlready: boolean;
+  isAdmin?: boolean;
 }
 
 export const RoomCard = ({
-  roomData: {
-    id,
-    name,
-    description,
-    members,
-    lock,
-    availableBedsSingle,
-    availableBedsDouble,
-  },
+  roomData,
   userIsInSomeRoomAlready,
+  isAdmin,
 }: RoomCardProps) => {
   const { user } = useContext(Context);
+
+  const {
+    id,
+    name,
+    members,
+    availableBedsSingle,
+    availableBedsDouble,
+    description,
+    lock,
+    hidden,
+  } = roomData;
 
   const {
     joinRoomMutation,
     leaveRoomMutation,
     lockRoomMutation,
     unlockRoomMutation,
+    deleteRoomMutation,
+    editRoomMutation,
   } = useRoomMutations(id, name);
 
   const [roomPasswordDialogOpen, setRoomPasswordDialogOpen] = useState(false);
+  const [
+    roomDeleteConfirmationDialogOpen,
+    setRoomDeleteConfirmationDialogOpen,
+  ] = useState(false);
+  const [roomEditDialogOpen, setRoomEditDialogOpen] = useState(false);
 
   const allPlaces = availableBedsSingle + availableBedsDouble * 2;
   const availablePlaces = allPlaces - members.length;
@@ -52,24 +66,28 @@ export const RoomCard = ({
     if (isLocked) {
       setRoomPasswordDialogOpen(true);
     } else {
-      joinRoomMutation.mutate("");
+      joinRoomMutation.mutate({ userId: user.id });
     }
   };
-  const leaveRoom = () => leaveRoomMutation.mutate();
+  const leaveRoom = () => leaveRoomMutation.mutate(user.id);
   const lockRoom = () => lockRoomMutation.mutate();
   const unlockRoom = () => unlockRoomMutation.mutate();
+  const deleteRoom = () => setRoomDeleteConfirmationDialogOpen(true);
+  const editRoom = () => setRoomEditDialogOpen(true);
 
   return (
     <div
       className={clsx(
         "card card-bordered card-compact border-base-content bg-base-100 lg:card-normal",
         isMyRoom && "order-first col-span-2 bg-base-300",
+        hidden && "glass bg-base-content text-base-100",
       )}
     >
       <div className="card-body justify-between">
         <div className="flex justify-between gap-x-4">
           <h2 className="card-title flex-col items-start lg:flex-row">
-            {isMyRoom && <span>Your room: </span>} <span>{name}</span>{" "}
+            {isMyRoom && <span>Your room: </span>}{" "}
+            <span>{`${name}${hidden ? " (hidden room)" : ""} `}</span>
             {isLocked && <LockClosedIconSolid className="size-6" />}
           </h2>
           <RoomMembersCount
@@ -97,8 +115,10 @@ export const RoomCard = ({
             availableBedsSingle={availableBedsSingle}
             availableBedsDouble={availableBedsDouble}
             description={description}
+            hidden={hidden}
           />
           <RoomActions
+            isAdmin={isAdmin}
             isMyRoom={isMyRoom}
             isLocked={isLocked}
             canUnlock={canUnlock}
@@ -107,10 +127,14 @@ export const RoomCard = ({
             leaveRoom={leaveRoom}
             lockRoom={lockRoom}
             unlockRoom={unlockRoom}
+            deleteRoom={deleteRoom}
+            editRoom={editRoom}
             enterRoomPending={joinRoomMutation.isPending}
             leaveRoomPending={leaveRoomMutation.isPending}
             lockRoomPending={lockRoomMutation.isPending}
             unlockRoomPending={unlockRoomMutation.isPending}
+            deleteRoomPending={deleteRoomMutation.isPending}
+            editRoomPending={editRoomMutation.isPending}
           />
         </div>
       </div>
@@ -120,6 +144,20 @@ export const RoomCard = ({
         dialogOpen={roomPasswordDialogOpen}
         closeDialog={() => setRoomPasswordDialogOpen(false)}
       />
+      <RoomDeleteConfirmationDialog
+        roomName={name}
+        deleteRoomMutation={deleteRoomMutation}
+        dialogOpen={roomDeleteConfirmationDialogOpen}
+        closeDialog={() => setRoomDeleteConfirmationDialogOpen(false)}
+      />
+      {roomEditDialogOpen && (
+        // We remount the dialog every time it's opened to reset the form state
+        <RoomEditDialog
+          roomData={roomData}
+          dialogOpen={roomEditDialogOpen}
+          closeDialog={() => setRoomEditDialogOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -19,6 +19,24 @@ export interface RoomApiData {
   } | null;
   available_beds_single: number;
   available_beds_double: number;
+  beds_single: number;
+  beds_double: number;
+  hidden: boolean;
+}
+
+/** Data used to create a new room */
+export interface RoomCreateApiData {
+  name: string;
+  description: string;
+  available_beds_single: number;
+  available_beds_double: number;
+  beds_single: number;
+  beds_double: number;
+  hidden: boolean;
+}
+
+export interface RoomEditApiData extends RoomCreateApiData {
+  id: number;
 }
 
 interface RoomApiUserData {
@@ -40,6 +58,9 @@ export interface RoomData {
   };
   availableBedsSingle: number;
   availableBedsDouble: number;
+  bedsSingle: number;
+  bedsDouble: number;
+  hidden: boolean;
 }
 
 export interface RoomMember {
@@ -71,10 +92,15 @@ export const convertRoomApiDataToRoomData = (room: RoomApiData): RoomData => {
       : undefined,
     availableBedsSingle: room.available_beds_single,
     availableBedsDouble: room.available_beds_double,
+    bedsSingle: room.beds_single,
+    bedsDouble: room.beds_double,
+    hidden: room.hidden,
   };
 };
 
-export const createRoomDataFromTemplateProps = (props: templates.Rooms) => {
+export const createRoomDataFromTemplateProps = (
+  props: templates.Rooms | templates.AdminRoomsList,
+): RoomData[] => {
   return props.rooms.map((room) => ({
     id: room.id,
     name: room.name,
@@ -92,6 +118,7 @@ export const createRoomDataFromTemplateProps = (props: templates.Rooms) => {
             lastName: room.lock.user.last_name,
           },
           password:
+            "user_room_lock" in props &&
             props.user_room_lock?.id === room.lock.id
               ? props.user_room_lock.password
               : undefined,
@@ -100,5 +127,8 @@ export const createRoomDataFromTemplateProps = (props: templates.Rooms) => {
       : undefined,
     availableBedsSingle: room.available_beds_single,
     availableBedsDouble: room.available_beds_double,
+    bedsSingle: room.beds_single,
+    bedsDouble: room.beds_double,
+    hidden: room.hidden,
   }));
 };

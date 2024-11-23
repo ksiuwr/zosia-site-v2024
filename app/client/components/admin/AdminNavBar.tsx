@@ -1,7 +1,7 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import { Context, reverse } from "@reactivated";
 import clsx from "clsx";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 
 interface AdminNavBarProps {
   showAsSidebar?: boolean;
@@ -64,7 +64,10 @@ const navbarSections: AdminNavBarSection[] = [
   },
   {
     sectionTitle: "Rooms",
-    links: [{ linkTitle: "Upload rooms", href: reverse("rooms_import") }],
+    links: [
+      { linkTitle: "List rooms", href: reverse("admin_rooms_list") },
+      { linkTitle: "Import rooms", href: reverse("rooms_import") },
+    ],
   },
   {
     sectionTitle: "Boardgames",
@@ -147,17 +150,6 @@ const navbarSections: AdminNavBarSection[] = [
 export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
   const { request } = useContext(Context);
 
-  const currentPathLinkRef = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => {
-    if (currentPathLinkRef.current) {
-      currentPathLinkRef.current.scrollIntoView({
-        behavior: "instant",
-        block: "center",
-      });
-    }
-  }, []);
-
   return (
     <nav
       className={clsx(
@@ -195,7 +187,6 @@ export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
                       request.path === href &&
                         "bg-base-content text-base-100 hover:bg-base-content hover:text-base-100",
                     )}
-                    ref={request.path === href ? currentPathLinkRef : undefined}
                   >
                     {sectionTitle === "Downloads" && (
                       <ArrowDownTrayIcon
