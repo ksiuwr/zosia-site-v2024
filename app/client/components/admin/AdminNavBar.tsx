@@ -66,7 +66,7 @@ const navbarSections: AdminNavBarSection[] = [
     sectionTitle: "Rooms",
     links: [
       { linkTitle: "List rooms", href: reverse("admin_rooms_list") },
-      { linkTitle: "Upload rooms", href: reverse("rooms_import") },
+      { linkTitle: "Import rooms", href: reverse("rooms_import") },
     ],
   },
   {

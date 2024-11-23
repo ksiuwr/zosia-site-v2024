@@ -1,5 +1,6 @@
 import { Checkbox, Input, Textarea } from "@headlessui/react";
 import { FieldHandler, Widget } from "@reactivated";
+import clsx from "clsx";
 import React from "react";
 import { WidgetHandler } from "reactivated/dist/forms";
 import { DjangoFormsWidgetsCheckboxInput } from "reactivated/dist/generated";
@@ -27,6 +28,7 @@ export const BasicWidget = ({
     case "django.forms.widgets.URLInput":
     case "django.forms.widgets.DateInput":
     case "django.forms.widgets.DateTimeInput":
+    case "django.forms.widgets.ClearableFileInput":
       return (
         <Input
           type={
@@ -37,7 +39,12 @@ export const BasicWidget = ({
                 : field.widget.type
           }
           name={field.name}
-          className="input input-bordered w-full"
+          className={clsx(
+            "w-full",
+            field.widget.type === "file"
+              ? "file-input file-input-bordered"
+              : "input input-bordered",
+          )}
           required={field.widget.required}
           value={field.value ?? ""}
           onChange={(e) => field.handler(e.target.value)}

@@ -16,7 +16,7 @@ from django.views.decorators.vary import vary_on_cookie
 from server.conferences.models import Zosia
 from .forms import UploadFileForm
 from .models import Room
-from .templates import AdminRoomsList, Rooms
+from .templates import AdminRoomsImport, AdminRoomsList, Rooms
 from server.users.models import UserPreferences
 from server.utils.views import csv_response, validation_format
 
@@ -149,8 +149,8 @@ def import_room(request):
                 messages.error(request, _("There were errors when adding rooms"))
             else:
                 messages.success(request, _("Rooms have been successfully added"))
-                return HttpResponseRedirect(reverse('admin'))
+                return HttpResponseRedirect(reverse('admin_rooms_list'))
     else:
         form = UploadFileForm()
 
-    return render(request, 'rooms/import.html', {'form': form})
+    return AdminRoomsImport(form=form).render(request)

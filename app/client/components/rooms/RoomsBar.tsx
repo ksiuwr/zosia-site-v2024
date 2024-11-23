@@ -81,7 +81,7 @@ export const RoomsBar = ({
           >
             <PlusIcon className="size-6" /> Add room
           </button>
-          <a className="btn btn-info grow" href={reverse("rooms_import")}>
+          <a className="btn btn-success grow" href={reverse("rooms_import")}>
             <ArrowUpTrayIcon className="size-6" />
             Import rooms
           </a>

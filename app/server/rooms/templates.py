@@ -1,6 +1,7 @@
 from typing import List, Literal, NamedTuple
 from reactivated import Pick, template
 
+from .forms import UploadFileForm
 from .models import Room, RoomLock
 
 ROOM_DATA = List[
@@ -37,3 +38,8 @@ class Rooms(NamedTuple):
 @template
 class AdminRoomsList(NamedTuple):
     rooms: ROOM_DATA
+
+
+@template
+class AdminRoomsImport(NamedTuple):
+    form: UploadFileForm
