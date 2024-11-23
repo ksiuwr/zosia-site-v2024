@@ -1,22 +1,21 @@
 import { LoadingContentSpinner } from "@client/components/LoadingContentSpinner";
 import { RoomData } from "@client/utils/roomData";
 import React, { useState } from "react";
-import { CustomDialog } from "../../CustomDialog";
 import { useRoomMutations } from "../api/RoomMutations";
 import { RoomPropertiesFormFieldCheckbox } from "./RoomPropertiesFormFieldCheckbox";
 import { RoomPropertiesFormFieldInput } from "./RoomPropertiesFormFieldInput";
 
-interface RoomPropertiesDialogProps {
+interface RoomPropertiesFormProps {
   roomData?: RoomData;
-  dialogOpen: boolean;
   closeDialog: () => void;
+  submitButtonLabel: string;
 }
 
-export const RoomPropertiesDialog = ({
+export const RoomPropertiesForm = ({
   roomData,
-  dialogOpen,
   closeDialog,
-}: RoomPropertiesDialogProps) => {
+  submitButtonLabel,
+}: RoomPropertiesFormProps) => {
   const [roomName, setRoomName] = useState(roomData ? roomData.name : "");
   const [roomDescription, setRoomDescription] = useState(
     roomData ? roomData.description : "",
@@ -44,9 +43,6 @@ export const RoomPropertiesDialog = ({
     roomName,
   );
 
-  const isInEditMode = roomData !== undefined;
-  const title = isInEditMode ? "Edit room" : "Add room";
-
   const resetFormState = () => {
     setRoomName("");
     setRoomDescription("");
@@ -64,7 +60,7 @@ export const RoomPropertiesDialog = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isInEditMode) {
+    if (roomData) {
       editRoomMutation.mutate(
         {
           id: roomData.id,
@@ -95,60 +91,58 @@ export const RoomPropertiesDialog = ({
   };
 
   return (
-    <CustomDialog dialogOpen={dialogOpen} onClose={closeDialog} title={title}>
-      <form onSubmit={handleSubmit}>
-        <RoomPropertiesFormFieldInput
-          label="Room name"
-          type="text"
-          value={roomName}
-          onChange={setRoomName}
-          required
-        />
-        <RoomPropertiesFormFieldInput
-          label="Room description"
-          type="text"
-          value={roomDescription}
-          onChange={setRoomDescription}
-        />
-        <RoomPropertiesFormFieldInput
-          label="Available single beds"
-          type="number"
-          value={availableBedsSingle.toString()}
-          onChange={(newValue) => setAvailableBedsSingle(parseInt(newValue))}
-        />
-        <RoomPropertiesFormFieldInput
-          label="Available double beds"
-          type="number"
-          value={availableBedsDouble.toString()}
-          onChange={(newValue) => setAvailableBedsDouble(parseInt(newValue))}
-        />
-        <RoomPropertiesFormFieldInput
-          label="Single beds"
-          type="number"
-          value={bedsSingle.toString()}
-          onChange={(newValue) => setBedsSingle(parseInt(newValue))}
-        />
-        <RoomPropertiesFormFieldInput
-          label="Double beds"
-          type="number"
-          value={bedsDouble.toString()}
-          onChange={(newValue) => setBedsDouble(parseInt(newValue))}
-        />
-        <RoomPropertiesFormFieldCheckbox
-          label="Hidden"
-          checked={roomHidden}
-          onChange={setRoomHidden}
-        />
-        <button
-          type="submit"
-          className="btn btn-success btn-lg btn-block"
-          disabled={createRoomMutation.isPending}
-        >
-          <LoadingContentSpinner isLoading={createRoomMutation.isPending}>
-            {title}
-          </LoadingContentSpinner>
-        </button>
-      </form>
-    </CustomDialog>
+    <form onSubmit={handleSubmit}>
+      <RoomPropertiesFormFieldInput
+        label="Room name"
+        type="text"
+        value={roomName}
+        onChange={setRoomName}
+        required
+      />
+      <RoomPropertiesFormFieldInput
+        label="Room description"
+        type="text"
+        value={roomDescription}
+        onChange={setRoomDescription}
+      />
+      <RoomPropertiesFormFieldInput
+        label="Available single beds"
+        type="number"
+        value={availableBedsSingle.toString()}
+        onChange={(newValue) => setAvailableBedsSingle(parseInt(newValue))}
+      />
+      <RoomPropertiesFormFieldInput
+        label="Available double beds"
+        type="number"
+        value={availableBedsDouble.toString()}
+        onChange={(newValue) => setAvailableBedsDouble(parseInt(newValue))}
+      />
+      <RoomPropertiesFormFieldInput
+        label="Single beds"
+        type="number"
+        value={bedsSingle.toString()}
+        onChange={(newValue) => setBedsSingle(parseInt(newValue))}
+      />
+      <RoomPropertiesFormFieldInput
+        label="Double beds"
+        type="number"
+        value={bedsDouble.toString()}
+        onChange={(newValue) => setBedsDouble(parseInt(newValue))}
+      />
+      <RoomPropertiesFormFieldCheckbox
+        label="Hidden"
+        checked={roomHidden}
+        onChange={setRoomHidden}
+      />
+      <button
+        type="submit"
+        className="btn btn-success btn-lg btn-block"
+        disabled={createRoomMutation.isPending}
+      >
+        <LoadingContentSpinner isLoading={createRoomMutation.isPending}>
+          {submitButtonLabel}
+        </LoadingContentSpinner>
+      </button>
+    </form>
   );
 };

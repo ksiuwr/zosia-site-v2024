@@ -5,7 +5,7 @@ import { BasicListbox } from "../forms/widgets/BasicListbox";
 
 import { ArrowUpTrayIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { reverse } from "@reactivated";
-import { RoomPropertiesDialog } from "./admin/RoomPropertiesDialog";
+import { RoomAddDialog } from "./admin/RoomAddDialog";
 
 interface RoomsBarProps {
   searchText: string;
@@ -85,7 +85,7 @@ export const RoomsBar = ({
             <ArrowUpTrayIcon className="size-6" />
             Import rooms
           </a>
-          <RoomPropertiesDialog
+          <RoomAddDialog
             dialogOpen={addRoomDialogOpen}
             closeDialog={() => setAddRoomDialogOpen(false)}
           />

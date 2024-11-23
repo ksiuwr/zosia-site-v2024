@@ -6,7 +6,7 @@ import { Context } from "@reactivated";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
 import { RoomDeleteConfirmationDialog } from "../admin/RoomDeleteConfirmationDialog";
-import { RoomPropertiesDialog } from "../admin/RoomPropertiesDialog";
+import { RoomEditDialog } from "../admin/RoomEditDialog";
 import { useRoomMutations } from "../api/RoomMutations";
 import { JoinLockedRoomDialog } from "../JoinLockedRoomDialog";
 import { RoomActions } from "./RoomActions";
@@ -152,7 +152,7 @@ export const RoomCard = ({
       />
       {roomEditDialogOpen && (
         // We remount the dialog every time it's opened to reset the form state
-        <RoomPropertiesDialog
+        <RoomEditDialog
           roomData={roomData}
           dialogOpen={roomEditDialogOpen}
           closeDialog={() => setRoomEditDialogOpen(false)}
