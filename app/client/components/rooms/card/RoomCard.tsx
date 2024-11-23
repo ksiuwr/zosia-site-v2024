@@ -66,10 +66,10 @@ export const RoomCard = ({
     if (isLocked) {
       setRoomPasswordDialogOpen(true);
     } else {
-      joinRoomMutation.mutate("");
+      joinRoomMutation.mutate({ userId: user.id });
     }
   };
-  const leaveRoom = () => leaveRoomMutation.mutate();
+  const leaveRoom = () => leaveRoomMutation.mutate(user.id);
   const lockRoom = () => lockRoomMutation.mutate();
   const unlockRoom = () => unlockRoomMutation.mutate();
   const deleteRoom = () => setRoomDeleteConfirmationDialogOpen(true);

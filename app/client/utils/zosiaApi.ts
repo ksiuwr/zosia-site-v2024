@@ -15,6 +15,8 @@ export const zosiaApiRoutes = {
   organizations: "api/v1/users/organizations/",
   addLectureDurations: reverse("load_durations"),
 
+  users: "api/v1/users/",
+
   rooms: "api/v2/rooms/",
   room: (id: number) => `api/v2/rooms/${id}/`,
   roomMember: (roomId: number) => `api/v2/rooms/${roomId}/member/`,

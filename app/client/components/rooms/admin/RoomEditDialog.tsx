@@ -2,6 +2,7 @@ import { RoomData } from "@client/utils/roomData";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import React from "react";
 import { CustomDialog } from "../../CustomDialog";
+import { RoomMembersEdit } from "./RoomMembersEdit";
 import { RoomPropertiesForm } from "./RoomPropertiesForm";
 
 interface RoomEditDialogProps {
@@ -32,7 +33,9 @@ export const RoomEditDialog = ({
               submitButtonLabel={title}
             />
           </TabPanel>
-          <TabPanel>Members</TabPanel>
+          <TabPanel>
+            <RoomMembersEdit roomID={roomData.id} members={roomData.members} />
+          </TabPanel>
         </TabPanels>
       </TabGroup>
     </CustomDialog>
