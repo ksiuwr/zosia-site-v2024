@@ -67,6 +67,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
 # Upload generated static files to Google Cloud Storage bucket
 bucket_name = os.environ.get("GCS_BUCKET_NAME", "")
 STATIC_URL = "https://storage.googleapis.com/" + bucket_name + "/"
+GS_DEFAULT_ACL = "publicRead"
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
