@@ -1,12 +1,11 @@
 from collections import Counter
 import csv
-import json
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
@@ -178,7 +177,7 @@ def transport_add(request, pk=None):
         form.save()
         messages.success(request, _('Transport has been saved'))
         return redirect('transport')
-    
+
     return AdminTransportUpdate(form=form, edit_mode=instance is not None).render(request)
 
 

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render, reverse
+from django.shortcuts import get_object_or_404, redirect, reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -9,9 +9,7 @@ from django.views.decorators.http import require_http_methods
 from .templates import AdminSponsorsList, AdminSponsorsUpdate
 from .forms import SponsorForm
 from .models import Sponsor
-from server.utils.constants import BUCKET_NAME, BUCKET_URL
 from server.utils.forms import errors_format
-from server.utils.s3 import list_bucket_objects
 
 
 @staff_member_required()
@@ -34,8 +32,6 @@ def update(request, sponsor_id=None):
     form = SponsorForm(request.POST or None, request.FILES or None, **kwargs)
 
     # TODO: Allow uploading images to Google Cloud Storage bucket
-    # ctx['s3_objects'] = list_bucket_objects(BUCKET_NAME)
-    # ctx['bucket_url'] = BUCKET_URL
 
     if request.method == 'POST':
         if form.is_valid():

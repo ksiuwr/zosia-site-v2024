@@ -7,9 +7,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_cookie
 
@@ -47,8 +46,9 @@ def index(request):
         messages.error(request, _('Your payment must be accepted first'))
         return redirect(reverse('accounts_profile'))
 
-    has_accommodation = preferences.accommodation_day_1 or preferences.accommodation_day_2 or \
-                        preferences.accommodation_day_3
+    has_accommodation = (
+        preferences.accommodation_day_1 or preferences.accommodation_day_2 or preferences.accommodation_day_3
+    )
     if not has_accommodation:
         messages.error(request, _("You haven't ordered any accommodation"))
         return redirect(reverse('accounts_profile'))
