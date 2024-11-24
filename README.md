@@ -68,7 +68,6 @@ time:
 
 - `./app/server` as `/code/server`
 - `./app/client` as `/code/client`
-- `./app/js` as `/code/js`
 - `./app/static` as `/code/static`
 - `./app/node_modules` as `/code/node_modules`
 
