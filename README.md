@@ -10,9 +10,11 @@ Django 4.2 version of ZOSIA registration page.
     - [How can I run it?](#how-can-i-run-it)
     - [I have run it - what is happening?](#i-have-run-it---what-is-happening)
   - [Troubleshooting](#troubleshooting)
+- [Frontend](#frontend)
 - [Hosting](#hosting)
   - [2019-2020](#2019-2020)
   - [2022-2023](#2022-2023)
+  - [2024-](#2024-)
 
 ## Development
 
@@ -68,7 +70,6 @@ time:
 
 - `./app/server` as `/code/server`
 - `./app/client` as `/code/client`
-- `./app/js` as `/code/js`
 - `./app/static` as `/code/static`
 - `./app/node_modules` as `/code/node_modules`
 
@@ -82,11 +83,15 @@ Some commands may create files inside listed folders. This files will be owned b
 because they were created inside docker. You don't have to worry about them, we listed them in
 `.gitignore` file, so they should not appear in `git status`.
 
-Files created in directory `/code/static` are output from the webpack build system (these are JS
-and CSS files). They will be created in your local filesystem and fortunately will be ignored by
+Files created in directory `/code/static` are output from the Vite build system
+(handled by the Reactivated library) - these are JS and CSS files.
+They will be created in your local filesystem and fortunately will be ignored by
 version control.
 
-`/code/node_modules` contains all installed NodeJS modules required by our application. Node modules installed inside the container need to be visible in host for local development, IDEs etc. Especially the `_reactivated` module which is generated on `./dev.py server` and contains types for Typescript.
+`/code/node_modules` contains all installed NodeJS modules required by our application.
+Node modules installed inside the container need to be visible in host for local development,
+IDEs etc. Especially the `_reactivated` module which is generated on `./dev.py server`
+and contains types for Typescript.
 
 Next, we run migrations on database and, finally, start the web server. In terminal you will
 see output/logs from django (e.g. queries to the database).
@@ -121,6 +126,16 @@ In case of that error just restart docker daemon service with this command:
 In case of any other problems it is recommended to rebuild the container with `--no-cache` option
 (i.e. `./dev.py run --no-cache` or `./dev.py start --no-cache`).
 
+## Frontend
+
+On the frontend we use React with Typescript. Integration with Django is handled by
+[Reactivated](https://www.reactivated.io/), which makes React an alternative template engine.
+This library also handles Server Side Rendering as a nice bonus.
+
+When running the app in development you might notice that the css loads very slowly.
+In order to fix it, you can run just the frontend part in production mode (with `./dev.py --prod-frontend`).
+This fixes the issue, but you at the same time lose useful dev features like hot reload.
+
 ## Hosting
 
 ### 2019-2020
@@ -136,3 +151,11 @@ All deployment scripts used for that are placed in the `.ecs` directory.
 
 We hosted the ZOSIA site on GCP App Engine with GCP SQL as Postgres managed database. Deployments
 were still done using CircleCI pipelines.
+
+### 2024-
+
+We hosted the ZOSIA site on GCP Cloud Run with GCP SQL as Postgres managed database.
+The entire infrastructure was described in terraform code in the
+[infrastructure repo](https://github.com/ksiuwr/infrastructure).
+
+Deployments were still done using CircleCI pipelines using the new `app/deploy.sh` script.
