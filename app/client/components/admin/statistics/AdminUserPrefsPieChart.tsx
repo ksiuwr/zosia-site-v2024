@@ -21,6 +21,7 @@ export const AdminUserPrefsPieChart = ({
 }: AdminUserPrefsPieChartProps) => {
   return (
     <Pie
+      redraw={true}
       data={{
         labels: [
           "Users with payment accepted",
