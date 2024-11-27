@@ -14,6 +14,7 @@ export const Template = (props: templates.HomePage) => {
     return {
       name: sponsor.name,
       logoPath: sponsor.path_to_logo,
+      logoPathDarkMode: sponsor.path_to_logo_dark_mode,
       url: sponsor.url,
     };
   });

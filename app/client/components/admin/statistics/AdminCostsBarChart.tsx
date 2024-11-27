@@ -15,6 +15,7 @@ export const AdminCostsBarChart = ({
 }: AdminCostsBarChartProps) => {
   return (
     <Bar
+      redraw={true}
       data={{
         labels: costValues,
         datasets: [

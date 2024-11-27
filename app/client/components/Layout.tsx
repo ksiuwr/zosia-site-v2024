@@ -1,4 +1,5 @@
-import { themeInitScript } from "@client/utils/themes";
+import { ThemeProvider } from "@client/utils/themes/ThemeContext";
+import { themeInitScript } from "@client/utils/themes/themes";
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -69,24 +70,26 @@ export const Layout = ({
       </Helmet>
       <Toaster position="top-center" />
       <QueryClientProvider client={queryClient}>
-        {showAdminSidebar && (
-          <div className="fixed hidden h-screen w-80 overflow-scroll lg:block">
-            <AdminNavBar showAsSidebar />
-          </div>
-        )}
-
-        <div
-          className={clsx(
-            "flex h-dvh flex-col",
-            showAdminSidebar && "lg:ml-80",
+        <ThemeProvider>
+          {showAdminSidebar && (
+            <div className="fixed hidden h-screen w-80 overflow-scroll lg:block">
+              <AdminNavBar showAsSidebar />
+            </div>
           )}
-        >
-          <Navbar adminSidebarShown={showAdminSidebar} />
-          <main className="grow bg-base-100">{children}</main>
-          <Footer adminSidebarShown={showAdminSidebar} />
-        </div>
 
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <div
+            className={clsx(
+              "flex h-dvh flex-col",
+              showAdminSidebar && "lg:ml-80",
+            )}
+          >
+            <Navbar adminSidebarShown={showAdminSidebar} />
+            <main className="grow bg-base-100">{children}</main>
+            <Footer adminSidebarShown={showAdminSidebar} />
+          </div>
+
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   );
