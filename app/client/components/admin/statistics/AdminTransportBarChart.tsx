@@ -23,6 +23,7 @@ export const AdminTransportBarChart = ({
 }: AdminTransportBarChartProps) => {
   return (
     <Bar
+      redraw={true}
       data={{
         labels: transportLabels,
         datasets: [

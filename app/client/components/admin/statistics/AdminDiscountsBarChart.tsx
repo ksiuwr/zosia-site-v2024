@@ -17,6 +17,7 @@ export const AdminDiscountsBarChart = ({
 }: AdminDiscountsBarChartProps) => {
   return (
     <Bar
+      redraw={true}
       data={{
         labels: ["Round 1", "Round 2", "Round 3"],
         datasets: [

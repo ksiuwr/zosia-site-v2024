@@ -1,18 +1,8 @@
-import React from "react";
-
-declare global {
-  interface Window {
-    // __isDark and __setPreferredDarkTheme are defined in a script injected by Helmet
-    // Source code is in app/client/utils/themes.ts
-    __isDark: boolean;
-    __setPreferredDarkTheme: (isDark: boolean) => void;
-  }
-}
+import { ThemeContext } from "@client/utils/themes/ThemeContext";
+import React, { useContext } from "react";
 
 export const ThemeToggle = () => {
-  const toggleTheme = () => {
-    window.__setPreferredDarkTheme(!window.__isDark);
-  };
+  const { toggleTheme } = useContext(ThemeContext);
 
   return (
     <button
