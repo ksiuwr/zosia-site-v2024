@@ -6,6 +6,7 @@ import { LogosCard } from "./logos/LogosCard";
 interface SponsorData {
   name: string;
   logoPath: string | null;
+  logoPathDarkMode: string | null;
   url: string;
 }
 
@@ -22,6 +23,7 @@ export const Sponsors = ({ sponsorsData }: SponsorsProps) => {
             name={sponsor.name}
             key={sponsor.name}
             logoPath={sponsor.logoPath}
+            logoPathDarkMode={sponsor.logoPathDarkMode}
             url={sponsor.url}
           />
         ))}
