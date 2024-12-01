@@ -54,6 +54,7 @@ from server.utils.constants import (
     UserInternals,
 )
 from server.utils.forms import errors_format
+from server.utils.recaptcha import is_recaptcha_valid
 from server.utils.views import csv_response
 
 
@@ -139,7 +140,7 @@ def signup(request):
     form = forms.UserForm(request.POST or None)
 
     if request.method == 'POST':
-        if form.is_valid():
+        if form.is_valid() and is_recaptcha_valid(request):
             form.save(request)
             return SignUp(form=form, is_signup_successful=True).render(request)
 
