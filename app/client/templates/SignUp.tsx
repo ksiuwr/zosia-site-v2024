@@ -2,7 +2,9 @@ import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
 import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { CenteredFormContainer } from "@client/components/containers/CenteredFormContainer";
-import { BasicForm } from "@client/components/forms/BasicForm";
+import { BasicFormField } from "@client/components/forms/BasicFormField";
+import { BasicFormWithCustomFields } from "@client/components/forms/BasicFormWithCustomFields";
+import { BasicReCaptcha } from "@client/components/forms/BasicReCaptcha";
 import { templates, useForm } from "@reactivated";
 import React from "react";
 import Markdown from "react-markdown";
@@ -36,7 +38,15 @@ export const Template = (props: templates.SignUp) => {
         </CenteredContainer>
       ) : (
         <CenteredFormContainer>
-          <BasicForm form={form} submitButtonLabel="Sign up" />
+          <BasicFormWithCustomFields form={form} submitButtonLabel="Sign up">
+            <BasicFormField field={form.fields.first_name} />
+            <BasicFormField field={form.fields.last_name} />
+            <BasicFormField field={form.fields.email} />
+            <BasicFormField field={form.fields.password1} />
+            <BasicFormField field={form.fields.password2} />
+            <BasicFormField field={form.fields.privacy_consent} />
+            <BasicReCaptcha />
+          </BasicFormWithCustomFields>
         </CenteredFormContainer>
       )}
     </Layout>
