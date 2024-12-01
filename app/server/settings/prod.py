@@ -7,7 +7,7 @@ DEBUG = False
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-# Django reCaptcha config
+# reCaptcha config
 RECAPTCHA_PUBLIC_KEY = os.environ.get("CAPTCHA_PUBLIC")
 RECAPTCHA_PRIVATE_KEY = os.environ.get("CAPTCHA_PRIVATE")
 
