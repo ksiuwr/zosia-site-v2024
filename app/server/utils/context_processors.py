@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.http import HttpRequest
 from server.utils.recaptcha import RECAPTCHA_TEST_PUBLIC_KEY, RECAPTCHA_TOKEN_FIELD_NAME
-from server import settings
+from django.conf import settings
 from server.utils.time_manager import format_in_zone
 from typing import TypedDict
 
