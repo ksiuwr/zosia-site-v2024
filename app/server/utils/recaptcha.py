@@ -2,11 +2,11 @@ import json
 
 from django.http import HttpRequest
 from django.contrib import messages
+from django.conf import settings
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, build_opener
 
-from server import settings
 
 # Test keys as per https://developers.google.com/recaptcha/docs/faq
 # "With the following test keys, you will always get No CAPTCHA and all
