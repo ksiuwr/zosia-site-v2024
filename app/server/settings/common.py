@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "storages",
     "reactivated",
+    "django_recaptcha",
 ]
 
 MIDDLEWARE = [
