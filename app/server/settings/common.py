@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "storages",
     "reactivated",
+    "django_recaptcha",
 ]
 
 MIDDLEWARE = [
@@ -172,6 +173,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "server.utils.context_processors.user_context",
                 "server.utils.context_processors.server_time_context",
+                "server.utils.context_processors.recaptcha_context",
             ]
         },
     },
