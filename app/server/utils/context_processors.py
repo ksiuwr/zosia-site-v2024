@@ -1,10 +1,9 @@
 from django.utils import timezone
 from django.http import HttpRequest
-from server.utils.recaptcha import RECAPTCHA_TOKEN_FIELD_NAME
+from server.utils.recaptcha import RECAPTCHA_TEST_PUBLIC_KEY, RECAPTCHA_TOKEN_FIELD_NAME
 from server import settings
 from server.utils.time_manager import format_in_zone
 from typing import TypedDict
-from django_recaptcha.constants import TEST_PUBLIC_KEY
 
 
 class UserInfo(TypedDict):
@@ -53,7 +52,7 @@ class ReCaptchaContext(TypedDict):
 def recaptcha_context(request: HttpRequest) -> ReCaptchaContext:
     return {
         "recaptcha": {
-            "site_key": getattr(settings, "RECAPTCHA_PUBLIC_KEY", TEST_PUBLIC_KEY),
+            "site_key": getattr(settings, "RECAPTCHA_PUBLIC_KEY", RECAPTCHA_TEST_PUBLIC_KEY),
             "token_field_name": RECAPTCHA_TOKEN_FIELD_NAME,
         }
     }
