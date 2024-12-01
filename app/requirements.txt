@@ -18,4 +18,3 @@ google-cloud-secret-manager~=2.20.0
 reactivated~=0.41.2
 django-stubs-ext~=5.0.0
 django-storages[google]~=1.14.3
-django-recaptcha~=4.0.0

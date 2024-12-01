@@ -131,7 +131,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "storages",
     "reactivated",
-    "django_recaptcha",
 ]
 
 MIDDLEWARE = [
@@ -220,9 +219,6 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
-
-# If there's not reCaptcha credentials, don't report error
-SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
