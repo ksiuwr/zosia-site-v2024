@@ -84,11 +84,13 @@ export const Template = (props: templates.Register) => {
         {props.before_discounts && (
           <Alert type="info">
             <span>
-              Information about student funding can be found in the{" "}
+              The first round of funding starts <b>20.12.2024</b>, registering
+              before this date, you will not get a discount - see the{" "}
               <a href={reverse("questions_index")} className="link font-bold">
                 Q&A
               </a>{" "}
-              section
+              for more information. At this point, you can still register to get
+              bonus time for rooms enrollment.
             </span>
           </Alert>
         )}
