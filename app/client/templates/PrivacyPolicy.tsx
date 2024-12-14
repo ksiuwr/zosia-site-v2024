@@ -119,7 +119,7 @@ wykorzystuje usługę Google Cloud SQL.
 raportowane do usługi sentry.io, gdzie są przetrzymywane przez 30
 dni.
 
-- Naszym dostawcą usług mailingowych jest Mailgun.com. Twój adres
+- Naszym dostawcą usług mailingowych jest mailjet.com. Twój adres
 e-mail zostanie udostępniony tej usłudze poprzez API wyłącznie w
 celu wysłania do Ciebie wiadomości dot. organizacji Obozu.
 
@@ -127,8 +127,7 @@ celu wysłania do Ciebie wiadomości dot. organizacji Obozu.
 zostanie udostępniony drukarni Neoimprenta, al. Jana
 Kochanowskiego 24c 51-601 Wrocław, w celu przygotowania dla Ciebie
 zosiowej koszulki, zaś Twoje imię, nazwisko oraz organizacja
-zostaną udostępnione drukarni GreenPress, ul. Ślężna 116a, 53-111
-Wrocław, w celu przygotowania Twojego identyfikatora.
+zostaną udostępnione drukarni w celu przygotowania Twojego identyfikatora.
 
 - Twoje imię i nazwisko, wraz z zarezerwowanym przez Ciebie pokojem,
 zostanie przekazane obsłudze ośrodka, w którym odbędzie się
