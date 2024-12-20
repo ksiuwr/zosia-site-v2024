@@ -91,7 +91,6 @@ export const Template = (props: templates.Register) => {
               </a>{" "}
               for more information. At this point, you can still register to get
               bonus time for rooms enrollment.
-              <br>If a student chooses to use a discount, they agree to sign a declaration confirming their eligibility for it.</br>
             </span>
           </Alert>
         ) : (
