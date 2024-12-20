@@ -81,7 +81,7 @@ export const Template = (props: templates.Register) => {
       <PageTitle>{pageTitle}</PageTitle>
 
       <CenteredFormContainer>
-        {props.before_discounts && (
+        {props.before_discounts ? (
           <Alert type="info">
             <span>
               The first round of funding starts <b>20.12.2024</b>, registering
@@ -91,6 +91,18 @@ export const Template = (props: templates.Register) => {
               </a>{" "}
               for more information. At this point, you can still register to get
               bonus time for rooms enrollment.
+              <br>If a student chooses to use a discount, they agree to sign a declaration confirming their eligibility for it.</br>
+            </span>
+          </Alert>
+        ) : (
+          <Alert type="info">
+            <span>
+              The first round of funding started! - see the{" "}
+              <a href={reverse("questions_index")} className="link font-bold">
+                Q&A
+              </a>{" "}
+              for more information. 
+              <b>If a student chooses to use a discount, they agree to sign a declaration confirming its use.</b>
             </span>
           </Alert>
         )}
