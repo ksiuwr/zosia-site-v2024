@@ -92,7 +92,7 @@ def profile(request):
             registration_open and not current_zosia.is_registration_over or \
             current_prefs and (current_zosia.is_registration_over or
                                current_zosia.registration_suspended)
-     
+
     price = None
     transfer_title = None
     shirt_type = None
@@ -202,7 +202,7 @@ def mail_to_all(request):
             form.send_mail()
             text = form.cleaned_data.get('text')
             subject = form.cleaned_data.get('subject')
-            receivers = map(lambda user: user.email, form.receivers()) 
+            receivers = map(lambda user: user.email, form.receivers())
             return AdminUsersSendEmailComplete(text=text, subject=subject, receivers=receivers).render(request)
 
     return AdminUsersSendEmail(form=form).render(request)
@@ -299,7 +299,7 @@ def user_preferences_edit(request, pk=None):
         kwargs['instance'] = user_preferences
 
     form = UserPreferencesAdminForm(request.POST or None, **kwargs)
-    
+
     if request.method == 'POST':
         if form.is_valid():
             form.save()
