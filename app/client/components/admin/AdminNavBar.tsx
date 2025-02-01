@@ -116,6 +116,10 @@ const navbarSections: AdminNavBarSection[] = [
         href: reverse("list_csv_preferences_paid"),
       },
       {
+        linkTitle: "List of users that got a discount (CSV)",
+        href: reverse("list_csv_preferences_with_discounts"),
+      },
+      {
         linkTitle: "User --> Room (CSV)",
         href: reverse("list_csv_room_by_user"),
       },

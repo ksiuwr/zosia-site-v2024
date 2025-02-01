@@ -447,6 +447,17 @@ def list_csv_preferences_paid(request):
 
 @staff_member_required
 @require_http_methods(['GET'])
+def list_csv_preferences_with_discounts(request):
+    prefs = (UserPreferences.objects.select_related('user')
+             .exclude(discount_round=0).order_by("user__last_name", "user__first_name"))
+    header = ("User", "Payment accepted", "Student", "Discount Round")
+    data_list = [(p.user, p.payment_accepted, p.is_student, p.discount_round) for p in prefs]
+
+    return csv_response(header, data_list, filename="list_csv_preferences_with_discounts")
+
+
+@staff_member_required
+@require_http_methods(['GET'])
 def list_csv_lectures(request):
     lectures = Lecture.objects.all()
     header = ("Name", "Printed name", "Lecturers", "Duration", "Type",

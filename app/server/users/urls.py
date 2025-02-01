@@ -35,6 +35,8 @@ urlpatterns = [
             name='list_csv_preferences_all'),
     path('preferences/list/paid', views.list_csv_preferences_paid,
             name='list_csv_preferences_paid'),
+    path('preferences/list/discounts', views.list_csv_preferences_with_discounts,
+            name='list_csv_preferences_with_discounts'),
     path('lectures/list/all', views.list_csv_lectures,
             name='list_csv_lectures'),
     path('register/', views.register, name='user_zosia_register'),
