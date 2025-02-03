@@ -25,7 +25,7 @@ export const Footer = ({ adminSidebarShown }: FooterProps) => {
               <br />
               Fryderyka Joliot-Curie 15
               <br />
-              50-383
+              50-383 Wrocław
               <br />
               <a
                 className="link-hover link"
