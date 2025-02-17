@@ -23,7 +23,7 @@ COPY static ./static
 COPY manage.py ./
 
 
-FROM base as dev
+FROM base AS dev
 
 # Set environment variables for development
 ENV DJANGO_ENV="dev"
@@ -39,7 +39,7 @@ COPY requirements.dev.txt ./
 RUN pip install --no-cache-dir -r requirements.dev.txt
 
 
-FROM base as prod
+FROM base AS prod
 
 # Set environment variables for production
 ENV DJANGO_ENV="prod"
@@ -49,7 +49,7 @@ ENV NODE_ENV="production"
 # Install node dependencies
 RUN npm install
 
-# Copy code 
+# Copy code
 COPY server ./server
 COPY client ./client
 COPY scripts ./scripts

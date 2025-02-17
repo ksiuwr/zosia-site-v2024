@@ -92,7 +92,7 @@ def profile(request):
             registration_open and not current_zosia.is_registration_over or \
             current_prefs and (current_zosia.is_registration_over or
                                current_zosia.registration_suspended)
-     
+
     price = None
     transfer_title = None
     shirt_type = None
@@ -202,7 +202,7 @@ def mail_to_all(request):
             form.send_mail()
             text = form.cleaned_data.get('text')
             subject = form.cleaned_data.get('subject')
-            receivers = map(lambda user: user.email, form.receivers()) 
+            receivers = map(lambda user: user.email, form.receivers())
             return AdminUsersSendEmailComplete(text=text, subject=subject, receivers=receivers).render(request)
 
     return AdminUsersSendEmail(form=form).render(request)
@@ -299,7 +299,7 @@ def user_preferences_edit(request, pk=None):
         kwargs['instance'] = user_preferences
 
     form = UserPreferencesAdminForm(request.POST or None, **kwargs)
-    
+
     if request.method == 'POST':
         if form.is_valid():
             form.save()
@@ -443,6 +443,17 @@ def list_csv_preferences_paid(request):
     ) for p in prefs
     ]
     return csv_response(header, data_list, filename="list_csv_preferences_paid")
+
+
+@staff_member_required
+@require_http_methods(['GET'])
+def list_csv_preferences_with_discounts(request):
+    prefs = (UserPreferences.objects.select_related('user')
+             .exclude(discount_round=0).order_by("user__last_name", "user__first_name"))
+    header = ("User", "Payment accepted", "Student", "Discount Round")
+    data_list = [(p.user, p.payment_accepted, p.is_student, p.discount_round) for p in prefs]
+
+    return csv_response(header, data_list, filename="list_csv_preferences_with_discounts")
 
 
 @staff_member_required

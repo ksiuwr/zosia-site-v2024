@@ -189,6 +189,11 @@ def create_random_user_with_preferences(zosia, id):
     is_student = id % 2 == 1
     student_number = random.randint(100000, 999999) if is_student else ''
 
+    discount_round = 0
+    if is_student:
+        # Not all student get a discounts
+        discount_round = random.randint(0, 3)
+
     UserPreferences.objects.create(
         user=u,
         zosia=zosia,
@@ -208,7 +213,8 @@ def create_random_user_with_preferences(zosia, id):
         bonus_minutes=bonus,
         is_student=is_student,
         student_number=student_number,
-        terms_accepted=True
+        terms_accepted=True,
+        discount_round=discount_round,
     )
     return u
 
@@ -237,7 +243,7 @@ def create_sponsor(number):
         [SponsorInternals.TYPE_BRONZE,
          SponsorInternals.TYPE_SILVER,
          SponsorInternals.TYPE_GOLD])
-    
+
     logo_path = 'https://s3.amazonaws.com/freebiesupply/large/2x/google-logo-transparent.png' if random.random() < 0.5 else None
 
     data = {
@@ -280,7 +286,7 @@ class Command(BaseCommand):
         create_contact_to_organizer(zosia, sample_organizer_user)
         self.stdout.write('Contact to sample organizer created')
 
-        user_num = 7
+        user_num = 15
         for i in range(1, user_num + 1):
             user_with_prefs = create_random_user_with_preferences(zosia, i)
             self.stdout.write(f"Created random user #{i}")
