@@ -76,11 +76,11 @@ def web_build(with_collect_static: bool = True) -> None:
     # Builds Reactivated files for frontend
     print(f"{Colour.PURPLE}-- Building frontend --{Colour.NORMAL}")
 
-    docker_shell(["python", "manage.py", "generate_client_assets"])
-    docker_shell(["python", "manage.py", "build"])
+    docker_python(["generate_client_assets"])
+    docker_python(["build"])
 
     if with_collect_static:
-        docker_shell(["python", "manage.py", "collectstatic", "--noinput"])
+        docker_python(["collectstatic", "--noinput"])
 
 
 def setup(is_no_cache: bool, display_remind: bool = False) -> None:
@@ -97,8 +97,8 @@ def shutdown():
     docker_compose_run(["down"])
 
 
-def run_server(display_remind: bool = False, run_frontend_in_production_mode: bool = False) -> None:
-    if run_frontend_in_production_mode:
+def run_server(display_remind: bool = False, is_frontend_in_production_mode: bool = False) -> None:
+    if is_frontend_in_production_mode:
         web_build()
         docker_shell(["NODE_ENV=production", "gunicorn", "--bind", ":8000", "server.wsgi:application"])
     else:
@@ -121,7 +121,7 @@ def run_tests(modules: Optional[List[str]], is_verbose: bool, build_frontend: bo
     if build_frontend:
         print(
             f"{Colour.YELLOW}In order to run tests frontend is automatically built.",
-            f"You can run tests without building frontend by running: `dev.py test --no-build-frontend` "
+            f"You can run tests without building frontend by running `dev.py test --no-build-frontend` "
             f"if you built it earlier with `dev.py web build`{Colour.NORMAL}",
             sep="\n",
         )
@@ -208,7 +208,7 @@ def cli():
         "--no-cache", action="store_true",
         help="do not use cache when building container images")
 
-    bash_parser = subparsers.add_parser(
+    shell_parser = subparsers.add_parser(
         "shell", aliases=["sh"],
         help=f"run sh shell inside website container")
 
@@ -217,7 +217,7 @@ def cli():
         help="run Postgres shell (psql) in database container")
 
     migrations_parser = subparsers.add_parser(
-        "migrations", aliases=["m"],
+        "migrations", aliases=["m", "db"],
         help=f"operate on Django migrations {SUBCOMMANDS_NOTE}")
 
     migrations_subparsers = migrations_parser.add_subparsers(
@@ -314,7 +314,7 @@ def cli():
     elif args.command in ["postgres", "psql"]:
         docker_exec(["psql", "-U", "zosia"], DB_CONTAINER_NAME)
 
-    elif args.command in ["migrations", "m"]:
+    elif args.command in ["migrations", "m", "db"]:
         if args.action in ["apply", "a"]:
             migrate(args.create_admin, args.create_data)
         elif args.action in ["make", "m"]:
