@@ -94,7 +94,7 @@ tegorocznego Obozu.
 
 ## Kto jest administratorem danych?
 
-Administratorem danych jest Koło Studentów Informatyki UWr, z siedzibą
+Administratorem danych jest Uniwersytet Wrocławski oraz Koło Studentów Informatyki UWr, z siedzibą
 w Instytucie Informatyki Uwr, ul. Fryderyka Joliot-Curie 15, p. 24.
 
 
