@@ -58,7 +58,7 @@ class ModelTestCase(LectureTestCase):
             duration=10,
             lecture_type=LectureInternals.TYPE_LECTURE,
             author=self.normal_user,
-            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_STREAM
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_PUBLISH_AND_STREAM
         )
 
         with self.assertRaises(ValidationError):
@@ -344,7 +344,8 @@ class FormTestCase(LectureTestCase):
 
     def test_user_create_object(self):
         form = LectureForm({'title': 'foo', 'abstract': 'bar', 'duration': 45,
-                            'lecture_type': LectureInternals.TYPE_LECTURE})
+                            'lecture_type': LectureInternals.TYPE_LECTURE,
+                            'recording_preferences': LectureRecordingInternals.TYPE_RECORD})
 
         with transaction.atomic():
             with self.assertRaises(IntegrityError):
@@ -364,7 +365,8 @@ class FormTestCase(LectureTestCase):
     def test_admin_create_object(self):
         form = LectureAdminForm({'title': 'foo', 'abstract': 'bar', 'duration': 45,
                                  'lecture_type': LectureInternals.TYPE_LECTURE,
-                                 'author': self.normal_user.id})
+                                 'author': self.normal_user.id,
+                                 'recording_preferences': LectureRecordingInternals.TYPE_RECORD})
 
         with transaction.atomic():
             with self.assertRaises(IntegrityError):
