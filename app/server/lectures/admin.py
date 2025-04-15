@@ -47,12 +47,12 @@ class HasSupportingAuthorsListFilter(admin.SimpleListFilter):
 class UserLectureAdmin(admin.ModelAdmin):
     list_display = ('title', 'duration', 'lecture_type', 'accepted', 'author_first_name',
                     'author_last_name', 'author_email', 'author_person_type', 'author_organization',
-                    'has_supporting_authors', 'has_supporters_names')
+                    'recording_preferences', 'has_supporting_authors', 'has_supporters_names')
     readonly_fields = ('author_first_name', 'author_last_name', 'author_email',
                        'author_person_type', 'author_organization', 'supporters_names',
                        'has_supporters_names', 'has_supporting_authors')
     search_fields = ('title', 'author__first_name', 'author__last_name', 'author_organization')
-    list_filter = ('lecture_type', 'accepted', 'duration', 'author__person_type',
+    list_filter = ('lecture_type', 'accepted', 'duration', 'recording_preferences', 'author__person_type',
                    HasSupportingAuthorsListFilter, HasSupportersNamesListFilter)
 
     def get_queryset(self, request):

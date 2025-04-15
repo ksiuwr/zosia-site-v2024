@@ -7,14 +7,14 @@ class LectureForm(forms.ModelForm):
     class Meta:
         model = Lecture
         fields = ['title', 'abstract', 'lecture_type', 'duration', 'supporters_names', 'requests',
-                  'events']
+                  'events', 'recording_preferences']
 
 
 class LectureAdminForm(forms.ModelForm):
     class Meta:
         model = Lecture
         fields = ['accepted', 'author', 'supporting_authors', 'supporters_names', 'description',
-                  'title', 'abstract', 'lecture_type', 'duration', 'requests', 'events']
+                  'title', 'abstract', 'lecture_type', 'duration', 'requests', 'events', 'recording_preferences']
         widgets = {
             'supporters_names': forms.Textarea(attrs={'disabled': 'True'}),
         }

@@ -21,6 +21,7 @@ export const Template = (props: templates.AdminLecturesList) => {
             "Duration (minutes)",
             "Main author",
             "Title",
+            "Recording preferences",
             "Accepted?",
             "Actions",
           ]}
@@ -60,6 +61,9 @@ export const Template = (props: templates.AdminLecturesList) => {
                     ]}
                   />
                 }
+              </td>
+              <td>
+                {lecture.recording_preferences}
               </td>
               <td>
                 <AdminAcceptedCheckbox

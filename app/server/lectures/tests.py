@@ -8,7 +8,7 @@ from .forms import LectureAdminForm, LectureForm
 from .models import Lecture
 from .templates import Lectures
 from server.utils.constants import LECTURE_NORMAL_MAX_DURATION, LECTURE_SPONSOR_MAX_DURATION, \
-    LectureInternals, UserInternals, WORKSHOP_MIN_DURATION
+    LectureInternals, LectureRecordingInternals, UserInternals, WORKSHOP_MIN_DURATION
 from server.utils.test_helpers import TestCaseWithReact, create_user, create_zosia, login_as_user
 from server.utils.time_manager import now, timedelta_since_now
 
@@ -44,7 +44,8 @@ class ModelTestCase(LectureTestCase):
             abstract="foo",
             duration=10,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_DO_NOT_RECORD
         )
 
         with self.assertRaises(ValidationError):
@@ -56,7 +57,8 @@ class ModelTestCase(LectureTestCase):
             abstract="foo",
             duration=10,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_STREAM
         )
 
         with self.assertRaises(ValidationError):
@@ -68,7 +70,8 @@ class ModelTestCase(LectureTestCase):
             title="foo",
             duration=10,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         with self.assertRaises(ValidationError):
@@ -80,7 +83,8 @@ class ModelTestCase(LectureTestCase):
             title="foo",
             abstract="foo",
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         with self.assertRaises(ValidationError):
@@ -92,7 +96,8 @@ class ModelTestCase(LectureTestCase):
             title="foo",
             abstract="foo",
             duration=10,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         with self.assertRaises(ValidationError):
@@ -104,6 +109,20 @@ class ModelTestCase(LectureTestCase):
             title="foo",
             abstract="foo",
             duration=10,
+            lecture_type=LectureInternals.TYPE_LECTURE,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
+        )
+
+        with self.assertRaises(ValidationError):
+            lecture.full_clean()
+
+    def test_lecture_is_invalid_without_recording_preferences(self):
+        lecture = Lecture(
+            zosia=self.zosia,
+            title="foo",
+            abstract="foo",
+            duration=10,
+            author=self.normal_user,
             lecture_type=LectureInternals.TYPE_LECTURE
         )
 
@@ -117,7 +136,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=75,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         with self.assertRaises(ValidationError):
@@ -130,7 +150,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=75,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.sponsor_user
+            author=self.sponsor_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -150,7 +171,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=20,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -170,7 +192,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=LECTURE_NORMAL_MAX_DURATION,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -190,7 +213,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=LECTURE_SPONSOR_MAX_DURATION,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.sponsor_user
+            author=self.sponsor_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -210,7 +234,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=15,
             lecture_type=LectureInternals.TYPE_WORKSHOP,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         with self.assertRaises(ValidationError):
@@ -223,7 +248,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=75,
             lecture_type=LectureInternals.TYPE_WORKSHOP,
-            author=self.sponsor_user
+            author=self.sponsor_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -243,7 +269,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=WORKSHOP_MIN_DURATION,
             lecture_type=LectureInternals.TYPE_WORKSHOP,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -263,7 +290,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=120,
             lecture_type=LectureInternals.TYPE_WORKSHOP,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         count = Lecture.objects.count()
@@ -284,7 +312,8 @@ class ModelTestCase(LectureTestCase):
             abstract="qux quux quuux",
             duration=15,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
         lecture.supporting_authors.add(self.sponsor_user)
 
@@ -297,7 +326,8 @@ class ModelTestCase(LectureTestCase):
             abstract="bar",
             duration=45,
             lecture_type=LectureInternals.TYPE_LECTURE,
-            author=self.normal_user
+            author=self.normal_user,
+            recording_preferences = LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH
         )
 
         self.assertFalse(lecture.accepted)

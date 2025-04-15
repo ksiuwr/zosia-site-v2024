@@ -54,6 +54,13 @@ class LectureInternals:
     TYPE_WORKSHOP = "Workshop"
 
 
+class LectureRecordingInternals:
+    TYPE_DO_NOT_RECORD = "DoNotRecord"
+    TYPE_RECORD = "Record"
+    TYPE_RECORD_AND_PUBLISH = "RecordAndPublish"
+    TYPE_RECORD_PUBLISH_AND_STREAM = "RecordPublishAndStream"
+
+
 LECTURE_NORMAL_MAX_DURATION = 60
 
 LECTURE_SPONSOR_MAX_DURATION = 90
@@ -83,6 +90,13 @@ WORKSHOP_DURATION_CHOICES = [d for d in FULL_DURATION_CHOICES if d[0] >= WORKSHO
 LECTURE_TYPE = [
     (LectureInternals.TYPE_LECTURE, _("Lecture")),
     (LectureInternals.TYPE_WORKSHOP, _("Workshop"))
+]
+
+LECTURE_RECORD_PREFERENCE = [
+    (LectureRecordingInternals.TYPE_DO_NOT_RECORD, _("Do not allow recording")),
+    (LectureRecordingInternals.TYPE_RECORD, _("Allow recording")),
+    (LectureRecordingInternals.TYPE_RECORD_AND_PUBLISH, _("Allow recording and publication on YouTube")),
+    (LectureRecordingInternals.TYPE_RECORD_PUBLISH_AND_STREAM, _("Allow recording, publication and live-streaming on YouTube"))
 ]
 
 
