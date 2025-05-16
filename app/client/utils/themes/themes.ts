@@ -1,9 +1,21 @@
-import type { Theme } from "daisyui";
+import type { CustomTheme } from "daisyui";
 
 // You can change these values to other themes provided by daisyUI
 // Or create your own themes and use them here
-export const LIGHT_THEME: Theme = "light";
-export const DARK_THEME: Theme = "dark";
+export const LIGHT_THEME = "leosia-light";
+export const DARK_THEME = "leosia-dark";
+
+export const LEOSIA_LIGHT: CustomTheme = {
+  [LIGHT_THEME]: {
+    /* todo: create a light theme */
+  },
+};
+
+export const LEOSIA_DARK: CustomTheme = {
+  [DARK_THEME]: {
+    /* todo: create a dark theme */
+  },
+};
 
 /**
  * This script handles saving/reading preferred theme from localStorage,
