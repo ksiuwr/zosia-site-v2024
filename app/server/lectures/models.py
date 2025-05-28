@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from server.conferences.models import Zosia
 from server.users.models import User
-from server.utils.constants import DELIMITER, FULL_DURATION_CHOICES, LECTURE_TYPE, LectureInternals
+from server.utils.constants import DELIMITER, FULL_DURATION_CHOICES, LECTURE_RECORD_PREFERENCE, LECTURE_TYPE, LectureInternals
 from server.utils.forms import get_durations
 
 
@@ -55,6 +55,10 @@ class Lecture(models.Model):
             "Write here the names of people that you'd like to present your lecture/workshop with. "
             "The organizers will then assign their accounts to your lecture/workshop.")
     )
+
+    recording_preferences = models.CharField(verbose_name=_("Lecture recording preferences"),
+                                             max_length=30, choices=LECTURE_RECORD_PREFERENCE)
+
 
     @property
     def all_authors_tuple(self):

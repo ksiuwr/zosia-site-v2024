@@ -48,6 +48,7 @@ class AdminLecturesList(NamedTuple):
                 'supporters_names',
                 'requests',
                 'events',
+                'recording_preferences',
                 'author.first_name',
                 'author.last_name',
                 'author.person_type',
