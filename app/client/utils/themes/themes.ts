@@ -1,19 +1,36 @@
-import type { CustomTheme } from "daisyui";
+import type { CustomTheme, Theme } from "daisyui";
 
 // You can change these values to other themes provided by daisyUI
 // Or create your own themes and use them here
-export const LIGHT_THEME = "leosia-light";
+export const LIGHT_THEME: Theme = "retro";
 export const DARK_THEME = "leosia-dark";
 
 export const LEOSIA_LIGHT: CustomTheme = {
   [LIGHT_THEME]: {
-    /* todo: create a light theme */
+    "color-scheme": "light",
+    "secondary-content": "blue",
+    accent: "yellow",
+    neutral: "oklch(58% 0.173 17.585)",
+    "neutral-content": "white",
+    "base-100": "oklch(96% 0.059 95.617)",
+    "base-200": "oklch(90% 0.076 70.697)",
+    "base-300": "oklch(85% 0.153 55.934)",
+    "base-content": "oklch(45% 0.188 13.697)",
   },
 };
 
 export const LEOSIA_DARK: CustomTheme = {
   [DARK_THEME]: {
-    /* todo: create a dark theme */
+    "color-scheme": "dark",
+    primary: "oklch(65.69% 0.196 275.75)",
+    secondary: "oklch(74.8% 0.26 342.55)",
+    accent: "oklch(74.51% 0.167 183.61)",
+    neutral: "#3b2747",
+    "neutral-content": "#d9d5f7",
+    "base-100": "#624185",
+    "base-200": "oklch(0.7 0.121 310.96)",
+    "base-300": "#3b2747",
+    "base-content": "oklch(0.95 0.111 316.96)",
   },
 };
 

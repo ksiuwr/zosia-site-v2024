@@ -19,8 +19,8 @@ export const Navbar = ({ adminSidebarShown }: NavbarProps) => {
           <MobileMenu />
           <a href={reverse("index")} className="flex flex-col justify-center">
             <img
-              src={`${context.STATIC_URL}imgs/zosia.svg`}
-              alt="ZOSIA"
+              src={`${context.STATIC_URL}imgs/leosia-logo.png`}
+              alt="LEOSIA"
               className="h-10 lg:h-12"
             />
           </a>

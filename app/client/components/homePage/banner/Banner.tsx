@@ -26,7 +26,7 @@ export const Banner = ({
       <div className="hero-content p-0 text-center text-neutral-content">
         <CenteredContainer>
           <h1 className="mb-10 text-4xl font-bold lg:text-6xl">
-            Zimowy Obóz Studentów Informatyki A
+            LEtni Obóz Studentów Informatyki A
           </h1>
           {registrationStatus && <RegistrationStatus {...registrationStatus} />}
         </CenteredContainer>
