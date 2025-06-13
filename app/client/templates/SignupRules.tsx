@@ -10,8 +10,8 @@ const signupRulesMarkdown = `
 adres w domenie **cs.uni.wroc.pl** lub dowolnej innej*.  
 Konta zakładane na naszej stronie w przeszłości zostały usunięte.
 
-2. By zarejestrować się na najbliższą edycję ZOSI na stronie głównej
-lub w swoim profilu w zakładce ZOSIA kliknij przycisk **REGISTER**.
+2. By zarejestrować się na najbliższą edycję LEOSI na stronie głównej
+lub w swoim profilu w zakładce LEOSI kliknij przycisk **REGISTER**.
 
 3.  Uzupełnij kwestionariusz. W polu **Information** koniecznie wpisz
 swoje preferencje przy wyborze pokoju. Potrzebujemy wiedzieć czy
@@ -42,7 +42,7 @@ export const Template = () => {
       <CenteredContainer>
         <article className="prose mx-auto my-10">
           <h1 className="text-center">
-            Zapisy dla Zaproszonych na Zimowy Obóz Studentów Informatyki A
+            Zapisy dla Zaproszonych na LEtni Obóz Studentów Informatyki
           </h1>
           <Markdown>{signupRulesMarkdown}</Markdown>
         </article>

@@ -6,7 +6,7 @@ import Markdown from "react-markdown";
 const privacyPolicyMarkdown = `
 ## Polityka prywatności
 
-Korzystając ze strony zosia.org powierzasz nam swoje informacje. Aby
+Korzystając ze strony leosia.org powierzasz nam swoje informacje. Aby
 przedstawić Ci po krótce co będzie się działo z Twoimi danymi
 przygotowaliśmy poniższą Politykę prywatności.
 
@@ -21,7 +21,7 @@ wiadomość na nasz adres e-mail: [ksi@cs.uni.wroc.pl](mailto:ksi@cs.uni.wroc.pl
 O tym czym są pliki cookies możesz przeczytać np. pod tym adresem: 
 [https://pl.wikipedia.org/wiki/HTTP_cookie](https://pl.wikipedia.org/wiki/HTTP_cookie).
 
-zosia.org wykorzystuje pliki cookie wyłącznie w celu zapisywania
+leosia.org wykorzystuje pliki cookie wyłącznie w celu zapisywania
 informacji o sesji zalogowanego użytkownika oraz w celu zabezpieczenia
 przed atakim typu CSRF. Dodatkowe pliki cookies, również związane
 jedynie z funkcjonalnością strony oraz zapewnieniem bezpieczeństwa
@@ -33,11 +33,11 @@ można z nich zrezygnować.
 ## Jakie dane przetwarzamy?
 
 Jedyne dane jakie przechowujemy i przetwarzamy to dane, które podajesz
-nam podczas rejestracji, określania swoich preferencji dot. ZOSI
-(dalej jako "ZOSIA", "Obóz" bądź "Wydarzenie") oraz Twój adres IP.
+nam podczas rejestracji, określania swoich preferencji dot. LEOSIA
+(dalej jako "LEOSIA", "Obóz" bądź "Wydarzenie") oraz Twój adres IP.
 
 Może się również zdarzyć, że zdjęcie z Twoim wizerunkiem wykonane
-podczas ZOSI pojawi się na profilu ZOSI w portalu Facebook i będziemy
+podczas LEOSIA pojawi się na profilu LEOSIA w portalu Facebook i będziemy
 chcieli przechować je w celu promocji Obozu w przyszłych latach.
 
 
@@ -64,7 +64,7 @@ wykorzystywane w żadnym innym celu.
 Zbierane przez nas dane są niezbędne dla organizacji Obozu oraz
 zapewnienia bezpieczeństwa jego uczestnikom. W związku z tym podanie
 prawdziwych danych oraz wyrażenie zgody na ich przetwarzanie jest
-wymagane do rejestracji konta na stronie zosia.org oraz uczestnictwa w
+wymagane do rejestracji konta na stronie leosia.org oraz uczestnictwa w
 Wydarzeniu.
 
 *UWAGA: Podanie nieprawdziwych danych (w szczególności imienia i
@@ -102,16 +102,16 @@ w Instytucie Informatyki Uwr, ul. Fryderyka Joliot-Curie 15, p. 24.
 
 Jedynymi osobami uprawnionymi do dostępu do Twoich informacji są
 Członkowie oraz Członkowie Honorowi KSI będący jednocześnie członkami
-Komitetu Organizacyjnego ZOSI.
+Komitetu Organizacyjnego LEOSIA.
 
 
 ## Gdzie wysyłamy dane?
 
-Organizacji Wydarzenia jakim jest ZOSIA wymaga od nas współpracy z
+Organizacji Wydarzenia jakim jest LEOSIA wymaga od nas współpracy z
 firmami zewnętrznymi. Do realizacji niektórych usług niezbędne jest
 udostępnienie części Twoich danych:
 
-- Strona ZOSI korzysta z infrastruktury Google Cloud. Wszystkie
+- Strona LEOSI korzysta z infrastruktury Google Cloud. Wszystkie
 dane, które podajesz zapisywane są w naszej bazie danych, która
 wykorzystuje usługę Google Cloud SQL.
 
@@ -126,7 +126,7 @@ celu wysłania do Ciebie wiadomości dot. organizacji Obozu.
 - Podany przez Ciebie rozmiar koszulki (bez imienia i nazwiska)
 zostanie udostępniony drukarni Neoimprenta, al. Jana
 Kochanowskiego 24c 51-601 Wrocław, w celu przygotowania dla Ciebie
-zosiowej koszulki, zaś Twoje imię, nazwisko oraz organizacja
+leosiowej koszulki, zaś Twoje imię, nazwisko oraz organizacja
 zostaną udostępnione drukarni w celu przygotowania Twojego identyfikatora.
 
 - Twoje imię i nazwisko, wraz z zarezerwowanym przez Ciebie pokojem,
