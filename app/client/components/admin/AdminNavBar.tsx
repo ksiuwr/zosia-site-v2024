@@ -95,7 +95,7 @@ const navbarSections: AdminNavBarSection[] = [
     sectionTitle: "Downloads",
     links: [
       {
-        linkTitle: "ZOSIA data export (for zosia-print script) (JSON)",
+        linkTitle: "LEOSIA data export (for leosia-print script) (JSON)",
         href: reverse("export_data"),
       },
       {

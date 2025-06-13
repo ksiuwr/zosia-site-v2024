@@ -132,7 +132,7 @@ export const Template = (props: templates.TermsAndConditions) => {
       <CenteredContainer>
         <article className="prose mx-auto my-10">
           <h1 className="text-center">
-            Regulamin Zimowego Obozu Studentów Informatyki A oraz warunki sprzedaży
+            Regulamin LEtniego Obozu Studentów Informatyki
           </h1>
             <Markdown>
               {termsAndConditionsMarkdown()}

@@ -48,7 +48,7 @@ export const Layout = ({
         <script>{themeInitScript}</script>
         <meta content="text/html; charset=UTF-8" httpEquiv="Content-Type" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Zimowy Obóz Studentów Informatyki A</title>
+        <title>LEtni Obóz Studentów Informatyki</title>
         <link
           rel="icon"
           href={`${STATIC_URL}imgs/favicon-16x16.png`}
