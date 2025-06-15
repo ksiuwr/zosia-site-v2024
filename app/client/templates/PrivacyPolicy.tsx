@@ -34,11 +34,7 @@ Wyjątek stanowią powiązane faktury i dane płatności, które są przechowywa
 
 Administratorem danych jest:
 
-Fundacja Wrocławskich Studentów Informatyki (KRS: 0001175280)
-
-ul. Św. Mikołaja 8/11 lok. 208, 50-125 Wrocław,
-
-e-mail: kontakt.fwsi@gmail.com 
+[DO UZUPEŁNIENIA]
 
 Masz prawo do dostępu do danych, ich poprawiania, usunięcia, ograniczenia przetwarzania, przenoszenia, wycofania zgody oraz wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.
 `
