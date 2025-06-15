@@ -76,8 +76,8 @@ ANYMAIL = {
 }
 
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
-DEFAULT_FROM_EMAIL = "admin@zosia.org"
-DEFAULT_FROM_EMAIL_NAME = "Zosia Administrators"
+DEFAULT_FROM_EMAIL = "admin@leosia.org"
+DEFAULT_FROM_EMAIL_NAME = "Leosia Administrators"
 DEFAULT_MAIL = f"{DEFAULT_FROM_EMAIL_NAME} <{DEFAULT_FROM_EMAIL}>"
 
 sentry_dsn = os.environ.get("SENTRY_DSN")
