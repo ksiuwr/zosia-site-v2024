@@ -5,133 +5,133 @@ import { templates } from "@reactivated";
 import React from "react";
 import Markdown from "react-markdown";
 
-const privacyPolicyMarkdown = (
-  zosiaTitle: string,
-  town: string,
-  startDate: string,
-  endDate: string,
-) => `
-1. Niniejszy regulamin reguluje zasady obowiązujące osoby
-uczestniczące w Ogólnopolskiej Konferencji „${zosiaTitle}”,
-zwanej dalej Konferencją, odbywającej się w miejscowości
-${town}, w dniach ${startDate} - ${endDate}, a także
-definiuje konsekwencje wynikające z nieprzestrzegania tych zasad.
+const termsAndConditionsMarkdown = () => `
+Ostatnia aktualizacja: 16/06/2025
 
-2. Organizatorem Konferencji jest Koło Studentów Informatyki
-działające przy Wydziale Matematyki i Informatyki Uniwersytetu
-Wrocławskiego, z siedzibą w Instytucie Informatyki Uniwersytetu
-Wrocławskiego przy ul. Joliot-Curie 15, 50-383 Wrocław.
+## I. Informacje ogólne
 
-3. Osobami uczestniczącymi w Konferencji, zwanymi dalej
-Uczestnikami, mogą być jedynie osoby zarejestrowane w serwisie
-internetowym Konferencji, które uiściły odpowiednią opłatę
-wyliczoną indywidualnie dla każdego Uczestnika na podstawie
-podanych przez niego danych.
+### 1. Dane organizatora
+Usługodawcą jest:
 
-4. Konferencja rozpoczyna się dnia ${startDate} i kończy dnia
-${endDate}, jednakże czas pobytu każdego z Uczestników jest
-zależny od jego preferencji zadeklarowanych w systemie
-internetowym.
+Fundacja Wrocławskich Studentów Informatyki (NIP: 8971954829)
+z siedzibą przy ul. Św. Mikołaja 8/11/208, Wrocław.
+Kontakt e-mail: kontakt.fwsi@gmail.com
 
-5. W trakcie trwania Konferencji, Uczestnik zobowiązany jest do
-stosowania się do poleceń Organizatora i osób przez niego
-wyznaczonych.
+Regulamin określa zasady zapisów oraz uczestnictwa w obozie.
 
-6. Nieodpowiednie zachowanie Uczestnika w trakcie Konferencji, w
-szczególności niestosowanie się do poleceń osób wymienionych w
-punkcie 5, nadużywanie alkoholu, stosowanie środków
-odurzających, bądź inne zachowania nieobyczajne, a także
-zachowania stwarzające zagrożenie zdrowia i bezpieczeństwa
-Uczestnika bądź innych Uczestników stanowią podstawę do
-zastosowania następujących środków dyscyplinujących:
+---
 
-    1. upomnienia;
-    2. powiadomienia władz organizacji macierzystej (uczelni) o
-       zachowaniu Uczestnika;
-    3. wydalenia z Konferencji.    
+## II. Zakres i warunki świadczenia usług
 
-    O zastosowaniu środka dyscyplinującego, w tym także o rodzaju
-    zastosowanego środka, decyduje jednoosobowo osoba wskazana przez
-    Organizatora jako Kierownik Konferencji. Kierownik Konferencji
-    może zdecydować o nałożeniu środka najbardziej dotkliwego bez
-    uprzedniego stosowania pozostałych środków. Kierownik
-    Konferencji może zdecydować o zastosowaniu wszystkich środków
-    dyscyplinujących łącznie. Władze uczelni macierzystych względem
-    osób będących Uczestnikami mogą za to samo zachowanie zastosować
-    kary dyscyplinarne wynikające z Regulaminu Studiów.
+### 2. Zakres usługi
+Cena obozu obejmuje wybrane przez uczestnika usługi:
+* nocleg ze śniadaniem i obiadokolacją (w wyznaczonych godzinach),
+* transport,
+* transport bagażu (jeśli dotyczy).
 
-7. Na terenie całego ośrodka, w którym odbywać się będzie
-Konferencja obowiązuje bezwzględny zakaz palenia papierosów oraz
-innych wyrobów nikotynowych (w tym papierosów elektronicznych,
-itp.). W przypadku nieprzestrzegania tego zakazu organizator
-zastrzega sobie prawo do zastosowania środków dyscyplinujących
-opisanych w punkcie 6.
+Miejsce obozu i forma transportu są ogłaszane na stronie z odpowiednim wyprzedzeniem.
 
-8. Uczestnik ponosi odpowiedzialność za szkody wyrządzone osobom
-trzecim w czasie przebywania na Konferencji. Organizator nie
-przejmuje odpowiedzialności względem osób trzecich za zachowania
-Uczestnika w trakcie Konferencji.
+### 3. Zmiany w terminie lub formie usługi
+* W przypadku zmiany terminu lub miejsca obozu, uczestnik ma prawo do rezygnacji i pełnego zwrotu opłaty.
+* W przypadku istotnej zmiany terminu lub formy transportu, uczestnik ma prawo do rezygnacji z tej usługi i zwrotu jej kosztów.
 
-9. Organizator nie sprawuje pieczy nad osobą Uczestnika oraz jego
-mieniem w trakcie Konferencji. W szczególności Organizator nie
-ponosi odpowiedzialności za mienie Uczestnika pozostawione w
-obiekcie, w którym organizowana jest Konferencja.
+### 4. Zmiany programu
+Organizator zastrzega sobie prawo do dowolnych zmian w terminarzu zajęć i wykładów, dla zapewnienia optymalnego przebiegu obozu.
 
-10. Uczestnik podający w serwisie internetowym nieprawdziwe dane,
-zgadza się na konsekwencje prawne i finansowe z tego wynikające.
-Organizator zastrzega sobie prawo do wydalenia takiego
-Uczestnika z Konferencji. W przypadku, gdy informacje podane
-przez Uczestnika narażają Organizatorów na straty finansowe,
-Uczestnik zobowiązuje się do zwrotu poniesionych przez
-Organizatora dodatkowych kosztów.
+### 5. Godzina rozpoczęcia
+Za początek obozu uznaje się pierwsze zajęcia lub wykład. Meldowanie w ośrodku może zostać wstrzymane do tego czasu. Szczegóły zameldowania i wymeldowania zostaną ogłoszone na stronie obozu.
 
-11. Uczestnikowi nie przysługuje zwrot jego świadczenia na rzecz
-Organizatora bądź części tego świadczenia w przypadku niepełnego
-udziału w Konferencji z przyczyn, za które Organizator nie
-odpowiada. W szczególności zwrot świadczenia bądź części
-świadczenia nie przysługuje Uczestnikowi, względem którego
-zastosowano karę wydalenia z Konferencji.
+### 6. Gry planszowe
+Organizator decyduje o dostępności i doborze gier planszowych. Preferencje uczestników będą brane pod uwagę, ale nie są wiążące.
 
-12. Warunki rezygnacji:
+---
 
-    1. Rezygnacja z Konferencji następuje w momencie złożenia przez
-    Uczestnika rezygnacji w formie pisemnej lub elektronicznej
-    na adres pocztowy Organizatora.
+## III. Rejestracja i płatności
 
-    2. W przypadku rezygnacji potrąca się 100% wpłaconej kwoty.
+### 7. Zgłoszenie i opłata
+Rejestracja odbywa się poprzez formularz na stronie. Po wyborze wariantu uczestnik otrzymuje dane do przelewu. Rezerwacja miejsca następuje po zaksięgowaniu wpłaty.
 
-    3. Istnieje możliwość zwrotu wpłaconej kwoty, gdy rezygnujący
-    Uczestnik znajdzie na to miejsce innego Uczestnika.
+### 8. Odstąpienie od umowy (14 dni)
+Uczestnik może zrezygnować w ciągu **14 dni** od zakupu, bez podania przyczyny. Zwrot następuje w ciągu 14 dni od zgłoszenia rezygnacji.
+
+Prawo do odstąpienia od umowy nie przysługuje, jeśli usługa została w pełni wykonana przed upływem 14 dni, a uczestnik wyraźnie się na to zgodził i został poinformowany o utracie tego prawa.
+
+---
+
+## IV. Zakwaterowanie i materiały
+
+### 9. Przydział pokoi
+Organizator zastrzega sobie prawo do samodzielnego przydzielania uczestników do pokoi, niezależnie od wcześniejszych deklaracji. Przy dokonywaniu podziału podejmowane będą starania, aby uwzględnić zgłoszone preferencje.
+
+### 10. Pakiet startowy
+Organizator może zapewnić uczestnikom pakiet konferencyjny (np. identyfikator, koszulkę). Jego skład może różnić się od zgłoszonych oczekiwań, jednak organizator dołoży starań, aby je uwzględnić.
+
+---
+
+## V. Prawa i obowiązki
+
+### 11. Zasady bezpieczeństwa i odpowiedzialność
+Uczestnicy zobowiązani są do przestrzegania zaleceń organizatorów, zasad bezpieczeństwa oraz regulacji obowiązujących w ośrodku. Organizator nie odpowiada za szkody wynikające z niestosowania się do zasad.
+
+### 12. Mienie osobiste uczestników
+Organizator nie ponosi odpowiedzialności za rzeczy zagubione, skradzione lub zniszczone. Zaleca się ostrożność przy przechowywaniu przedmiotów wartościowych.
+
+### 13. Ubezpieczenie
+Organizator nie zapewnia ubezpieczenia. Uczestnikom zaleca się posiadanie indywidualnego ubezpieczenia NNW.
+
+---
+
+## VI. Odmowa świadczenia usług i wykluczenie
+
+### 14. Wykluczenie uczestnika
+Organizator może usunąć uczestnika z obozu, bez zwrotu kosztów, jeśli jego zachowanie:
+* narusza zasady współżycia społecznego lub bezpieczeństwa,
+* zagraża zdrowiu lub życiu,
+* zakłóca przebieg obozu,
+* powoduje zniszczenie mienia,
+* łamie regulamin lub przepisy prawa.
+
+Organizator może także odmówić świadczenia usług tej osobie w przyszłości.
+
+### 15. Odmowa świadczenia konkretnej usługi
+Organizator zastrzega sobie prawo do odmowy realizacji konkretnej usługi na **7 dni** przed rozpoczęciem obozu z istotnych przyczyn organizacyjnych lub technicznych. Uczestnik zostanie o tym niezwłocznie poinformowany, a wniesiona opłata za tę usługę zostanie zwrócona w terminie 7 dni.
+
+---
+
+## VII. Sytuacje nadzwyczajne i reklamacje
+
+### 16. Siła wyższa
+Organizator nie ponosi odpowiedzialności za niewykonanie lub nienależyte wykonanie usługi z przyczyn niezależnych, będących skutkiem działania siły wyższej (np. klęski żywiołowe, epidemie, wojny, strajki, decyzje administracyjne). W takim przypadku uczestnikowi może przysługiwać częściowy lub pełny zwrot opłaty za niewykonaną usługę, zgodnie z obowiązującymi przepisami prawa.
+
+### 17. Reklamacje
+Reklamacje należy składać mailowo. Organizator odpowiada w terminie **14 dni**.
+
+---
+
+## VIII. Zmiany regulaminu i postanowienia końcowe
+
+### 18. Zmiana regulaminu
+Organizator zastrzega sobie prawo do zmiany regulaminu do **7 dni** przed obozem. Uczestnik ma wówczas prawo do rezygnacji i pełnego zwrotu, o ile zgłosi to w ciągu **7 dni** od otrzymania informacji.
+
+### 19. Postanowienia końcowe
+Regulamin obowiązuje od dnia publikacji. W sprawach nieuregulowanych mają zastosowanie przepisy prawa polskiego.
+
+### 20. Charakter zamknięty obozu
+Obóz ma charakter zamknięty i jest przeznaczony wyłącznie dla zapisanych uczestników. Udział osób nieuprawnionych może skutkować konsekwencjami prawnymi, w tym zgłoszeniem naruszenia odpowiednim służbom lub dochodzeniem roszczeń cywilnoprawnych.
 `;
 
 export const Template = (props: templates.TermsAndConditions) => {
-  let startDate = "";
-  let endDate = "";
-
-  if (props.zosia) {
-    startDate = getLocalDate(new Date(props.zosia.start_date));
-    endDate = getLocalDate(new Date(props.zosia_end_date));
-  }
 
   return (
     <Layout>
       <CenteredContainer>
         <article className="prose mx-auto my-10">
           <h1 className="text-center">
-            Regulamin LEtniego Obozu Studentów Informatyki
+            Regulamin LEtniego Obozu Studentów Informatyki A oraz warunki sprzedaży
           </h1>
-          {props.zosia ? (
             <Markdown>
-              {privacyPolicyMarkdown(
-                props.zosia_title,
-                props.place.town,
-                startDate,
-                endDate,
-              )}
+              {termsAndConditionsMarkdown()}
             </Markdown>
-          ) : (
-            <h2 className="text-center">W przygotowaniu...</h2>
-          )}
         </article>
       </CenteredContainer>
     </Layout>

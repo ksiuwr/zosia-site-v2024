@@ -36,6 +36,8 @@ export const Template = (props: templates.AddLecture) => {
           <BasicFormField field={form.fields.supporters_names} />
           <BasicFormField field={form.fields.requests} />
           <BasicFormField field={form.fields.events} />
+
+		  <BasicFormField field={form.fields.recording_preferences} />
         </BasicFormWithCustomFields>
       </CenteredFormContainer>
     </Layout>
