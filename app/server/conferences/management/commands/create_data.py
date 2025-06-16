@@ -11,7 +11,7 @@ from server.organizers.models import OrganizerContact
 from server.questions.models import QA
 from server.rooms.models import Room
 from server.users.models import Organization, User, UserPreferences
-from server.utils.constants import FULL_DURATION_CHOICES, LECTURE_TYPE, MAX_BONUS_MINUTES, SponsorInternals, UserInternals
+from server.utils.constants import FULL_DURATION_CHOICES, LECTURE_RECORD_PREFERENCE, LECTURE_TYPE, MAX_BONUS_MINUTES, SponsorInternals, UserInternals
 from server.utils.time_manager import now, time_point, timedelta_since, timedelta_since_now
 
 FIRST_NAMES = ['Kasia', 'Marta', 'Julia', 'Ola', 'Natalia', 'Ania', 'Ewa', 'Alicja', 'Beata',
@@ -39,6 +39,7 @@ def create_lecture(zosia, author):
         'description': lorem_ipsum.words(random.randint(10, 20))[:255],
         'author': author,
         'accepted': random_bool(),
+        'recording_preferences': random.choice(LECTURE_RECORD_PREFERENCE)[0],
     }
     return Lecture.objects.create(**data)
 

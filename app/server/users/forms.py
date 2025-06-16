@@ -188,7 +188,7 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
         self.fields['transport_baggage'].label = "I want to have my baggage transferred."
 
         terms_help_text = f'<a href="{reverse("terms_and_conditions")}" class="link">Read full Terms & Conditions here</a>.'
-        self.fields["terms_accepted"].label = 'I agree to Terms & Conditions of ZOSIA.'
+        self.fields["terms_accepted"].label = 'I agree to Terms & Conditions of LEOSIA.'
         self.fields["terms_accepted"].help_text = mark_safe(terms_help_text)
         self.fields["terms_accepted"].error_messages = \
             {'required': "You have to accept Terms & Conditions."}

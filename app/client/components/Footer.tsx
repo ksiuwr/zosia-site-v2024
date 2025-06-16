@@ -58,7 +58,7 @@ export const Footer = ({ adminSidebarShown }: FooterProps) => {
             <div className="flex justify-between gap-2">
               <a
                 className="link text-neutral-content hover:mix-blend-difference"
-                href="https://www.facebook.com/ZOSIA.KSI"
+                href="https://www.facebook.com/ksi.uwr"
                 target="_blank"
                 rel="noreferrer"
               >

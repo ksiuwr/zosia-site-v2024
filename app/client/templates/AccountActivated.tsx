@@ -13,7 +13,7 @@ export const Template = (props: templates.AccountActivated) => {
           <p>
             Your email has been activated successfully!
             {props.is_conference_active
-              ? " You should update preferences for ZOSIA conference."
+              ? " You should update preferences for LEOSIA conference."
               : " You may now proceed to the website."}
           </p>
           <a

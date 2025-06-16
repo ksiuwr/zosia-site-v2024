@@ -353,11 +353,11 @@ def register(request):
 
     if user_prefs is None:
         if not zosia.is_user_registration_open(user):
-            messages.error(request, _('Registration for ZOSIA is not open yet'))
+            messages.error(request, _('Registration for LEOSIA is not open yet'))
             return redirect(reverse('index'))
 
         if zosia.is_registration_over:
-            messages.error(request, _('You missed registration for ZOSIA'))
+            messages.error(request, _('You missed registration for LEOSIA'))
             return redirect(reverse('index'))
 
     form_args = {}
