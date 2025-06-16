@@ -317,7 +317,7 @@ class UserPreferences(models.Model):
 
     @property
     def transfer_title(self):
-        return f"ZOSIA - {self.user.full_name} - {self.user.short_hash}"
+        return f"LEOSIA - {self.user.full_name} - {self.user.short_hash}"
 
     @property
     def rooming_start_time(self):

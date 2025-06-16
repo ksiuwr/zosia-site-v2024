@@ -14,7 +14,9 @@ Ostatnia aktualizacja: 16/06/2025
 Usługodawcą jest:
 
 Fundacja Wrocławskich Studentów Informatyki (NIP: 8971954829)
-z siedzibą przy ul. Św. Mikołaja 8/11/208, Wrocław.
+
+Z siedzibą przy ul. Św. Mikołaja 8/11/208, Wrocław.
+
 Kontakt e-mail: kontakt.fwsi@gmail.com
 
 Regulamin określa zasady zapisów oraz uczestnictwa w obozie.
