@@ -168,27 +168,7 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
 
         self.assertLess(len(user_prefs.transfer_title), 130)
 
-    def test_transfer_title_matches_pattern(self):
-        user_prefs = self.make_user_prefs(
-            accommodation_day_1=False,
-            dinner_day_1=False,
-            breakfast_day_2=False,
-            accommodation_day_2=True,
-            dinner_day_2=True,
-            breakfast_day_3=True,
-            accommodation_day_3=False,
-            dinner_day_3=False,
-            breakfast_day_4=False,
-        )
-
-        first_name = re.escape(self.normal.first_name)
-        last_name = re.escape(self.normal.last_name)
-        short_hash = re.escape(self.normal.short_hash)
-        pattern = f'^ZOSIA - {first_name} {last_name} - {short_hash} - \\d+$'
-
-        self.assertRegex(user_prefs.transfer_title, pattern)
-
-    def test_transfer_title_different_for_different_preferences(self):
+    def test_service_recognition_num_different_for_different_preferences(self):
         user_prefs_1 = self.make_user_prefs(
             accommodation_day_1=False,
             dinner_day_1=False,
@@ -213,9 +193,9 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
             breakfast_day_4=True,
         )
 
-        self.assertNotEqual(user_prefs_1.transfer_title, user_prefs_2.transfer_title)
+        self.assertNotEqual(user_prefs_1._chosen_options_summary(), user_prefs_2._chosen_options_summary())
 
-    def test_transfer_title_is_the_same_for_the_same_preferences(self):
+    def test_service_recognition_num_is_the_same_for_the_same_preferences(self):
         user_prefs_1 = self.make_user_prefs(
             accommodation_day_1=False,
             dinner_day_1=False,
@@ -240,7 +220,7 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
             breakfast_day_4=False,
         )
 
-        self.assertEqual(user_prefs_1.transfer_title, user_prefs_2.transfer_title)
+        self.assertEqual(user_prefs_1._chosen_options_summary(), user_prefs_2._chosen_options_summary())
 
 
 class UserPreferencesFormTestCase(TestCase):

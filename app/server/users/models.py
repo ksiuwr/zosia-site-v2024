@@ -267,10 +267,13 @@ class UserPreferences(models.Model):
             summary <<= 1
             if option:
                 summary += 1
-        summary <<= 1 if self.discount_round == 0 else floor(log2(self.discount_round)) + 1
-        summary += self.discount_round
 
-        return summary
+        number_of_rounds = self.zosia.get_total_number_of_discount_rounds()
+        if(number_of_rounds > 0):
+            summary <<= floor(log2(number_of_rounds)) + 1
+            summary += self.discount_round
+
+        return hex(summary)[2:]
 
     @staticmethod
     def get_current_discount_round(zosia: Zosia):
