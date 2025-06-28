@@ -16,11 +16,14 @@ PRICE_BASE = 1 << 4
 PRICE_TRANSPORT = 1 << 5
 PRICE_FULL = 1 << 6
 
+LONG_USER_INDEX = 4
+
 USER_DATA = [
     ('mccartney@thebeatles.com', 'paul!password'),
     ('lennon@thebeatles.com', 'john!password'),
     ('harrison@thebeatles.com', 'george!password'),
-    ('starr@thebeatles.com', 'ringo!password')
+    ('starr@thebeatles.com', 'ringo!password'),
+    ('superlongfirstnameeeeeeeeeeeee@thebeatles.com', 'grzegorzbrzeczyszczykiewicz!password')
 ]
 
 

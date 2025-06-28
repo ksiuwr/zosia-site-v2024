@@ -1,4 +1,5 @@
 import hashlib
+from math import floor, log2
 import re
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -255,6 +256,23 @@ class UserPreferences(models.Model):
 
         return self.zosia.price_accommodation
 
+    def _chosen_options_summary(self):
+        summary = 0
+        options = [self.transport is not None, self.transport_baggage,
+                   self.dinner_day_1, self.accommodation_day_1,
+                   self.breakfast_day_2, self.dinner_day_2, self.accommodation_day_2,
+                   self.breakfast_day_3, self.dinner_day_3, self.accommodation_day_3,
+                   self.breakfast_day_4, self.is_student]
+        for option in options:
+            summary <<= 1
+            if option:
+                summary += 1
+        # this assumes discound_round takes 2 bits
+        summary <<= floor(log2(self.discount_round)) + 1
+        summary += self.discount_round
+
+        return summary
+
     @staticmethod
     def get_current_discount_round(zosia: Zosia):
         boxed_discount_turn_students_counts = UserPreferences.objects \
@@ -317,7 +335,7 @@ class UserPreferences(models.Model):
 
     @property
     def transfer_title(self):
-        return f"ZOSIA - {self.user.full_name} - {self.user.short_hash}"
+        return f"ZOSIA - {self.user.full_name} - {self.user.short_hash} - {self._chosen_options_summary()}"
 
     @property
     def rooming_start_time(self):

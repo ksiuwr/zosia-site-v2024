@@ -1,10 +1,12 @@
+import re
+
 from django.test import TestCase
 from django.urls import reverse
 
-from .forms import UserPreferencesAdminForm, UserPreferencesForm
+from .forms import UserPreferencesForm
 from .models import UserPreferences
 from server.utils.constants import UserInternals
-from server.utils.test_helpers import PRICE_BASE, PRICE_BREAKFAST, PRICE_DINNER, PRICE_FULL, \
+from server.utils.test_helpers import PRICE_BASE, PRICE_BREAKFAST, PRICE_DINNER, PRICE_FULL, LONG_USER_INDEX, \
     create_organization, create_user, create_user_preferences, create_zosia, login_as_user
 from server.utils.time_manager import timedelta_since_now
 
@@ -15,6 +17,7 @@ class UserPreferencesTestCase(TestCase):
         self.normal = create_user(0)
         self.staff = create_user(1, is_staff=True)
         self.zosia = create_zosia(active=True)
+        self.long_user = create_user(LONG_USER_INDEX)
 
 
 class UserPreferencesModelTestCase(UserPreferencesTestCase):
@@ -148,6 +151,96 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
         self.assertFalse(user_prefs.payment_accepted)
         user_prefs.toggle_payment_accepted()
         self.assertTrue(user_prefs.payment_accepted)
+
+    def test_tansfer_title_shorter_than_130_characters(self):
+        user_prefs = self.make_user_prefs(
+            accommodation_day_1=False,
+            dinner_day_1=False,
+            breakfast_day_2=False,
+            accommodation_day_2=True,
+            dinner_day_2=True,
+            breakfast_day_3=True,
+            accommodation_day_3=False,
+            dinner_day_3=False,
+            breakfast_day_4=False,
+            user=self.long_user
+        )
+
+        self.assertLess(len(user_prefs.transfer_title), 130)
+
+    def test_transfer_title_matches_pattern(self):
+        user_prefs = self.make_user_prefs(
+            accommodation_day_1=False,
+            dinner_day_1=False,
+            breakfast_day_2=False,
+            accommodation_day_2=True,
+            dinner_day_2=True,
+            breakfast_day_3=True,
+            accommodation_day_3=False,
+            dinner_day_3=False,
+            breakfast_day_4=False,
+        )
+
+        first_name = re.escape(self.normal.first_name)
+        last_name = re.escape(self.normal.last_name)
+        short_hash = re.escape(self.normal.short_hash)
+        pattern = f'^ZOSIA - {first_name} {last_name} - {short_hash} - \\d+$'
+
+        self.assertRegex(user_prefs.transfer_title, pattern)
+
+    def test_transfer_title_different_for_different_preferences(self):
+        user_prefs_1 = self.make_user_prefs(
+            accommodation_day_1=False,
+            dinner_day_1=False,
+            breakfast_day_2=False,
+            accommodation_day_2=True,
+            dinner_day_2=True,
+            breakfast_day_3=True,
+            accommodation_day_3=False,
+            dinner_day_3=False,
+            breakfast_day_4=False,
+        )
+
+        user_prefs_2 = self.make_user_prefs(
+            accommodation_day_1=True,
+            dinner_day_1=False,
+            breakfast_day_2=False,
+            accommodation_day_2=True,
+            dinner_day_2=True,
+            breakfast_day_3=True,
+            accommodation_day_3=True,
+            dinner_day_3=False,
+            breakfast_day_4=True,
+        )
+
+        self.assertNotEqual(user_prefs_1.transfer_title, user_prefs_2.transfer_title)
+
+    def test_transfer_title_is_the_same_for_the_same_preferences(self):
+        user_prefs_1 = self.make_user_prefs(
+            accommodation_day_1=False,
+            dinner_day_1=False,
+            breakfast_day_2=False,
+            accommodation_day_2=True,
+            dinner_day_2=True,
+            breakfast_day_3=True,
+            accommodation_day_3=False,
+            dinner_day_3=False,
+            breakfast_day_4=False,
+        )
+
+        user_prefs_2 = self.make_user_prefs(
+            accommodation_day_1=False,
+            dinner_day_1=False,
+            breakfast_day_2=False,
+            accommodation_day_2=True,
+            dinner_day_2=True,
+            breakfast_day_3=True,
+            accommodation_day_3=False,
+            dinner_day_3=False,
+            breakfast_day_4=False,
+        )
+
+        self.assertEqual(user_prefs_1.transfer_title, user_prefs_2.transfer_title)
 
 
 class UserPreferencesFormTestCase(TestCase):
