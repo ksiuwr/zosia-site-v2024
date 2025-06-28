@@ -251,6 +251,10 @@ class Zosia(models.Model):
 
         return self.third_discount
 
+    @staticmethod
+    def get_total_number_of_discount_rounds():
+        return 3
+
     def clean(self):
         if self.early_registration_start is not None:
             if self.early_registration_start > self.registration_start:
