@@ -267,8 +267,7 @@ class UserPreferences(models.Model):
             summary <<= 1
             if option:
                 summary += 1
-        # this assumes discound_round takes 2 bits
-        summary <<= floor(log2(self.discount_round)) + 1
+        summary <<= 1 if self.discount_round == 0 else floor(log2(self.discount_round)) + 1
         summary += self.discount_round
 
         return summary
