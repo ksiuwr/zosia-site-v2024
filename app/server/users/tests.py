@@ -168,7 +168,7 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
 
         self.assertLess(len(user_prefs.transfer_title), 130)
 
-    def test_service_recognition_num_different_for_different_preferences(self):
+    def test_transfer_title_different_for_different_preferences(self):
         user_prefs_1 = self.make_user_prefs(
             accommodation_day_1=False,
             dinner_day_1=False,
@@ -193,9 +193,9 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
             breakfast_day_4=True,
         )
 
-        self.assertNotEqual(user_prefs_1._chosen_options_summary(), user_prefs_2._chosen_options_summary())
+        self.assertNotEqual(user_prefs_1.transfer_title, user_prefs_2.transfer_title)
 
-    def test_service_recognition_num_is_the_same_for_the_same_preferences(self):
+    def test_transfer_title_is_the_same_for_the_same_preferences(self):
         user_prefs_1 = self.make_user_prefs(
             accommodation_day_1=False,
             dinner_day_1=False,
@@ -220,7 +220,7 @@ class UserPreferencesModelTestCase(UserPreferencesTestCase):
             breakfast_day_4=False,
         )
 
-        self.assertEqual(user_prefs_1._chosen_options_summary(), user_prefs_2._chosen_options_summary())
+        self.assertEqual(user_prefs_1.transfer_title, user_prefs_2.transfer_title)
 
 
 class UserPreferencesFormTestCase(TestCase):
