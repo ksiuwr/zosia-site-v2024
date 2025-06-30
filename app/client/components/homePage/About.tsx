@@ -12,7 +12,7 @@ export const About = () => {
              is an event inspired by the long-standing winter conference ZOSIA, which has been
               traditionally held for the past 20 years at our institute. For now a smaller and
                more informal version of a scientific conference, LEOSIA will take place for the
-              first time this summer. During the 3-day conference, participants will not only
+              first time this summer. During the 4-day conference, participants will not only
               enjoy talks and lectures, but also outdoor activities, trips, and the opportunity
               to socialize with both current and former students and lecturers.`}
           </p>

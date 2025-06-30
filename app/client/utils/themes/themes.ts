@@ -1,36 +1,58 @@
-import type { CustomTheme, Theme } from "daisyui";
+import type { CustomTheme } from "daisyui";
 
 // You can change these values to other themes provided by daisyUI
 // Or create your own themes and use them here
-export const LIGHT_THEME: Theme = "retro";
-export const DARK_THEME = "leosia-dark";
+export const LIGHT_THEME = "LEOSIA_LIGHT";
+//export const DARK_THEME = "LEOSIA_DARK";
+export const DARK_THEME = "LEOSIA_DARK";
 
 export const LEOSIA_LIGHT: CustomTheme = {
   [LIGHT_THEME]: {
-    "color-scheme": "light",
-    "secondary-content": "blue",
-    accent: "yellow",
-    neutral: "oklch(58% 0.173 17.585)",
-    "neutral-content": "white",
-    "base-100": "oklch(96% 0.059 95.617)",
-    "base-200": "oklch(90% 0.076 70.697)",
-    "base-300": "oklch(85% 0.153 55.934)",
-    "base-content": "oklch(45% 0.188 13.697)",
+    primary: "#e86d7c",
+    "primary-focus": "#e13d50",
+    "primary-content": "#ffffff",
+
+    secondary: "#a68df6",
+    "secondary-focus": "#8462f3",
+    "secondary-content": "#ffffff",
+
+    accent: "#ddbe88",
+    "accent-focus": "#d0a862",
+    "accent-content": "#ffffff",
+
+    neutral: "#9b5050",
+    "neutral-focus": "#6a3e3e",
+    "neutral-content": "#f0d6e8",
+
+    "base-100": "#fffac2",
+    "base-200": "#fee09f",
+    "base-300": "#f0ce93",
+    "base-content": "#342914",
   },
 };
 
 export const LEOSIA_DARK: CustomTheme = {
   [DARK_THEME]: {
-    "color-scheme": "dark",
-    primary: "oklch(65.69% 0.196 275.75)",
-    secondary: "oklch(74.8% 0.26 342.55)",
-    accent: "oklch(74.51% 0.167 183.61)",
-    neutral: "#3b2747",
-    "neutral-content": "#d9d5f7",
-    "base-100": "#624185",
-    "base-200": "oklch(0.7 0.121 310.96)",
-    "base-300": "#3b2747",
-    "base-content": "oklch(0.95 0.111 316.96)",
+    primary: "#f556a6",
+    "primary-focus": "#d72d82",
+    "primary-content": "#1b1c22",
+
+    secondary: "#dfa2fb",
+    "secondary-focus": "#bc64f7",
+    "secondary-content": "#1b1c22",
+
+    accent: "#ffd5b3",
+    "accent-focus": "#ffc380",
+    "accent-content": "#1b1c22",
+
+    neutral: "#231a32",
+    "neutral-focus": "#281c35",
+    "neutral-content": "#d5ccff",
+
+    "base-100": "#2a1c40",
+    "base-200": "#26183a",
+    "base-300": "#1b122b",
+    "base-content": "#d5ccff",
   },
 };
 
