@@ -7,7 +7,7 @@ import { BasicFormWithCustomFields } from "@client/components/forms/BasicFormWit
 import { AccomodationFieldGroup } from "@client/components/register/AccomodationFieldGroup";
 import { OrganizationSelector } from "@client/components/register/OrganizationSelector";
 import { CostSummary } from "@client/components/register/PriceSummary";
-import { reverse, templates, useForm } from "@reactivated";
+import { templates, useForm } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.Register) => {
@@ -81,7 +81,7 @@ export const Template = (props: templates.Register) => {
       <PageTitle>{pageTitle}</PageTitle>
 
       <CenteredFormContainer>
-        {props.before_discounts ? (
+        {/* {props.before_discounts ? (
           <Alert type="info">
             <span>
               The first round of funding starts <b>20.12.2024</b>, registering
@@ -100,11 +100,14 @@ export const Template = (props: templates.Register) => {
               <a href={reverse("questions_index")} className="link font-bold">
                 Q&A
               </a>{" "}
-              for more information. 
-              <b>If a student chooses to use a discount, they agree to sign a declaration confirming its use.</b>
+              for more information.
+              <b>
+                If a student chooses to use a discount, they agree to sign a
+                declaration confirming its use.
+              </b>
             </span>
           </Alert>
-        )}
+        )} */}
 
         <BasicFormWithCustomFields form={form} submitButtonLabel={pageTitle}>
           <BasicFormField field={form.fields.is_student} />
@@ -121,7 +124,10 @@ export const Template = (props: templates.Register) => {
 
           <OrganizationSelector field={form.fields.organization} />
           <BasicFormField field={form.fields.transport} />
-          <BasicFormField field={form.fields.transport_baggage} />
+          <BasicFormField
+            field={form.fields.transport_baggage}
+            disabled={true}
+          />
 
           <div className="divider" />
 
@@ -139,8 +145,8 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.contact} />
           <BasicFormField field={form.fields.information} />
           <BasicFormField field={form.fields.vegetarian} />
-          <BasicFormField field={form.fields.shirt_size} />
-          <BasicFormField field={form.fields.shirt_type} />
+          {/* <BasicFormField field={form.fields.shirt_size} /> */}
+          {/* <BasicFormField field={form.fields.shirt_type} /> */}
           <BasicFormField field={form.fields.terms_accepted} />
 
           <div className="divider" />
