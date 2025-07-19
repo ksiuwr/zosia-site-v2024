@@ -30,9 +30,8 @@ const preferencesInfoMarkdown = ({
   return `
 Organization: **${organization || "You haven't selected any organization"}**
 Transport: **${transportDisplay}**
-Transport baggage: **${transportBaggage ? "Yes" : "No"}**
-Vegetarian: **${vegetarian ? "Yes" : "No"}**
-T-shirt: **${shirtType} ${shirtSize}**
+${/*Transport baggage: **${transportBaggage ? "Yes" : "No"}** */ ""}Vegetarian: **${vegetarian ? "Yes" : "No"}**
+${/* T-shirt: **${shirtType} ${shirtSize}** */ ""}
 `;
 };
 
