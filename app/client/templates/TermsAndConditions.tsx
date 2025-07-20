@@ -6,7 +6,7 @@ import React from "react";
 import Markdown from "react-markdown";
 
 const termsAndConditionsMarkdown = () => `
-Ostatnia aktualizacja: 16/06/2025
+Ostatnia aktualizacja: 00:25 21/07/2025
 
 ## I. Informacje ogólne
 
@@ -98,27 +98,30 @@ Organizator może także odmówić świadczenia usług tej osobie w przyszłośc
 ### 15. Odmowa świadczenia konkretnej usługi
 Organizator zastrzega sobie prawo do odmowy realizacji konkretnej usługi na **7 dni** przed rozpoczęciem obozu z istotnych przyczyn organizacyjnych lub technicznych. Uczestnik zostanie o tym niezwłocznie poinformowany, a wniesiona opłata za tę usługę zostanie zwrócona w terminie 7 dni.
 
+### 16. Odwołanie Obozu
+W przypadku nieuzbierania wystarczającej ilości środków niezbędnych do przeprowadzenia Obozu organizator zastrzega sobie prawo do odwołania wydarzenia. Decyzja w tej sprawie może zostać podjęta i opublikowana najpóźniej do dnia 24 sierpnia 2025 r. (włącznie). Wpłacone środki zostaną zwrócone uczestnikom w ciągu 7 dni od momentu ogłoszenia decyzji.
+
 ---
 
 ## VII. Sytuacje nadzwyczajne i reklamacje
 
-### 16. Siła wyższa
+### 17. Siła wyższa
 Organizator nie ponosi odpowiedzialności za niewykonanie lub nienależyte wykonanie usługi z przyczyn niezależnych, będących skutkiem działania siły wyższej (np. klęski żywiołowe, epidemie, wojny, strajki, decyzje administracyjne). W takim przypadku uczestnikowi może przysługiwać częściowy lub pełny zwrot opłaty za niewykonaną usługę, zgodnie z obowiązującymi przepisami prawa.
 
-### 17. Reklamacje
+### 18. Reklamacje
 Reklamacje należy składać mailowo. Organizator odpowiada w terminie **14 dni**.
 
 ---
 
 ## VIII. Zmiany regulaminu i postanowienia końcowe
 
-### 18. Zmiana regulaminu
+### 19. Zmiana regulaminu
 Organizator zastrzega sobie prawo do zmiany regulaminu do **7 dni** przed obozem. Uczestnik ma wówczas prawo do rezygnacji i pełnego zwrotu, o ile zgłosi to w ciągu **7 dni** od otrzymania informacji.
 
-### 19. Postanowienia końcowe
+### 20. Postanowienia końcowe
 Regulamin obowiązuje od dnia publikacji. W sprawach nieuregulowanych mają zastosowanie przepisy prawa polskiego.
 
-### 20. Charakter zamknięty obozu
+### 21. Charakter zamknięty obozu
 Obóz ma charakter zamknięty i jest przeznaczony wyłącznie dla zapisanych uczestników. Udział osób nieuprawnionych może skutkować konsekwencjami prawnymi, w tym zgłoszeniem naruszenia odpowiednim służbom lub dochodzeniem roszczeń cywilnoprawnych.
 `;
 
