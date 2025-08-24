@@ -6,7 +6,7 @@ import React from "react";
 import Markdown from "react-markdown";
 
 const termsAndConditionsMarkdown = () => `
-Ostatnia aktualizacja: 00:25 21/07/2025
+Ostatnia aktualizacja: 22:05 24/08/2025
 
 ## I. Informacje ogólne
 
