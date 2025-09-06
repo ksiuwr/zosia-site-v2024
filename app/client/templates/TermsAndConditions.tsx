@@ -6,7 +6,7 @@ import React from "react";
 import Markdown from "react-markdown";
 
 const termsAndConditionsMarkdown = () => `
-Ostatnia aktualizacja: 21:42 1/09/2025
+Ostatnia aktualizacja: 22:29 6/09/2025
 
 ## I. Informacje ogólne
 
@@ -99,7 +99,7 @@ Organizator może także odmówić świadczenia usług tej osobie w przyszłośc
 Organizator zastrzega sobie prawo do odmowy realizacji konkretnej usługi na **7 dni** przed rozpoczęciem obozu z istotnych przyczyn organizacyjnych lub technicznych. Uczestnik zostanie o tym niezwłocznie poinformowany, a wniesiona opłata za tę usługę zostanie zwrócona w terminie 7 dni.
 
 ### 16. Odwołanie Obozu
-W przypadku nieuzbierania wystarczającej ilości środków niezbędnych do przeprowadzenia Obozu organizator zastrzega sobie prawo do odwołania wydarzenia. Decyzja w tej sprawie może zostać podjęta i opublikowana najpóźniej do dnia 6 września 2025 r. (włącznie). Wpłacone środki zostaną zwrócone uczestnikom w ciągu 7 dni od momentu ogłoszenia decyzji.
+W przypadku nieuzbierania wystarczającej ilości środków niezbędnych do przeprowadzenia Obozu organizator zastrzega sobie prawo do odwołania wydarzenia. Decyzja w tej sprawie może zostać podjęta i opublikowana najpóźniej do dnia 8 września 2025 r. (włącznie). Wpłacone środki zostaną zwrócone uczestnikom w ciągu 7 dni od momentu ogłoszenia decyzji.
 
 ---
 
