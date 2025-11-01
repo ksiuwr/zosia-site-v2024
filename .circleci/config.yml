@@ -65,4 +65,4 @@ workflows:
           filters:
             branches:
               only:
-                - leosia25
+                - master
