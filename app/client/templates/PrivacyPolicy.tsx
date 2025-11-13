@@ -4,9 +4,11 @@ import React from "react";
 import Markdown from "react-markdown";
 
 const privacyPolicyMarkdown = `
+Ostatnia aktualizacja: 19:30 13/11/2025
+
 ## Informacja o plikach cookies
 
-Zosia.org używa plików cookie wyłącznie do zarządzania sesją użytkownika i ochrony przed atakami CSRF. Dodatkowe pliki cookie, związane z bezpieczeństwem i funkcjonowaniem strony, stosuje także nasz dostawca DNS, Cloudflare. Pliki te są niezbędne do prawidłowego działania serwisu i nie można z nich zrezygnować.
+zosia.org używa plików cookie wyłącznie do zarządzania sesją użytkownika i ochrony przed atakami CSRF. Dodatkowe pliki cookie, związane z bezpieczeństwem i funkcjonowaniem strony, stosuje także nasz dostawca DNS, Cloudflare. Pliki te są niezbędne do prawidłowego działania serwisu i nie można z nich zrezygnować.
 
 ## Polityka prywatności
 
@@ -34,7 +36,11 @@ Wyjątek stanowią powiązane faktury i dane płatności, które są przechowywa
 
 Administratorem danych jest:
 
-[DO UZUPEŁNIENIA]
+Fundacja Wrocławskich Studentów Informatyki (KRS: 0001175280)
+
+Z siedzibą przy ul. Św. Mikołaja 8/11 lok. 208, 50-125 Wrocław.
+
+Kontakt e-mail: kontakt.fwsi@gmail.com
 
 Masz prawo do dostępu do danych, ich poprawiania, usunięcia, ograniczenia przetwarzania, przenoszenia, wycofania zgody oraz wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.
 `
