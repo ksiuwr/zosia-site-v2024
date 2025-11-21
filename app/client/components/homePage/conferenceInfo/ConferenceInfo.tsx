@@ -10,15 +10,16 @@ interface ConferenceInfoProps {
   registrationStartDate: Date;
   registrationEndDate: Date;
 
-  lectureRegistrationStartDate: Date;
-  lectureRegistrationEndDate: Date;
+  lectureRegistrationStartDate: Date | null;
+  lectureRegistrationEndDate: Date | null;
 
-  roomingStartDate: Date;
-  roomingEndDate: Date;
+  roomingStartDate: Date | null;
+  roomingEndDate: Date | null;
 
   placeName: string;
   placeAddress: string;
   placeUrl: string;
+  dates_are_tba: boolean;
 }
 
 export const ConferenceInfo = ({
@@ -33,13 +34,18 @@ export const ConferenceInfo = ({
   placeName,
   placeAddress,
   placeUrl,
+  dates_are_tba,
 }: ConferenceInfoProps) => {
   return (
     <div className="bg-neutral text-neutral-content">
       <CenteredContentContainer>
         <div className="py-10">
           <h2 className="mb-8 text-center text-2xl font-bold lg:text-4xl">
-            {`${getLocalDate(conferenceStartDate)} - ${getLocalDate(conferenceEndDate)}`}
+            {dates_are_tba
+              ? "Dates to be announced soon"
+              : `${getLocalDate(conferenceStartDate)} - ${getLocalDate(
+                  conferenceEndDate
+                )}`}
           </h2>
           <div className="mx-auto flex w-fit flex-col justify-around gap-3 text-center text-lg lg:w-auto lg:flex-row">
             <div className="flex flex-col gap-3">
@@ -47,17 +53,24 @@ export const ConferenceInfo = ({
                 startDate={registrationStartDate}
                 endDate={registrationEndDate}
                 title="Registration"
+                dates_are_tba={dates_are_tba}
               />
-              <EventDates
-                startDate={lectureRegistrationStartDate}
-                endDate={lectureRegistrationEndDate}
-                title="Call for papers"
-              />
-              <EventDates
-                startDate={roomingStartDate}
-                endDate={roomingEndDate}
-                title="Rooms enrollment"
-              />
+              {lectureRegistrationStartDate && lectureRegistrationEndDate && (
+                <EventDates
+                  startDate={lectureRegistrationStartDate}
+                  endDate={lectureRegistrationEndDate}
+                  title="Call for papers"
+                  dates_are_tba={dates_are_tba}
+                />
+              )}
+              {roomingStartDate && roomingEndDate && (
+                <EventDates
+                  startDate={roomingStartDate}
+                  endDate={roomingEndDate}
+                  title="Rooms enrollment"
+                  dates_are_tba={dates_are_tba}
+                />
+              )}
             </div>
             <div>
               <a

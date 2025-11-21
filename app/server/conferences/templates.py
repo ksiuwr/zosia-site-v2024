@@ -12,7 +12,7 @@ from server.users.models import UserPreferences
 @template
 class HomePage(NamedTuple):
     zosia: Pick[Zosia, Literal['start_date', 'registration_start', 'registration_end', 'registration_suspended',
-                               'lecture_registration_start', 'lecture_registration_end', 'rooming_start', 'rooming_end']]
+                               'lecture_registration_start', 'lecture_registration_end', 'rooming_start', 'rooming_end', 'dates_are_tba']]
     sponsors: List[Pick[Sponsor, Literal['name', 'is_active', 'url', 'path_to_logo', 'path_to_logo_dark_mode', 'sponsor_type']]]
     place: Pick[Place, Literal['name', 'address', 'url']]
     gapi_key: str

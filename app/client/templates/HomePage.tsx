@@ -42,16 +42,27 @@ export const Template = (props: templates.HomePage) => {
             registrationStartDate={new Date(props.zosia.registration_start)}
             registrationEndDate={new Date(props.zosia.registration_end)}
             lectureRegistrationStartDate={
-              new Date(props.zosia.lecture_registration_start)
+              props.zosia.lecture_registration_start
+                ? new Date(props.zosia.lecture_registration_start)
+                : null
             }
             lectureRegistrationEndDate={
-              new Date(props.zosia.lecture_registration_end)
+              props.zosia.lecture_registration_end
+                ? new Date(props.zosia.lecture_registration_end)
+                : null
             }
-            roomingStartDate={new Date(props.zosia.rooming_start)}
-            roomingEndDate={new Date(props.zosia.rooming_end)}
+            roomingStartDate={
+              props.zosia.rooming_start
+                ? new Date(props.zosia.rooming_start)
+                : null
+            }
+            roomingEndDate={
+              props.zosia.rooming_end ? new Date(props.zosia.rooming_end) : null
+            }
             placeName={props.place.name}
             placeAddress={props.place.address}
             placeUrl={props.place.url}
+            dates_are_tba={props.zosia.dates_are_tba}
           />
 
           <APIProvider apiKey={props.gapi_key}>
