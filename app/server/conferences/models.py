@@ -78,6 +78,10 @@ class Zosia(models.Model):
         verbose_name=_('Is registration suspended'), default=False
     )
 
+    dates_are_tba = models.BooleanField(
+        verbose_name=_('Dates are To Be Announced'), default=False
+    )
+
     early_registration_start = models.DateTimeField(
         verbose_name=_('Registration for early registering users starts'), null=True, blank=True
     )
@@ -87,14 +91,14 @@ class Zosia(models.Model):
     registration_end = models.DateTimeField()
 
     lecture_registration_start = models.DateTimeField(
-        verbose_name=_('Registration for lectures starts'),
+        verbose_name=_('Registration for lectures starts'), null=True, blank=True
     )
-    lecture_registration_end = models.DateTimeField()
+    lecture_registration_end = models.DateTimeField(null=True, blank=True)
 
     rooming_start = models.DateTimeField(
-        verbose_name=_('Users room picking starts'),
+        verbose_name=_('Users room picking starts'), null=True, blank=True
     )
-    rooming_end = models.DateTimeField()
+    rooming_end = models.DateTimeField(null=True, blank=True)
 
     price_accommodation = models.IntegerField(
         verbose_name=_('Price for sleeping in hotel, per day'),
