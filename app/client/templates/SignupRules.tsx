@@ -23,7 +23,7 @@ obojętne. Prosimy o uzupełnienie tego pola.
 4. Wyślij formularz i gotowe!
 
 Jako osoba zaproszona posiadasz specjalny priorytet i możesz wybrać
-pokój przed resztą uczestników. Do 14tego września mamy najwięcej
+pokój przed resztą uczestników. Do 31 stycznia mamy najwięcej
 możliwości, by pomóc Ci w wyborze pokoju. Po podanej dacie dalej
 jesteśmy do Twojej dyspozji i zawsze służymy pomocą. Natomiast im
 bliżej do daty rozpoczęcia Konferencji, tym nasz zasób pokoi będzie
