@@ -74,6 +74,15 @@ export const ProfilePaymentSection = ({
               conference immediately so as not to lose your discount.
             </Alert>
           )}
+          <Alert type="info">
+            In accordance with Article 106i(2) and (6) of the Goods and Services
+            Tax Act ("Ustawy o podatku od towarów i usług"), an invoice for a
+            service is issued at the customer's request if they submit a request
+            for it no later than the 15th day of the month following the month
+            in which they made the payment (it is not possible to issue a document after
+            this date&nbsp;— <span className="font-bold">it may not be feasible to receive an invoice after the end of the camp</span>).
+            The service provider's contact details are: kontakt.fwsi@gmail.com
+          </Alert>
         </>
       )}
     </>
