@@ -81,7 +81,7 @@ STORAGES = {
         },
     },
     "staticfiles": {
-        "BACKEND": "server.utils.storages.GCSManifestStaticFilesStorage",
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
         "OPTIONS": {
             "bucket_name": bucket_name,
         },
