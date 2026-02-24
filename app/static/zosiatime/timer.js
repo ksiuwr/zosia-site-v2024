@@ -3,7 +3,6 @@ const SCHEDULE_REFRESH_INTERVAL_MS = 60000;
 const MAX_EVENT_DISTANCE_SECONDS = 6 * 60 * 60;
 
 let scheduleData = { events: [] };
-let scheduleChecksum = "";
 
 function setBarColor(color) {
     const bar = document.getElementById("bar");
@@ -164,18 +163,9 @@ async function refreshScheduleData() {
 
         const payload = await response.json();
         const events = normalizeScheduleData(payload);
-        const checksum = JSON.stringify(events.map((event) => [
-            event.start,
-            event.end,
-            event.title,
-            event.author,
-        ]));
 
-        if (checksum !== scheduleChecksum) {
-            scheduleData = { events };
-            scheduleChecksum = checksum;
-            refreshClock();
-        }
+        scheduleData = { events };
+        refreshClock();
     } catch (error) {
         console.error("Failed to refresh schedule data", error);
     }
