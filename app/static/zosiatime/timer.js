@@ -75,6 +75,20 @@ function findEvents(nowSeconds) {
     return [eventPrevious, eventNow, eventNext];
 }
 
+function getEventCountdownColor(secondsToEnd) {
+    if (secondsToEnd < 60) {
+        return "red";
+    }
+    if (secondsToEnd < 5 * 60) {
+        return "orange";
+    }
+    if (secondsToEnd < 10 * 60) {
+        return "yellow";
+    }
+
+    return "white";
+}
+
 function refreshClock() {
     const nowMs = Date.now();
     const nowSeconds = nowMs / 1000;
@@ -93,14 +107,7 @@ function refreshClock() {
         const progress = Math.max(0, Math.min(1, elapsedMs / eventDurationMs));
         document.getElementById("bar").value = progress;
 
-        let color = "white";
-        if (secondsToEnd < 60) {
-            color = "red";
-        } else if (secondsToEnd < 5 * 60) {
-            color = "orange";
-        } else if (secondsToEnd < 10 * 60) {
-            color = "yellow";
-        }
+        const color = getEventCountdownColor(secondsToEnd);
 
         document.getElementById("timer-event").style.color = color;
         setBarColor(color);
