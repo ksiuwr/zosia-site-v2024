@@ -32,7 +32,7 @@ function normalizeScheduleData(payload) {
 
     return payload.events
         .map(sanitizeEvent)
-        .filter(Boolean)
+        .filter((event) => event)
         .sort((left, right) => left.start - right.start);
 }
 
