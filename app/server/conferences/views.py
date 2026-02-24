@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
@@ -137,6 +137,11 @@ def privacy_policy(request):
 @require_http_methods(['GET'])
 def sign_up_rules_for_invited(request):
     return SignupRules().render(request)
+
+
+@require_http_methods(['GET'])
+def zosiatime(request):
+    return render(request, "zosiatime/time.html")
 
 
 @staff_member_required
