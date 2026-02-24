@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Transport, Zosia
 from server.utils.test_helpers import create_transport, create_user, create_user_preferences, create_zosia
@@ -104,3 +105,15 @@ class TransportTestCase(TestCase):
         user_prefs = create_user_preferences(self.normal, self.zosia, transport=self.transport3)
         transport = Transport.objects.find_available(self.zosia, passenger=user_prefs)
         self.assertEqual(transport.count(), 2)
+
+
+class ZosiaTimeViewTestCase(TestCase):
+    def test_zosiatime_without_trailing_slash_is_available(self):
+        response = self.client.get('/zosiatime')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-timer-data-url')
+        self.assertContains(response, reverse('lectures_schedule_timer'))
+
+    def test_zosiatime_with_trailing_slash_is_available(self):
+        response = self.client.get('/zosiatime/')
+        self.assertEqual(response.status_code, 200)

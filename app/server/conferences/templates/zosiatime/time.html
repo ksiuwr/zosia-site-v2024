@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ZOSIA - Time</title>
+    <link rel="stylesheet" href="{% static 'zosiatime/time.css' %}">
+</head>
+<body data-timer-data-url="{% url 'lectures_schedule_timer' %}">
+    <div class="top">
+        <div class="timer">
+            <div id="timer-event" style="display: none;">00:00</div>
+            <div id="timer-break">
+                <div id="timer-break-up">-00:00</div>
+                <div id="timer-break-down">break<br><div id="timer-break-down-text">00:00</div></div>
+            </div>
+        </div>
+        <div class="progress">
+            <progress id="bar" value="0" max="1"></progress>
+        </div>
+        <div id="footer">ZOSIA</div>
+    </div>
+    <script type="text/javascript" src="{% static 'zosiatime/timer.js' %}"></script>
+</body>
+</html>

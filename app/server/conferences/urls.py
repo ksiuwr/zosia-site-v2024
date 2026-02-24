@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('zosiatime', views.zosiatime, name='zosiatime'),
+    path('zosiatime/', views.zosiatime),
     path('terms/', views.terms_and_conditions, name='terms_and_conditions'),
     path('privacy/', views.privacy_policy, name='privacy_policy'),
     path('panel/', views.admin_panel, name='admin'),
