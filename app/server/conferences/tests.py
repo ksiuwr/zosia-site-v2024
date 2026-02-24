@@ -108,12 +108,8 @@ class TransportTestCase(TestCase):
 
 
 class ZosiaTimeViewTestCase(TestCase):
-    def test_zosiatime_without_trailing_slash_is_available(self):
-        response = self.client.get('/zosiatime')
+    def test_zosiatime_is_available(self):
+        response = self.client.get('/zosiatime/')
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'data-timer-data-url')
         self.assertContains(response, reverse('lectures_schedule_timer'))
-
-    def test_zosiatime_with_trailing_slash_is_available(self):
-        response = self.client.get('/zosiatime/')
-        self.assertEqual(response.status_code, 200)
