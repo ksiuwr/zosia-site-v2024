@@ -34,7 +34,7 @@ export const Template = (props: templates.Schedule) => {
                       : undefined
                   }
                   abstract={event.abstract}
-                  highlight={event.highlight === "gold"}
+                  highlight={event.highlight === "gold" || event.highlight === "silver"}
                 />
               ))}
             </div>
