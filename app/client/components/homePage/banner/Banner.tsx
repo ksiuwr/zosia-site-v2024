@@ -22,7 +22,7 @@ export const Banner = ({
         backgroundImage: `url(${context.STATIC_URL}imgs/blur-bg-4496x1986.jpg)`,
       }}
     >
-      <div className="hero-overlay bg-opacity-60"></div>
+      <div className=""></div>
       <div className="hero-content p-0 text-center text-neutral-content">
         <CenteredContainer>
           <h1 className="mb-10 text-4xl font-bold lg:text-6xl">

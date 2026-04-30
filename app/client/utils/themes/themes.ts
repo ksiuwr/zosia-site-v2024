@@ -16,17 +16,17 @@ export const LEOSIA_LIGHT: CustomTheme = {
     "secondary-focus": "#8462f3",
     "secondary-content": "#ffffff",
 
-    accent: "#ddbe88",
+    accent: "#d6d2ff",
     "accent-focus": "#d0a862",
     "accent-content": "#ffffff",
 
-    neutral: "#9b5050",
+    neutral: "#ae1b64",
     "neutral-focus": "#6a3e3e",
     "neutral-content": "#f0d6e8",
 
-    "base-100": "#fffac2",
-    "base-200": "#fee09f",
-    "base-300": "#f0ce93",
+    "base-100": "#e0b6ca",
+    "base-200": "#d291b0",
+    "base-300": "#ff94c9",
     "base-content": "#342914",
   },
 };
