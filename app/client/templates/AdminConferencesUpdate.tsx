@@ -1,11 +1,13 @@
 import { AdminCenteredFormContainer } from "@client/components/admin/layout/AdminCenteredFormContainer";
 import { AdminLayout } from "@client/components/admin/layout/AdminLayout";
+import { showCustomToast } from "@client/components/CustomToast";
 import { BasicDescription } from "@client/components/forms/BasicDescription";
 import { BasicFormField } from "@client/components/forms/BasicFormField";
 import { BasicFormWithCustomFields } from "@client/components/forms/BasicFormWithCustomFields";
 import { BasicWidget } from "@client/components/forms/BasicWidget";
 import { PageTitle } from "@client/components/PageTitle";
 import { getConferenceStayPriceCombinations } from "@client/utils/payment";
+import { Field, Label } from "@headlessui/react";
 import { FieldHandler, templates, useForm } from "@reactivated";
 import React from "react";
 
@@ -44,7 +46,10 @@ export const Template = (props: templates.AdminConferencesUpdate) => {
     }
 
     event.preventDefault();
-    window.alert("Possible stay prices contain a negative total price.");
+    showCustomToast(
+      "error",
+      "Possible stay prices contain a negative total price.",
+    );
   };
 
   const discountFields = new Set([
@@ -54,14 +59,18 @@ export const Template = (props: templates.AdminConferencesUpdate) => {
   ]);
 
   const renderDiscountField = (field: FieldHandler, label: string) => (
-    <div className="mb-4 flex flex-col" key={field.name}>
-      <label className="label inline-block text-wrap text-base font-semibold">
+    <Field
+      className="mb-4 flex flex-col"
+      disabled={field.disabled}
+      key={field.name}
+    >
+      <Label className="label inline-block text-wrap text-base font-semibold">
         {label} discount <span className="font-bold text-error">PER DAY</span>
         {field.widget.required && <span className="mx-1 text-error">*</span>}
-      </label>
+      </Label>
       <BasicWidget field={field} />
       <BasicDescription field={field} />
-    </div>
+    </Field>
   );
 
   return (

@@ -87,7 +87,8 @@ export const CostSummary = ({
               {isStudent && (
                 <li>
                   Discount <span className="font-bold text-error">PER DAY</span>
-                  : <b>{discountPerDay} PLN</b> <br />
+                  {": "}
+                  <b>{discountPerDay} PLN</b> <br />
                   <span className="text-sm italic">
                     This is your possible discount. The actual discount will be
                     calculated after you save your registration.
