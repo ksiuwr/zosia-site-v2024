@@ -8,7 +8,7 @@ export const DARK_THEME = "LEOSIA_DARK";
 
 export const LEOSIA_LIGHT: CustomTheme = {
   [LIGHT_THEME]: {
-    primary: "#e86d7c",
+    primary: "#f071a6",
     "primary-focus": "#e13d50",
     "primary-content": "#ffffff",
 
@@ -20,20 +20,20 @@ export const LEOSIA_LIGHT: CustomTheme = {
     "accent-focus": "#d0a862",
     "accent-content": "#ffffff",
 
-    neutral: "#ae1b64",
+    neutral: "#db3588",
     "neutral-focus": "#6a3e3e",
     "neutral-content": "#f0d6e8",
 
-    "base-100": "#e0b6ca",
-    "base-200": "#d291b0",
-    "base-300": "#ff94c9",
+    "base-100": "#ffcfe6",
+    "base-200": "#fcafd4",
+    "base-300": "#ff9acc",
     "base-content": "#342914",
   },
 };
 
 export const LEOSIA_DARK: CustomTheme = {
   [DARK_THEME]: {
-    primary: "#f556a6",
+    primary: "#e24f99",
     "primary-focus": "#d72d82",
     "primary-content": "#1b1c22",
 
@@ -45,13 +45,13 @@ export const LEOSIA_DARK: CustomTheme = {
     "accent-focus": "#ffc380",
     "accent-content": "#1b1c22",
 
-    neutral: "#231a32",
-    "neutral-focus": "#281c35",
+    neutral: "#3f0d32",
+    "neutral-focus": "#351c2e",
     "neutral-content": "#d5ccff",
 
-    "base-100": "#2a1c40",
-    "base-200": "#26183a",
-    "base-300": "#1b122b",
+    "base-100": "#602450",
+    "base-200": "#501740",
+    "base-300": "#3f0d32",
     "base-content": "#d5ccff",
   },
 };
