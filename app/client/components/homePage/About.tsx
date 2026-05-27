@@ -8,15 +8,14 @@ export const About = () => {
         <div className="card-body text-base-content lg:text-lg">
           <p>
             <b>LEOSIA</b>{" "}
-            {`("LEtni Obóz Studentów informatyki", roughly
-          translated as "The Best Computer Science Students' Summer Camp") is
-          the annual gathering for people associated with the Institute of
-          Computer Science at the University of Wroclaw. It started 20 years ago
-          with a tight-knit group of friends and has grown to group of about 200
-          people from all over the world. During the three-day conference
-          attendees are welcome not only to enjoy talks (not only about computer
-          science), but also various outdoor activities, trips, and of course
-          integration with past and current students and lecturers.`}
+            {`("LEtni Obóz Studentów informatyki" - summer version of "Zimowy Obóz 
+			Studentów Informatyki") is a 4-day conference created by and for people 
+			associated with the Institute of Computer Science at the University of Wroclaw. 
+			The event will host around 100 participants - students, PhD students, 
+			lecturers and business professionals. During the conference there wil be
+			lectures and workshops on various topics related (mostly but not only)
+			to computer science, outdoor activities and social events. The camp
+			allows for integration between students, lecturers and professionals.`}
           </p>
         </div>
       </div>
