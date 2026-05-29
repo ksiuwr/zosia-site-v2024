@@ -7,6 +7,7 @@ import { BasicFormWithCustomFields } from "@client/components/forms/BasicFormWit
 import { AccomodationFieldGroup } from "@client/components/register/AccomodationFieldGroup";
 import { OrganizationSelector } from "@client/components/register/OrganizationSelector";
 import { CostSummary } from "@client/components/register/PriceSummary";
+import { calculateAccomodationDayCost } from "@client/utils/payment";
 import { reverse, templates, useForm } from "@reactivated";
 import React from "react";
 
@@ -35,41 +36,21 @@ export const Template = (props: templates.Register) => {
     },
   ];
 
-  const calculateAccomodationDayCost = (
-    breakfast: boolean,
-    dinner: boolean,
-    accomodation: boolean,
-  ) => {
-    if (!accomodation && !dinner && !breakfast) {
-      return 0;
-    }
-
-    if (dinner && breakfast) {
-      return props.zosia.price_whole_day;
-    }
-
-    if (dinner && !breakfast) {
-      return props.zosia.price_accommodation_dinner;
-    }
-
-    if (!dinner && breakfast) {
-      return props.zosia.price_accommodation_breakfast;
-    }
-
-    return props.zosia.price_accommodation;
-  };
-
   const calculateDiscountForGroup = (accomodation: boolean) => {
     return accomodation ? props.discount : 0;
   };
 
   const accomodationCostPerGroup = accomodationCheckboxesGroups.map(
     ({ dinner, accomodation, breakfast }) =>
-      calculateAccomodationDayCost(
-        breakfast.value,
-        dinner.value,
-        accomodation.value,
-      ),
+      calculateAccomodationDayCost({
+        breakfast: breakfast.value,
+        dinner: dinner.value,
+        accomodation: accomodation.value,
+        priceAccommodation: props.zosia.price_accommodation,
+        priceAccommodationBreakfast: props.zosia.price_accommodation_breakfast,
+        priceAccommodationDinner: props.zosia.price_accommodation_dinner,
+        priceWholeDay: props.zosia.price_whole_day,
+      }),
   );
 
   const discountPerGroup = accomodationCheckboxesGroups.map(
