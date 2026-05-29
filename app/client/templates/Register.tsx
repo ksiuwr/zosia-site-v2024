@@ -124,10 +124,7 @@ export const Template = (props: templates.Register) => {
 
           <OrganizationSelector field={form.fields.organization} />
           <BasicFormField field={form.fields.transport} />
-            <BasicFormField
-            field={form.fields.transport_baggage}
-            disabled={false}
-          />
+          <BasicFormField field={form.fields.transport_baggage} />
 
           <div className="divider" />
 
@@ -146,8 +143,8 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.information} />
           <BasicFormField field={form.fields.vegetarian} />
           <BasicFormField field={form.fields.shirt_size} />
-          {/*<BasicFormField field={form.fields.shirt_type} /> */}
-          <input type="hidden" name={form.fields.shirt_size.name} value="S" />
+          {/* <BasicFormField field={form.fields.shirt_type} />
+          <input type="hidden" name={form.fields.shirt_size.name} value="S" /> */}
           <input type="hidden" name={form.fields.shirt_type.name} value="m" />
           <BasicFormField field={form.fields.terms_accepted} />
 
