@@ -16,7 +16,7 @@ SHIRT_SIZE_CHOICES = [
 ]
 
 SHIRT_TYPES_CHOICES = [
-    ("m", _("classic")),
+    ("m", ("Size")),
     ("f", _("female")),
 ]
 
