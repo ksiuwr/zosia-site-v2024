@@ -364,6 +364,7 @@ class RegisterViewTestCase(TestCase):
         super().setUp()
         self.normal = create_user(0)
         self.privileged = create_user(1, person_type=UserInternals.PERSON_PRIVILEGED)
+        self.organizer = create_user(2, person_type=UserInternals.PERSON_ORGANIZER)
         self.zosia = create_zosia(active=True)
         self.url = reverse('user_zosia_register')
 
@@ -379,6 +380,14 @@ class RegisterViewTestCase(TestCase):
 
     def test_get_privileged_user_not_registered(self):
         login_as_user(self.privileged, self.client)
+        self.zosia.early_registration_start = timedelta_since_now(hours=-1)
+        self.zosia.registration_start = timedelta_since_now(hours=1)
+        self.zosia.save()
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_organizer_user_can_register_during_early_registration(self):
+        login_as_user(self.organizer, self.client)
         self.zosia.early_registration_start = timedelta_since_now(hours=-1)
         self.zosia.registration_start = timedelta_since_now(hours=1)
         self.zosia.save()
@@ -411,6 +420,15 @@ class RegisterViewTestCase(TestCase):
 
     def test_get_privileged_user_before_early_registration(self):
         login_as_user(self.privileged, self.client)
+        self.zosia.early_registration_start = timedelta_since_now(hours=1)
+        self.zosia.registration_start = timedelta_since_now(hours=2)
+        self.zosia.save()
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_get_organizer_user_cannot_register_before_early_registration(self):
+        login_as_user(self.organizer, self.client)
         self.zosia.early_registration_start = timedelta_since_now(hours=1)
         self.zosia.registration_start = timedelta_since_now(hours=2)
         self.zosia.save()
