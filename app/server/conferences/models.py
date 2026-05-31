@@ -185,7 +185,10 @@ class Zosia(models.Model):
     def user_registration_start(self, user):
         if user.is_authenticated \
                 and self.early_registration_start is not None \
-                and user.person_type == UserInternals.PERSON_PRIVILEGED:
+                and user.person_type in [
+                    UserInternals.PERSON_PRIVILEGED,
+                    UserInternals.PERSON_ORGANIZER,
+                ]:
             return self.early_registration_start
 
         return self.registration_start
