@@ -77,6 +77,12 @@ class Zosia(models.Model):
     registration_suspended = models.BooleanField(
         verbose_name=_('Is registration suspended'), default=False
     )
+    registration_limit = models.IntegerField(
+        verbose_name=_('Maximum number of registered users'),
+        help_text=_('Set to 0 for no limit'),
+        default=0,
+        validators=[MinValueValidator(0)],
+    )
 
     dates_are_tba = models.BooleanField(
         verbose_name=_('Dates are To Be Announced'), default=False
@@ -197,10 +203,17 @@ class Zosia(models.Model):
         if self.user_registration_start(user) > now():
             return False
 
+        if self.is_registration_full:
+            return False
+
         if self.registration_suspended:
             return user.is_authenticated and user.person_type == UserInternals.PERSON_PRIVILEGED
 
         return True
+
+    @property
+    def is_registration_full(self):
+        return self.registration_limit > 0 and self.registrations.count() >= self.registration_limit
 
     @property
     def is_registration_over(self):

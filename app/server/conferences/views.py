@@ -113,6 +113,7 @@ def index(request):
         place=zosia.place if zosia is not None else None,
         gapi_key=settings.GAPI_KEY,
         registration_open=zosia.is_user_registration_open(user) if zosia is not None else False,
+        registration_full=zosia.is_registration_full if zosia is not None else False,
         zosia_end_date=zosia.end_date if zosia is not None else ""
     ).render(request)
 

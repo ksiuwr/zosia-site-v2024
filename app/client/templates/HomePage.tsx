@@ -27,7 +27,8 @@ export const Template = (props: templates.HomePage) => {
             isRegistrationOpen: props.registration_open,
             registrationStart: new Date(props.zosia.registration_start),
             registrationEnd: new Date(props.zosia.registration_end),
-            registrationSuspended: props.zosia.registration_suspended,
+            registrationSuspended:
+              props.zosia.registration_suspended || props.registration_full,
           }}
         />
       ) : (

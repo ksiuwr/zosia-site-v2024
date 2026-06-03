@@ -65,7 +65,9 @@ export const Template = (props: templates.Profile) => {
                   registrationInfo={{
                     registrationOpen: props.registration_open,
                     registrationOver: props.registration_over,
-                    registrationSuspended: props.zosia.registration_suspended,
+                    registrationSuspended:
+                      props.zosia.registration_suspended ||
+                      props.registration_full,
                     registrationStart: new Date(props.registration_start),
                   }}
                   accomodation={{

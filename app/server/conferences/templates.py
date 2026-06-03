@@ -17,6 +17,7 @@ class HomePage(NamedTuple):
     place: Pick[Place, Literal['name', 'address', 'url']]
     gapi_key: str
     registration_open: bool
+    registration_full: bool
     zosia_end_date: str
 
 

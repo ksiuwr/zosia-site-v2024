@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .models import Transport, Zosia
+from server.utils.constants import UserInternals
 from server.utils.test_helpers import create_transport, create_user, create_user_preferences, create_zosia
 from server.utils.time_manager import now, time_point
 
@@ -29,6 +30,48 @@ class ZosiaTestCase(TestCase):
     def test_end_date(self):
         """Zosia has 4 days"""
         self.assertEqual(self.active.end_date, self.active.start_date + timedelta(days=3))
+
+    def test_registration_is_not_full_when_limit_is_zero(self):
+        create_user_preferences(self.normal, self.active)
+
+        self.assertFalse(self.active.is_registration_full)
+
+    def test_registration_is_not_full_below_limit(self):
+        self.active.registration_limit = 2
+        self.active.save()
+        create_user_preferences(self.normal, self.active)
+
+        self.assertFalse(self.active.is_registration_full)
+        self.assertTrue(self.active.is_user_registration_open(self.normal))
+
+    def test_registration_is_suspended_when_limit_is_reached(self):
+        self.active.registration_limit = 1
+        self.active.save()
+        create_user_preferences(self.normal, self.active)
+
+        self.assertTrue(self.active.is_registration_full)
+        self.assertFalse(self.active.is_user_registration_open(self.normal))
+
+    def test_privileged_user_cannot_register_when_registration_limit_is_reached(self):
+        privileged = create_user(1, person_type=UserInternals.PERSON_PRIVILEGED)
+        self.active.registration_limit = 1
+        self.active.save()
+        create_user_preferences(self.normal, self.active)
+
+        self.assertFalse(self.active.is_user_registration_open(privileged))
+
+    def test_privileged_user_can_register_when_registration_is_manually_suspended(self):
+        privileged = create_user(1, person_type=UserInternals.PERSON_PRIVILEGED)
+        self.active.registration_suspended = True
+        self.active.save()
+
+        self.assertTrue(self.active.is_user_registration_open(privileged))
+
+    def test_registration_limit_cannot_be_negative(self):
+        self.active.registration_limit = -1
+
+        with self.assertRaises(ValidationError):
+            self.active.full_clean()
 
     def test_can_user_choose_room_when_at_user_start_time(self):
         self.active.rooming_start = now()
@@ -56,6 +99,18 @@ class ZosiaTestCase(TestCase):
 
         result = self.active.can_user_choose_room(user_prefs, time=time_point(2016, 12, 22, 23, 58))
         self.assertTrue(result)
+
+
+class HomePageTestCase(TestCase):
+    def test_full_registration_is_rendered_as_suspended(self):
+        zosia = create_zosia(active=True, registration_limit=1)
+        user = create_user(0)
+        create_user_preferences(user, zosia)
+
+        response = self.client.get(reverse('index'))
+
+        self.assertFalse(response.context_data.registration_open)
+        self.assertTrue(response.context_data.registration_full)
 
 
 class TransportTestCase(TestCase):

@@ -359,6 +359,31 @@ class UserPreferencesEditTestCase(UserPreferencesTestCase):
         self.assertEqual(prefs.shirt_type, 'm')
 
 
+class ProfileViewTestCase(TestCase):
+    def test_full_registration_is_rendered_as_suspended_for_unregistered_user(self):
+        normal = create_user(0)
+        registered = create_user(1)
+        zosia = create_zosia(active=True, registration_limit=1)
+        create_user_preferences(registered, zosia)
+        login_as_user(normal, self.client)
+
+        response = self.client.get(reverse('accounts_profile'))
+
+        self.assertFalse(response.context_data.registration_open)
+        self.assertTrue(response.context_data.registration_full)
+
+    def test_registered_user_can_edit_preferences_when_registration_is_full(self):
+        normal = create_user(0)
+        zosia = create_zosia(active=True, registration_limit=1)
+        create_user_preferences(normal, zosia)
+        login_as_user(normal, self.client)
+
+        response = self.client.get(reverse('accounts_profile'))
+
+        self.assertTrue(response.context_data.registration_full)
+        self.assertTrue(response.context_data.enable_editing_preferences)
+
+
 class RegisterViewTestCase(TestCase):
     def setUp(self):
         super().setUp()
@@ -400,6 +425,26 @@ class RegisterViewTestCase(TestCase):
         self.zosia.save()
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
+
+    def test_get_regular_user_not_registered_when_registration_limit_is_reached(self):
+        self.zosia.registration_limit = 1
+        self.zosia.save()
+        create_user_preferences(self.privileged, self.zosia)
+        login_as_user(self.normal, self.client)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertRedirects(response, reverse('index'))
+
+    def test_get_privileged_user_not_registered_when_registration_limit_is_reached(self):
+        self.zosia.registration_limit = 1
+        self.zosia.save()
+        create_user_preferences(self.normal, self.zosia)
+        login_as_user(self.privileged, self.client)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertRedirects(response, reverse('index'))
 
     def test_get_regular_user_before_registration(self):
         login_as_user(self.normal, self.client)
@@ -469,6 +514,17 @@ class RegisterViewTestCase(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
 
+    def test_get_regular_user_already_registered_when_registration_limit_is_reached(self):
+        self.zosia.registration_limit = 1
+        self.zosia.save()
+        create_user_preferences(self.normal, self.zosia)
+        login_as_user(self.normal, self.client)
+
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.redirect_chain)
+
     def test_post_user_not_registered_empty_data(self):
         self.assertEqual(UserPreferences.objects.filter(user=self.normal).count(), 0)
         login_as_user(self.normal, self.client)
@@ -491,6 +547,26 @@ class RegisterViewTestCase(TestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(UserPreferences.objects.filter(user=self.normal).count(), 1)
+
+    def test_post_user_not_registered_when_registration_limit_is_reached(self):
+        self.zosia.registration_limit = 1
+        self.zosia.save()
+        create_user_preferences(self.privileged, self.zosia)
+        login_as_user(self.normal, self.client)
+
+        response = self.client.post(
+            self.url,
+            data={
+                'contact': 'fb: me',
+                'shirt_size': 'S',
+                'shirt_type': 'm',
+                'terms_accepted': True,
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse('index'))
+        self.assertFalse(UserPreferences.objects.filter(user=self.normal, zosia=self.zosia).exists())
 
     def test_post_user_already_registered(self):
         create_user_preferences(self.normal, self.zosia)
