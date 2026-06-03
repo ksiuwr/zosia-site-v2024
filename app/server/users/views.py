@@ -12,6 +12,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -386,10 +387,14 @@ def register(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.call(zosia, not is_user_already_registered)
-            messages.success(request, _("Preferences saved!"))
+            try:
+                form.call(zosia, not is_user_already_registered)
+            except ValidationError as ex:
+                messages.error(request, "; ".join(ex.messages))
+            else:
+                messages.success(request, _("Preferences saved!"))
 
-            return redirect(reverse('accounts_profile'))
+                return redirect(reverse('accounts_profile'))
         else:
             messages.error(request, errors_format(form))
 

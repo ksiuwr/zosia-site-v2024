@@ -5,6 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django.db import transaction
 
 from server.conferences.models import Transport, Zosia
 from .actions import SendActivationEmail, SendEmailToAll
@@ -196,12 +197,31 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
         self.fields['organization'].queryset = Organization.objects.order_by("-accepted", "name")
 
     def call(self, zosia, first_call):
-        user_preferences = self.save(commit=False)
-        user_preferences.user = self.user
-        user_preferences.zosia = zosia
-        if first_call and user_preferences.is_student:
-            user_preferences.discount_round = UserPreferences.get_current_discount_round(zosia)
-        user_preferences.save()
+        with transaction.atomic():
+            User.objects.select_for_update().get(pk=self.user.pk)
+            zosia = Zosia.objects.select_for_update().get(pk=zosia.pk)
+
+            if first_call and UserPreferences.objects.filter(zosia=zosia, user=self.user).exists():
+                raise forms.ValidationError(_("You are already registered for ZOSIA."))
+
+            user_preferences = self.save(commit=False)
+            user_preferences.user = self.user
+            user_preferences.zosia = zosia
+
+            if user_preferences.transport is not None:
+                transport = Transport.objects.select_for_update().get(pk=user_preferences.transport.pk)
+                passengers_count = transport.passengers.exclude(pk=user_preferences.pk).count()
+                if passengers_count >= transport.capacity:
+                    self.add_error('transport', forms.ValidationError(
+                        _("Selected transport has no free seats left."),
+                        code='invalid',
+                    ))
+                    raise forms.ValidationError(_("Selected transport has no free seats left."))
+                user_preferences.transport = transport
+
+            if first_call and user_preferences.is_student:
+                user_preferences.discount_round = UserPreferences.get_current_discount_round(zosia)
+            user_preferences.save()
 
         return user_preferences
 
