@@ -118,6 +118,7 @@ class Profile(NamedTuple):
 
     registration_open: bool
     registration_over: bool
+    registration_full: bool
     registration_start: datetime
     enable_editing_preferences: bool
 

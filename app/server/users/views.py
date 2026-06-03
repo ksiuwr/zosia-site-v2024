@@ -12,6 +12,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
+from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -82,16 +83,19 @@ def profile(request):
     registration_open = False
     registration_over = False
     registration_start = None
+    registration_full = False
     enable_editing_preferences = False
 
     if current_zosia:
         registration_open = current_zosia.is_user_registration_open(user)
         registration_over = current_zosia.is_registration_over
         registration_start = current_zosia.user_registration_start(user)
+        registration_full = current_zosia.is_registration_full
         enable_editing_preferences = \
             registration_open and not current_zosia.is_registration_over or \
             current_prefs and (current_zosia.is_registration_over or
-                               current_zosia.registration_suspended)
+                               current_zosia.registration_suspended or
+                               registration_full)
 
     price = None
     transfer_title = None
@@ -125,6 +129,7 @@ def profile(request):
 
         registration_open=registration_open,
         registration_over=registration_over,
+        registration_full=registration_full,
         registration_start=registration_start,
         enable_editing_preferences=enable_editing_preferences,
 
@@ -386,7 +391,13 @@ def register(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.call(zosia, not is_user_already_registered)
+            with transaction.atomic():
+                locked_zosia = Zosia.objects.select_for_update().get(pk=zosia.pk)
+                if not is_user_already_registered and not locked_zosia.is_user_registration_open(user):
+                    messages.error(request, _('Registration for ZOSIA is not open yet'))
+                    return redirect(reverse('index'))
+
+                form.call(locked_zosia, not is_user_already_registered)
             messages.success(request, _("Preferences saved!"))
 
             return redirect(reverse('accounts_profile'))
