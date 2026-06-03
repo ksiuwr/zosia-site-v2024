@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import escape
 from django.http import JsonResponse, HttpResponseBadRequest
+from django.db import IntegrityError, transaction
 from django.db.models import Count
 from urllib.request import urlopen
 
@@ -17,7 +18,7 @@ from .templates import AdminBoardgamesAccept, BoardgamesAdd, BoardgamesHome, Boa
 from .models import Boardgame, Vote
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
-from server.users.models import UserPreferences
+from server.users.models import User, UserPreferences
 
 
 MAX_NUMBER_OF_GAMES = 3
@@ -93,11 +94,10 @@ def get_id(url):
 @login_required
 @require_http_methods(['GET', 'POST'])
 def create(request):
-    user_boardgames = Boardgame.objects.filter(user=request.user)
     form = BoardgameForm(request.POST or None)
 
     if request.method == 'POST':
-        if user_boardgames.count() >= MAX_NUMBER_OF_GAMES:
+        if Boardgame.objects.filter(user=request.user).count() >= MAX_NUMBER_OF_GAMES:
             messages.error(request, _(f"Number of boardgames per account exceeded (max: {MAX_NUMBER_OF_GAMES})."))
         elif form.is_valid():
             new_url = form.cleaned_data['url']
@@ -105,17 +105,25 @@ def create(request):
                 messages.error(request, _("This is not a valid boardgame url"))
             else:
                 game_id = get_id(new_url)
-                # TODO: We should save only game id in the model instead of full URL
-                url_part = 'boardgame/' + game_id
-                if Boardgame.objects.filter(url__contains=url_part).exists():
-                    messages.error(
-                        request, _("This boardgame has been already added"))
-                else:
-                    name = get_game_name(new_url)
-                    boardgame = Boardgame(
-                        name=name, user=request.user, url=new_url)
-                    boardgame.save()
-                    return redirect('my_boardgames')
+                name = get_game_name(new_url)
+                try:
+                    with transaction.atomic():
+                        user = User.objects.select_for_update().get(pk=request.user.pk)
+
+                        if Boardgame.objects.filter(user=user).count() >= MAX_NUMBER_OF_GAMES:
+                            messages.error(
+                                request,
+                                _(f"Number of boardgames per account exceeded (max: {MAX_NUMBER_OF_GAMES}).")
+                            )
+                        elif Boardgame.objects.filter(bgg_id=game_id).exists():
+                            messages.error(request, _("This boardgame has been already added"))
+                        else:
+                            boardgame = Boardgame(
+                                name=name, bgg_id=game_id, user=user, url=new_url)
+                            boardgame.save()
+                            return redirect('my_boardgames')
+                except IntegrityError:
+                    messages.error(request, _("This boardgame has been already added"))
         else:
             messages.error(request, _("Can't add boardgame - form is not valid."))
 
@@ -160,8 +168,10 @@ def vote_edit(request):
     for boardgame in boardgames:
         newVotes.append(Vote(user=request.user, boardgame=boardgame))
 
-    Vote.objects.filter(user=request.user).delete()
-    Vote.objects.bulk_create(newVotes)
+    with transaction.atomic():
+        User.objects.select_for_update().get(pk=request.user.pk)
+        Vote.objects.filter(user=request.user).delete()
+        Vote.objects.bulk_create(newVotes)
 
     if (len(new_ids) == 0):
         messages.success(request, "Votes were successfully reset.")
