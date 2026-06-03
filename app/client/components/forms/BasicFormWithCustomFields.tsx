@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
-import { CSRFToken, FormHandler } from "@reactivated";
+import { CSRFToken, FormHandler, Widget } from "@reactivated";
 import { FieldMap } from "reactivated/dist/forms";
 import { Alert } from "../alert/Alert";
 
@@ -19,6 +19,9 @@ export const BasicFormWithCustomFields = <T extends FieldMap>({
   return (
     <form method="POST" onSubmit={onFormSubmit} encType="multipart/form-data">
       <CSRFToken />
+      {form.hiddenFields.map((field) => (
+        <Widget key={field.name} field={field} />
+      ))}
       {form.nonFieldErrors?.map((error) => (
         <Alert key={error} type="error">
           {error}

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.contrib.auth.tokens import default_token_generator
+from django.core import signing
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -147,6 +148,7 @@ class UserPreferencesWithTransportForm(forms.ModelForm):
 
 class UserPreferencesForm(UserPreferencesWithTransportForm):
     terms_accepted = forms.BooleanField(required=True)
+    discount_offer_round = forms.CharField(required=False, widget=forms.HiddenInput)
 
     use_required_attribute = False
 
@@ -181,8 +183,10 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
         ]
 
     def __init__(self, user, *args, **kwargs):
+        discount_offer_round = kwargs.pop('discount_offer_round', 0)
         super().__init__(*args, **kwargs)
         self.user = user
+        self.set_discount_offer_round(discount_offer_round)
         self.fields['is_student'].label = "I am a student under 25 and I have a valid Student ID card."
 
         self.fields['transport_baggage'].label = "I want to have my baggage transferred."
@@ -195,12 +199,38 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
 
         self.fields['organization'].queryset = Organization.objects.order_by("-accepted", "name")
 
-    def call(self, zosia, first_call):
+    def set_discount_offer_round(self, discount_offer_round, update_bound_data=False):
+        signed_discount_offer_round = signing.dumps(discount_offer_round)
+        self.fields['discount_offer_round'].initial = signed_discount_offer_round
+
+        if self.is_bound and update_bound_data:
+            data = self.data.copy()
+            data['discount_offer_round'] = signed_discount_offer_round
+            self.data = data
+
+    def get_discount_offer_round(self):
+        return signing.loads(self.cleaned_data['discount_offer_round'])
+
+    def clean_discount_offer_round(self):
+        discount_offer_round = self.cleaned_data['discount_offer_round']
+        if not discount_offer_round:
+            return signing.dumps(0)
+
+        try:
+            signing.loads(discount_offer_round)
+        except signing.BadSignature:
+            raise forms.ValidationError(_("Invalid discount offer. Please refresh the page and try again."))
+
+        return discount_offer_round
+
+    def call(self, zosia, first_call, discount_round=None):
         user_preferences = self.save(commit=False)
         user_preferences.user = self.user
         user_preferences.zosia = zosia
         if first_call and user_preferences.is_student:
-            user_preferences.discount_round = UserPreferences.get_current_discount_round(zosia)
+            if discount_round is None:
+                discount_round = UserPreferences.get_current_discount_round(zosia)
+            user_preferences.discount_round = discount_round
         user_preferences.save()
 
         return user_preferences

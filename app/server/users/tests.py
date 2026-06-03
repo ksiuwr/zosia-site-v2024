@@ -1,5 +1,6 @@
 import re
 
+from django.core import signing
 from django.test import TestCase
 from django.urls import reverse
 
@@ -368,6 +369,22 @@ class RegisterViewTestCase(TestCase):
         self.zosia = create_zosia(active=True)
         self.url = reverse('user_zosia_register')
 
+    def valid_student_registration_data(self, discount_offer_round, **override):
+        data = {
+            'is_student': True,
+            'student_number': '12345',
+            'dinner_day_1': True,
+            'accommodation_day_1': True,
+            'breakfast_day_2': True,
+            'contact': 'fb: student',
+            'shirt_size': 'S',
+            'shirt_type': 'm',
+            'terms_accepted': True,
+            'discount_offer_round': signing.dumps(discount_offer_round),
+        }
+        data.update(override)
+        return data
+
     def test_get_no_user(self):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -491,6 +508,96 @@ class RegisterViewTestCase(TestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(UserPreferences.objects.filter(user=self.normal).count(), 1)
+
+    def test_post_user_must_confirm_when_discount_disappears(self):
+        self.zosia.first_discount = 10
+        self.zosia.first_discount_limit = 1
+        self.zosia.save()
+
+        self.assertEqual(UserPreferences.get_current_discount_round(self.zosia), 1)
+
+        self.zosia.first_discount_limit = 0
+        self.zosia.save()
+
+        login_as_user(self.normal, self.client)
+        response = self.client.post(self.url,
+                                    data=self.valid_student_registration_data(
+                                        1,
+                                        contact='fb: stale form'
+                                    ),
+                                    follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserPreferences.objects.filter(user=self.normal).count(), 0)
+        self.assertContains(response, 'fb: stale form')
+        self.assertContains(response, 'Discount availability has changed')
+
+    def test_post_user_can_confirm_registration_without_discount_after_discount_disappears(self):
+        self.zosia.first_discount = 10
+        self.zosia.first_discount_limit = 0
+        self.zosia.save()
+
+        login_as_user(self.normal, self.client)
+        response = self.client.post(self.url,
+                                    data=self.valid_student_registration_data(
+                                        0,
+                                        contact='fb: confirmed form'
+                                    ),
+                                    follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        prefs = UserPreferences.objects.filter(user=self.normal).first()
+        self.assertIsNotNone(prefs)
+        self.assertEqual(prefs.discount_round, 0)
+        self.assertEqual(prefs.contact, 'fb: confirmed form')
+
+    def test_post_user_must_confirm_when_discount_is_downgraded_to_second_round(self):
+        self.zosia.first_discount = 10
+        self.zosia.first_discount_limit = 1
+        self.zosia.second_discount = 5
+        self.zosia.second_discount_limit = 1
+        self.zosia.save()
+
+        self.assertEqual(UserPreferences.get_current_discount_round(self.zosia), 1)
+
+        create_user_preferences(create_user(3), self.zosia, is_student=True, discount_round=1)
+        self.assertEqual(UserPreferences.get_current_discount_round(self.zosia), 2)
+
+        login_as_user(self.normal, self.client)
+        response = self.client.post(self.url,
+                                    data=self.valid_student_registration_data(
+                                        1,
+                                        contact='fb: downgraded form'
+                                    ),
+                                    follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(UserPreferences.objects.filter(user=self.normal).count(), 0)
+        self.assertContains(response, 'fb: downgraded form')
+        self.assertContains(response, 'Discount availability has changed')
+        self.assertContains(response, '5 PLN')
+
+    def test_post_user_can_confirm_registration_with_second_round_discount_after_downgrade(self):
+        self.zosia.first_discount = 10
+        self.zosia.first_discount_limit = 1
+        self.zosia.second_discount = 5
+        self.zosia.second_discount_limit = 1
+        self.zosia.save()
+        create_user_preferences(create_user(3), self.zosia, is_student=True, discount_round=1)
+
+        login_as_user(self.normal, self.client)
+        response = self.client.post(self.url,
+                                    data=self.valid_student_registration_data(
+                                        2,
+                                        contact='fb: confirmed downgraded form'
+                                    ),
+                                    follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        prefs = UserPreferences.objects.filter(user=self.normal).first()
+        self.assertIsNotNone(prefs)
+        self.assertEqual(prefs.discount_round, 2)
+        self.assertEqual(prefs.contact, 'fb: confirmed downgraded form')
 
     def test_post_user_already_registered(self):
         create_user_preferences(self.normal, self.zosia)

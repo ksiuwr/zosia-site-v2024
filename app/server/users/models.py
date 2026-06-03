@@ -278,6 +278,7 @@ class UserPreferences(models.Model):
     @staticmethod
     def get_current_discount_round(zosia: Zosia):
         boxed_discount_turn_students_counts = UserPreferences.objects \
+            .filter(zosia=zosia) \
             .values('discount_round').annotate(count=models.Count('discount_round'))
 
         discount_turn_students_counts = {d['discount_round']: d['count'] for d in boxed_discount_turn_students_counts}

@@ -362,19 +362,20 @@ def register(request):
 
     form_args = {}
     before_discounts = False
-    discount = None
+    discount_round = None
     if user_prefs is not None:
         form_args['instance'] = user_prefs
-        discount = zosia.get_discount_for_round(
-            user_prefs.discount_round
-        )
+        discount_round = user_prefs.discount_round
     else:
-        discount = zosia.get_discount_for_round(
-            UserPreferences.get_current_discount_round(zosia)
-        )
+        discount_round = UserPreferences.get_current_discount_round(zosia)
         before_discounts = zosia.first_discount_limit == 0
 
-    form = UserPreferencesForm(request.user, request.POST or None, **form_args)
+    form = UserPreferencesForm(
+        request.user,
+        request.POST or None,
+        discount_offer_round=discount_round,
+        **form_args
+    )
 
     if user_prefs:
         form.fields['is_student'].disabled = True
@@ -386,10 +387,25 @@ def register(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.call(zosia, not is_user_already_registered)
-            messages.success(request, _("Preferences saved!"))
+            current_discount_round = UserPreferences.get_current_discount_round(zosia)
+            discount_round_changed = (
+                not is_user_already_registered
+                and form.cleaned_data['is_student']
+                and form.get_discount_offer_round() != current_discount_round
+            )
 
-            return redirect(reverse('accounts_profile'))
+            if discount_round_changed:
+                discount_round = current_discount_round
+                form.set_discount_offer_round(current_discount_round, update_bound_data=True)
+                form.add_error(
+                    None,
+                    _("Discount availability has changed. Please review the updated price and submit again.")
+                )
+            else:
+                form.call(zosia, not is_user_already_registered, current_discount_round)
+                messages.success(request, _("Preferences saved!"))
+
+                return redirect(reverse('accounts_profile'))
         else:
             messages.error(request, errors_format(form))
 
@@ -398,7 +414,7 @@ def register(request):
         zosia=zosia,
         is_user_already_registered=is_user_already_registered,
         paid=paid,
-        discount=discount,
+        discount=zosia.get_discount_for_round(discount_round),
         before_discounts=before_discounts
     ).render(request)
 
