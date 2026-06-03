@@ -56,7 +56,7 @@ class RoomViewSet(ModelViewSet):
     def hide(self, request, pk):
         room = self.get_object()
         room.hidden = True
-        room.save()
+        room.save(update_fields=["hidden"])
 
         return Response(self.get_serializer(room).data, status=status.HTTP_200_OK)
 
@@ -64,7 +64,7 @@ class RoomViewSet(ModelViewSet):
     def unhide(self, request, pk):
         room = self.get_object()
         room.hidden = False
-        room.save()
+        room.save(update_fields=["hidden"])
 
         return Response(self.get_serializer(room).data, status=status.HTTP_200_OK)
 

@@ -109,10 +109,20 @@ class Room(models.Model):
     def __str__(self):
         return "Room " + self.name
 
+    def _lock(self):
+        # Callers lock the user first, the room always comes second. Both are NO KEY UPDATE locks,
+        # so they don't conflict with inserting rows that reference them (UserRoom, RoomLock).
+        Room.objects.select_for_update(no_key=True).get(pk=self.pk)
+        # The checks have to see the current state, not what the view loaded before the lock
+        self.refresh_from_db()
+
     @site_atomic
     def join(self, user, sender=None, password=None):
         if sender is None:
             sender = user
+
+        User.objects.select_for_update(no_key=True).get(pk=user.pk)
+        self._lock()
 
         if not sender.is_staff and sender != user:
             raise ValidationError(_("Only staff can add other users to rooms."), code="invalid")
@@ -141,12 +151,14 @@ class Room(models.Model):
                                   params={"room": self})
 
         self.members.add(user)
-        self.save()
 
     @site_atomic
     def leave(self, user, sender=None):
         if not sender:
             sender = user
+
+        User.objects.select_for_update(no_key=True).get(pk=user.pk)
+        self._lock()
 
         if not sender.is_staff and sender != user:
             raise ValidationError(_("Only staff can remove other users from rooms."),
@@ -158,12 +170,14 @@ class Room(models.Model):
             pass
 
         self.members.remove(user)
-        self.save()
 
     @site_atomic
     def set_lock(self, owner, sender=None, expiration_date=None):
         if sender is None:
             sender = owner
+
+        User.objects.select_for_update(no_key=True).get(pk=owner.pk)
+        self._lock()
 
         if not sender.is_staff and sender != owner:
             raise ValidationError(_("Only staff can lock rooms for other users."), code="invalid")
@@ -184,11 +198,12 @@ class Room(models.Model):
                                   params={"room": self})
 
         self.lock = RoomLock.objects.make(owner, expiration_date=expiration_date)
-        self.lock.save()
-        self.save()
+        self.save(update_fields=["lock"])
 
     @site_atomic
     def unlock(self, sender, leaving=False):
+        self._lock()
+
         if self.is_locked:
             if not self.lock.is_owned_by(sender) and (not sender.is_staff or leaving):
                 raise ValidationError(_("Cannot unlock %(room)s, lock belongs to other user."),
@@ -197,7 +212,7 @@ class Room(models.Model):
 
             lock = self.lock
             self.lock = None
-            self.save()
+            self.save(update_fields=["lock"])
             lock.delete()
 
     @staticmethod
