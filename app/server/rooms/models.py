@@ -108,96 +108,124 @@ class Room(models.Model):
     def __str__(self):
         return "Room " + self.name
 
+    def _locked(self):
+        return type(self).objects.select_for_update().get(pk=self.pk)
+
+    def _sync_from_locked(self, room):
+        self.name = room.name
+        self.description = room.description
+        self.hidden = room.hidden
+        self.beds_single = room.beds_single
+        self.beds_double = room.beds_double
+        self.available_beds_single = room.available_beds_single
+        self.available_beds_double = room.available_beds_double
+        self.lock = room.lock
+
     @transaction.atomic
     def join(self, user, sender=None, password=None):
         if sender is None:
             sender = user
 
+        User.objects.select_for_update().get(pk=user.pk)
+        room = self._locked()
+
         if not sender.is_staff and sender != user:
             raise ValidationError(_("Only staff can add other users to rooms."), code="invalid")
 
-        if self.hidden and not sender.is_staff:
+        if room.hidden and not sender.is_staff:
             raise ValidationError(_("Cannot join %(room)s, room is unavailable."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
-        if self.is_locked and not self.lock.is_opened_by(password) and sender == user:
+        if room.is_locked and not room.lock.is_opened_by(password) and sender == user:
             raise ValidationError(_("Cannot join %(room)s, incorrect password for locked room."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
         # Ensure room is not full
-        if self.is_full:
+        if room.is_full:
             raise ValidationError(_("Cannot join %(room)s, room is full."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
         # Ensure user is not already in a room
         prev_room = user.room_of_user.all().first()
         if prev_room is not None:
             raise ValidationError(_("Cannot join %(room)s, user is already in a room."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
-        self.members.add(user)
-        self.save()
+        room.members.add(user)
+        room.save()
+        self._sync_from_locked(room)
 
     @transaction.atomic
     def leave(self, user, sender=None):
         if not sender:
             sender = user
 
+        User.objects.select_for_update().get(pk=user.pk)
+        room = self._locked()
+
         if not sender.is_staff and sender != user:
             raise ValidationError(_("Only staff can remove other users from rooms."),
                                   code="invalid")
 
-        try:
-            self.unlock(user, True)
-        except ValidationError:
-            pass
+        if room.is_locked and room.lock.is_owned_by(user):
+            lock = room.lock
+            room.lock = None
+            room.save()
+            lock.delete()
 
-        self.members.remove(user)
-        self.save()
+        room.members.remove(user)
+        room.save()
+        self._sync_from_locked(room)
 
     @transaction.atomic
     def set_lock(self, owner, sender=None, expiration_date=None):
         if sender is None:
             sender = owner
 
+        room = self._locked()
+
         if not sender.is_staff and sender != owner:
             raise ValidationError(_("Only staff can lock rooms for other users."), code="invalid")
 
-        if not self.members.filter(pk__exact=owner.pk).exists():
+        if not room.members.filter(pk__exact=owner.pk).exists():
             raise ValidationError(_("Cannot lock %(room)s, user must first join the room."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
-        if self.hidden and not sender.is_staff:
+        if room.hidden and not sender.is_staff:
             raise ValidationError(_("Cannot join %(room)s, room is unavailable."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
-        if self.is_locked and not sender.is_staff:
+        if room.is_locked and not sender.is_staff:
             raise ValidationError(_("Cannot lock %(room)s, room has already been locked."),
                                   code="invalid",
-                                  params={"room": self})
+                                  params={"room": room})
 
-        self.lock = RoomLock.objects.make(owner, expiration_date=expiration_date)
-        self.lock.save()
-        self.save()
+        room.lock = RoomLock.objects.make(owner, expiration_date=expiration_date)
+        room.lock.save()
+        room.save()
+        self._sync_from_locked(room)
 
     @transaction.atomic
     def unlock(self, sender, leaving=False):
-        if self.is_locked:
-            if not self.lock.is_owned_by(sender) and (not sender.is_staff or leaving):
+        room = self._locked()
+
+        if room.is_locked:
+            if not room.lock.is_owned_by(sender) and (not sender.is_staff or leaving):
                 raise ValidationError(_("Cannot unlock %(room)s, lock belongs to other user."),
                                       code="invalid",
-                                      params={"room": self})
+                                      params={"room": room})
 
-            lock = self.lock
-            self.lock = None
-            self.save()
+            lock = room.lock
+            room.lock = None
+            room.save()
             lock.delete()
+            self._sync_from_locked(room)
 
     @staticmethod
     def name_to_key_orderable(room):

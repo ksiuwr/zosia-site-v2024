@@ -139,6 +139,9 @@ def validate_terms(value):
 class UserPreferences(models.Model):
     class Meta:
         verbose_name_plural = 'User preferences'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'zosia'], name='unique_user_preferences_per_zosia')
+        ]
 
     objects = UserPreferencesManager()
 
@@ -278,6 +281,7 @@ class UserPreferences(models.Model):
     @staticmethod
     def get_current_discount_round(zosia: Zosia):
         boxed_discount_turn_students_counts = UserPreferences.objects \
+            .filter(zosia=zosia) \
             .values('discount_round').annotate(count=models.Count('discount_round'))
 
         discount_turn_students_counts = {d['discount_round']: d['count'] for d in boxed_discount_turn_students_counts}
