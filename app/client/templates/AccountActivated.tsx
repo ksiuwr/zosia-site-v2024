@@ -1,10 +1,13 @@
 import { CenteredContentContainer } from "@client/components/containers/CenteredContentContainer";
 import { Layout } from "@client/components/Layout";
 import { PageTitle } from "@client/components/PageTitle";
+import { useSite } from "@client/utils/site";
 import { reverse, templates } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.AccountActivated) => {
+  const site = useSite();
+
   return (
     <Layout>
       <PageTitle>Email activated!</PageTitle>
@@ -13,7 +16,7 @@ export const Template = (props: templates.AccountActivated) => {
           <p>
             Your email has been activated successfully!
             {props.is_conference_active
-              ? " You should update preferences for ZOSIA conference."
+              ? ` You should update preferences for ${site.name} conference.`
               : " You may now proceed to the website."}
           </p>
           <a

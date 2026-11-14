@@ -47,11 +47,13 @@ CACHES = {
     }
 }
 
-DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PASSWORD'] = 'zosia'
+for database in DATABASES.values():
+    database['HOST'] = 'db'
+    database['PASSWORD'] = 'zosia'
 
 # This, in conjunction with DEBUG=True enables 'debug' directives in templates
 # Especially room.js makes heavy use of it
 INTERNAL_IPS = ['127.0.0.1']
-ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost']
+# zosia.localhost and leosia.localhost let you open each site locally
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'zosia.localhost', 'leosia.localhost']
 CSRF_TRUSTED_ORIGINS = [f"http://*.{host}" for host in ALLOWED_HOSTS]

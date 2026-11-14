@@ -4,11 +4,14 @@ import { AdminTable } from "@client/components/admin/tables/AdminTable";
 import { AdminTableActions } from "@client/components/admin/tables/AdminTableActions";
 import { AdminTableEditLink } from "@client/components/admin/tables/AdminTableEditLink";
 import { PageTitle } from "@client/components/PageTitle";
+import { useSite } from "@client/utils/site";
 import { getLocalYear } from "@client/utils/time";
 import { reverse, templates } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.AdminConferencesList) => {
+  const site = useSite();
+
   return (
     <AdminLayout>
       <PageTitle>Conferences</PageTitle>
@@ -22,7 +25,7 @@ export const Template = (props: templates.AdminConferencesList) => {
         >
           {props.conferences.map((conference) => (
             <tr key={conference.id}>
-              <td>{`ZOSIA ${getLocalYear(new Date(conference.start_date))}`}</td>
+              <td>{`${site.name} ${getLocalYear(new Date(conference.start_date))}`}</td>
               <td>
                 <AdminTableActions>
                   <AdminTableEditLink

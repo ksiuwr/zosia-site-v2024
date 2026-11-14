@@ -1,11 +1,12 @@
 import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Layout } from "@client/components/Layout";
+import { SiteConfig, useSite } from "@client/utils/site";
 import { getLocalDate } from "@client/utils/time";
 import { templates } from "@reactivated";
 import React from "react";
 import Markdown from "react-markdown";
 
-const termsAndConditionsMarkdown = () => `
+const termsAndConditionsMarkdown = (site: SiteConfig) => `
 Ostatnia aktualizacja: 19:30 13/11/2025
 
 ## I. Informacje ogólne
@@ -99,7 +100,7 @@ Organizator może także odmówić świadczenia usług tej osobie w przyszłośc
 Organizator zastrzega sobie prawo do odmowy realizacji konkretnej usługi na **7 dni** przed rozpoczęciem obozu z istotnych przyczyn organizacyjnych lub technicznych. Uczestnik zostanie o tym niezwłocznie poinformowany, a wniesiona opłata za tę usługę zostanie zwrócona w terminie 7 dni.
 
 ### 16. Odwołanie Obozu
-W przypadku nieuzbierania wystarczającej ilości środków niezbędnych do przeprowadzenia Obozu organizator zastrzega sobie prawo do odwołania wydarzenia. Decyzja w tej sprawie może zostać podjęta i opublikowana najpóźniej do dnia 31/01/2026 r. (włącznie). Wpłacone środki zostaną zwrócone uczestnikom w ciągu 7 dni od momentu ogłoszenia decyzji.
+W przypadku nieuzbierania wystarczającej ilości środków niezbędnych do przeprowadzenia Obozu organizator zastrzega sobie prawo do odwołania wydarzenia. Decyzja w tej sprawie może zostać podjęta i opublikowana najpóźniej do dnia ${site.cancellationDeadline} (włącznie). Wpłacone środki zostaną zwrócone uczestnikom w ciągu 7 dni od momentu ogłoszenia decyzji.
 
 ---
 
@@ -126,16 +127,17 @@ Obóz ma charakter zamknięty i jest przeznaczony wyłącznie dla zapisanych ucz
 `;
 
 export const Template = (props: templates.TermsAndConditions) => {
+  const site = useSite();
 
   return (
     <Layout>
       <CenteredContainer>
         <article className="prose mx-auto my-10">
           <h1 className="text-center">
-            Regulamin Zimowego Obozu Studentów Informatyki A oraz warunki sprzedaży
+            {site.termsTitle}
           </h1>
             <Markdown>
-              {termsAndConditionsMarkdown()}
+              {termsAndConditionsMarkdown(site)}
             </Markdown>
         </article>
       </CenteredContainer>

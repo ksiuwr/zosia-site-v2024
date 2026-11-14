@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.http import HttpRequest
 from server.utils.recaptcha import RECAPTCHA_TEST_PUBLIC_KEY, RECAPTCHA_TOKEN_FIELD_NAME
+from server.utils.sites import get_site, get_site_code
 from django.conf import settings
 from server.utils.time_manager import format_in_zone
 from typing import TypedDict
@@ -54,5 +55,23 @@ def recaptcha_context(request: HttpRequest) -> ReCaptchaContext:
         "recaptcha": {
             "site_key": getattr(settings, "RECAPTCHA_PUBLIC_KEY", RECAPTCHA_TEST_PUBLIC_KEY),
             "token_field_name": RECAPTCHA_TOKEN_FIELD_NAME,
+        }
+    }
+
+
+class SiteInfo(TypedDict):
+    code: str
+    name: str
+
+
+class SiteContext(TypedDict):
+    site: SiteInfo
+
+
+def site_context(request: HttpRequest) -> SiteContext:
+    return {
+        "site": {
+            "code": get_site_code(),
+            "name": get_site()["name"],
         }
     }

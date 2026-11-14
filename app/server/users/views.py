@@ -55,6 +55,7 @@ from server.utils.constants import (
 )
 from server.utils.forms import errors_format
 from server.utils.recaptcha import is_recaptcha_valid
+from server.utils.sites import get_site
 from server.utils.views import csv_response
 
 
@@ -169,6 +170,10 @@ class ReactChangePasswordDoneView(PasswordChangeDoneView):
 
 
 class ReactResetPasswordView(PasswordResetView):
+    @property
+    def from_email(self):
+        return get_site()["from_email"]
+
     def render_to_response(self, context, **response_kwargs):
         return AccountResetPassword(form=self.get_form()).render(self.request)
 
@@ -353,11 +358,11 @@ def register(request):
 
     if user_prefs is None:
         if not zosia.is_user_registration_open(user):
-            messages.error(request, _('Registration for ZOSIA is not open yet'))
+            messages.error(request, _('Registration for %(site)s is not open yet') % {'site': get_site()['name']})
             return redirect(reverse('index'))
 
         if zosia.is_registration_over:
-            messages.error(request, _('You missed registration for ZOSIA'))
+            messages.error(request, _('You missed registration for %(site)s') % {'site': get_site()['name']})
             return redirect(reverse('index'))
 
     form_args = {}

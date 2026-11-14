@@ -5,6 +5,9 @@ services:
       - POSTGRES_DB=zosia
       - POSTGRES_USER=zosia
       - POSTGRES_PASSWORD=zosia
+    volumes:
+      # Creates databases of the other sites (zosia is created by POSTGRES_DB)
+      - ./tools/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
 
   # Container with web application
   web:

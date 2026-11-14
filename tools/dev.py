@@ -131,7 +131,7 @@ def run_tests(modules: Optional[List[str]], is_verbose: bool, build_frontend: bo
 
 
 def migrate(is_create_admin: bool, is_create_data: bool) -> None:
-    docker_python(["migrate"])
+    docker_python(["migrate_sites"])
 
     if is_create_admin:
         print(f"{Colour.PURPLE}-- Set password for super user account --"

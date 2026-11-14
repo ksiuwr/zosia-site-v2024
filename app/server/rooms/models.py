@@ -3,13 +3,14 @@ import re
 import string
 
 from django.core.exceptions import ValidationError
-from django.db import models, transaction
+from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from server.users.models import User
 from server.utils.constants import DELIMITER, ROOM_LOCK_TIMEOUT
+from server.utils.sites import site_atomic
 from server.utils.time_manager import now, timedelta_since_now
 
 
@@ -108,7 +109,7 @@ class Room(models.Model):
     def __str__(self):
         return "Room " + self.name
 
-    @transaction.atomic
+    @site_atomic
     def join(self, user, sender=None, password=None):
         if sender is None:
             sender = user
@@ -142,7 +143,7 @@ class Room(models.Model):
         self.members.add(user)
         self.save()
 
-    @transaction.atomic
+    @site_atomic
     def leave(self, user, sender=None):
         if not sender:
             sender = user
@@ -159,7 +160,7 @@ class Room(models.Model):
         self.members.remove(user)
         self.save()
 
-    @transaction.atomic
+    @site_atomic
     def set_lock(self, owner, sender=None, expiration_date=None):
         if sender is None:
             sender = owner
@@ -186,7 +187,7 @@ class Room(models.Model):
         self.lock.save()
         self.save()
 
-    @transaction.atomic
+    @site_atomic
     def unlock(self, sender, leaving=False):
         if self.is_locked:
             if not self.lock.is_owned_by(sender) and (not sender.is_staff or leaving):

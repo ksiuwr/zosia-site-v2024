@@ -58,6 +58,20 @@ There are 3 flags that you might want to use with `dev.py run`:
   several user accounts `zosia[1-5]?@example.com` that can be accessed with password: `pass`.
 - `--no-cache` - build the fresh copy of the container image (ignore docker cache)
 
+#### ZOSIA and LEOSIA
+
+The same code serves both [zosia.org](https://zosia.org) and [leosia.org](https://leosia.org).
+The site is picked by the domain of the request and every site has its own database
+(see `SITES` in `app/server/settings/common.py` and `app/client/utils/site.ts`).
+
+Locally, open <http://zosia.localhost:8000> or <http://leosia.localhost:8000>
+(plain `localhost` is ZOSIA). Management commands use ZOSIA's database unless you set the
+`SITE` env variable, e.g. `SITE=leosia python manage.py createsuperuser`.
+`python manage.py migrate_sites` migrates the databases of all sites.
+
+If your database container was created before LEOSIA was added, create its database with
+`docker exec zosia_db_1 createdb -U zosia leosia`.
+
 #### I have run it - what is happening?
 
 First, script needs to build the docker image. This process uses local cache, so it takes time

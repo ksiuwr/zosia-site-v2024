@@ -1,14 +1,15 @@
 import { CenteredContainer } from "@client/components/containers/CenteredContainer";
 import { Layout } from "@client/components/Layout";
+import { useSite } from "@client/utils/site";
 import React from "react";
 import Markdown from "react-markdown";
 
-const privacyPolicyMarkdown = `
+const privacyPolicyMarkdown = (domain: string) => `
 Ostatnia aktualizacja: 19:30 13/11/2025
 
 ## Informacja o plikach cookies
 
-zosia.org używa plików cookie wyłącznie do zarządzania sesją użytkownika i ochrony przed atakami CSRF. Dodatkowe pliki cookie, związane z bezpieczeństwem i funkcjonowaniem strony, stosuje także nasz dostawca DNS, Cloudflare. Pliki te są niezbędne do prawidłowego działania serwisu i nie można z nich zrezygnować.
+${domain} używa plików cookie wyłącznie do zarządzania sesją użytkownika i ochrony przed atakami CSRF. Dodatkowe pliki cookie, związane z bezpieczeństwem i funkcjonowaniem strony, stosuje także nasz dostawca DNS, Cloudflare. Pliki te są niezbędne do prawidłowego działania serwisu i nie można z nich zrezygnować.
 
 ## Polityka prywatności
 
@@ -43,18 +44,19 @@ Z siedzibą przy ul. Św. Mikołaja 8/11 lok. 208, 50-125 Wrocław.
 Kontakt e-mail: kontakt.fwsi@gmail.com
 
 Masz prawo do dostępu do danych, ich poprawiania, usunięcia, ograniczenia przetwarzania, przenoszenia, wycofania zgody oraz wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.
-`
-;
+`;
 
 export const Template = () => {
+  const site = useSite();
+
   return (
     <Layout>
       <CenteredContainer>
         <article className="prose mx-auto my-10">
           <h1 className="text-center">
-            Polityka Prywatności Zimowego Obozu Studentów Informatyki A
+            Polityka Prywatności {site.fullNameGenitive}
           </h1>
-          <Markdown>{privacyPolicyMarkdown}</Markdown>
+          <Markdown>{privacyPolicyMarkdown(site.domain)}</Markdown>
         </article>
       </CenteredContainer>
     </Layout>

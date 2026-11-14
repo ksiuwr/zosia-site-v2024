@@ -1,3 +1,4 @@
+import { useSite } from "@client/utils/site";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import { Context, reverse } from "@reactivated";
 import clsx from "clsx";
@@ -12,7 +13,7 @@ interface AdminNavBarSection {
   links: { linkTitle: string; href: string }[];
 }
 
-const navbarSections: AdminNavBarSection[] = [
+const getNavbarSections = (siteName: string): AdminNavBarSection[] => [
   {
     sectionTitle: "Users",
     links: [
@@ -95,7 +96,7 @@ const navbarSections: AdminNavBarSection[] = [
     sectionTitle: "Downloads",
     links: [
       {
-        linkTitle: "ZOSIA data export (for zosia-print script) (JSON)",
+        linkTitle: `${siteName} data export (for zosia-print script) (JSON)`,
         href: reverse("export_data"),
       },
       {
@@ -157,6 +158,7 @@ const navbarSections: AdminNavBarSection[] = [
 
 export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
   const { request } = useContext(Context);
+  const navbarSections = getNavbarSections(useSite().name);
 
   return (
     <nav

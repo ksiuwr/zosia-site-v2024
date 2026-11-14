@@ -1,5 +1,6 @@
+import { useSite } from "@client/utils/site";
 import { ThemeProvider } from "@client/utils/themes/ThemeContext";
-import { themeInitScript } from "@client/utils/themes/themes";
+import { getThemeInitScript } from "@client/utils/themes/themes";
 import { Context } from "@reactivated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -26,6 +27,7 @@ export const Layout = ({
   children,
 }: PropsWithChildren<LayoutProps>) => {
   const { messages, STATIC_URL } = useContext(Context);
+  const site = useSite();
 
   // React query docs recommend keeping the query client in React state
   // for server side rendering.
@@ -45,10 +47,10 @@ export const Layout = ({
     <>
       <Helmet>
         <html />
-        <script>{themeInitScript}</script>
+        <script>{getThemeInitScript(site.lightTheme, site.darkTheme)}</script>
         <meta content="text/html; charset=UTF-8" httpEquiv="Content-Type" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Zimowy Obóz Studentów Informatyki A</title>
+        <title>{site.fullName}</title>
         <link
           rel="icon"
           href={`${STATIC_URL}imgs/favicon-16x16.png`}

@@ -1,9 +1,60 @@
-import type { Theme } from "daisyui";
+import type { CustomTheme } from "daisyui";
 
-// You can change these values to other themes provided by daisyUI
-// Or create your own themes and use them here
-export const LIGHT_THEME: Theme = "light";
-export const DARK_THEME: Theme = "dark";
+// Light and dark theme of every site, picked in client/utils/site.ts.
+// You can use themes provided by daisyUI or create your own themes below.
+// All of them have to be listed in tailwind.config.ts
+export const ZOSIA_LIGHT_THEME = "light";
+export const ZOSIA_DARK_THEME = "dark";
+
+export const LEOSIA_LIGHT_THEME = "LEOSIA_LIGHT";
+export const LEOSIA_DARK_THEME = "LEOSIA_DARK";
+
+export const CUSTOM_THEMES: CustomTheme = {
+  [LEOSIA_LIGHT_THEME]: {
+    primary: "#f071a6",
+    "primary-focus": "#e13d50",
+    "primary-content": "#ffffff",
+
+    secondary: "#a68df6",
+    "secondary-focus": "#8462f3",
+    "secondary-content": "#ffffff",
+
+    accent: "#d6d2ff",
+    "accent-focus": "#d0a862",
+    "accent-content": "#ffffff",
+
+    neutral: "#db3588",
+    "neutral-focus": "#6a3e3e",
+    "neutral-content": "#f0d6e8",
+
+    "base-100": "#ffcfe6",
+    "base-200": "#fcafd4",
+    "base-300": "#ff9acc",
+    "base-content": "#342914",
+  },
+  [LEOSIA_DARK_THEME]: {
+    primary: "#e24f99",
+    "primary-focus": "#d72d82",
+    "primary-content": "#1b1c22",
+
+    secondary: "#dfa2fb",
+    "secondary-focus": "#bc64f7",
+    "secondary-content": "#1b1c22",
+
+    accent: "#ffd5b3",
+    "accent-focus": "#ffc380",
+    "accent-content": "#1b1c22",
+
+    neutral: "#3f0d32",
+    "neutral-focus": "#351c2e",
+    "neutral-content": "#d5ccff",
+
+    "base-100": "#602450",
+    "base-200": "#501740",
+    "base-300": "#3f0d32",
+    "base-content": "#d5ccff",
+  },
+};
 
 /**
  * This script handles saving/reading preferred theme from localStorage,
@@ -19,11 +70,11 @@ export const DARK_THEME: Theme = "dark";
  * This approach is inspired by this blogpost:
  * https://hangindev.com/blog/avoid-flash-of-default-theme-an-implementation-of-dark-mode-in-react-app
  */
-export const themeInitScript = `
+export const getThemeInitScript = (lightTheme: string, darkTheme: string) => `
 function setTheme(isDark) {
   document
     .querySelector("html")
-    .setAttribute("data-theme", isDark ? "${DARK_THEME}" : "${LIGHT_THEME}");
+    .setAttribute("data-theme", isDark ? "${darkTheme}" : "${lightTheme}");
   window.__isDark = isDark;
 }
 
