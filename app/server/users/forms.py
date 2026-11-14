@@ -5,12 +5,14 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django.db import transaction
+from django.forms.models import construct_instance
 
 from server.conferences.models import Transport, Zosia
 from .actions import SendActivationEmail, SendEmailToAll
 from .models import Organization, User, UserPreferences
 from server.utils.constants import PAYMENT_GROUPS
-from server.utils.sites import get_site
+from server.utils.sites import get_site, get_site_database
 
 GROUPS = (
     ('pick', 'Pick users'),
@@ -197,12 +199,46 @@ class UserPreferencesForm(UserPreferencesWithTransportForm):
         self.fields['organization'].queryset = Organization.objects.order_by("-accepted", "name")
 
     def call(self, zosia, first_call):
-        user_preferences = self.save(commit=False)
-        user_preferences.user = self.user
-        user_preferences.zosia = zosia
-        if first_call and user_preferences.is_student:
-            user_preferences.discount_round = UserPreferences.get_current_discount_round(zosia)
-        user_preferences.save()
+        with transaction.atomic(using=get_site_database()):
+            User.objects.select_for_update(no_key=True).get(pk=self.user.pk)
+            # Work on the current row, not on the instance the view loaded before taking the lock,
+            # so that fields changed by admins in the meantime (e.g. payment) are kept
+            user_preferences = UserPreferences.objects.select_for_update(no_key=True) \
+                .filter(zosia=zosia, user=self.user).first()
+
+            if first_call and user_preferences is not None:
+                raise forms.ValidationError(
+                    _("You are already registered for %(site)s.") % {'site': get_site()['name']})
+
+            if not first_call and user_preferences is None:
+                raise forms.ValidationError(_("Your registration has been removed in the meantime."))
+
+            if user_preferences is None:
+                user_preferences = UserPreferences(user=self.user, zosia=zosia)
+
+            fields = [name for name, field in self.fields.items() if not field.disabled]
+            if user_preferences.payment_accepted:
+                fields = [name for name in fields if name in self.CAN_CHANGE_AFTER_PAYMENT_ACCEPTED]
+
+            previous_transport_id = user_preferences.transport_id
+            construct_instance(self, user_preferences, fields=fields)
+
+            transport = user_preferences.transport
+            if transport is not None and transport.pk != previous_transport_id:
+                transport = Transport.objects.select_for_update(no_key=True).get(pk=transport.pk)
+                if transport.passengers.count() >= transport.capacity:
+                    raise forms.ValidationError(_("Selected transport has no free seats left."),
+                                                code='invalid')
+
+            if first_call:
+                if user_preferences.is_student:
+                    # Serializes the students' registrations, so no discount round goes over its limit
+                    zosia = Zosia.objects.select_for_update(no_key=True).get(pk=zosia.pk)
+                    user_preferences.discount_round = UserPreferences.get_current_discount_round(zosia)
+
+                user_preferences.save()
+            else:
+                user_preferences.save(update_fields=fields)
 
         return user_preferences
 

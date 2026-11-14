@@ -10,17 +10,22 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import escape
 from django.http import JsonResponse, HttpResponseBadRequest
+from django.db import IntegrityError, transaction
 from django.db.models import Count
 from urllib.request import urlopen
 
 from .templates import AdminBoardgamesAccept, BoardgamesAdd, BoardgamesHome, BoardgamesMyGames, BoardgamesVote
-from .models import Boardgame, Vote
+from .models import Boardgame, Vote, bgg_id_from_url
 from .forms import BoardgameForm
 from server.conferences.models import Zosia
-from server.users.models import UserPreferences
+from server.users.models import User, UserPreferences
+from server.utils.sites import get_site_database
 
 
 MAX_NUMBER_OF_GAMES = 3
+
+INVALID_URL = _("This is not a valid boardgame url")
+ALREADY_ADDED = _("This boardgame has been already added")
 
 
 @login_required
@@ -58,18 +63,6 @@ def my_boardgames(request):
     return BoardgamesMyGames(user_boardgames=user_boardgames, votes=votes, can_add=can_add).render(request)
 
 
-def validate_game_url(url: str) -> bool:
-    url_pattern = r'(https://)?boardgamegeek.com/boardgame/\d{1,6}(/[0-9a-z-]+)?'
-    if re.match(url_pattern, url) is None:
-        return False
-
-    if not url.startswith("https://"):
-        url = f"https://{url}"
-
-    # Game name should be different then BoardGameGeek
-    return get_game_name(url) != "BoardGameGeek"
-
-
 # TODO: Simplify title detection
 def get_game_name(url) -> str:
     boargamegeek_html = urlopen(url).read()
@@ -85,37 +78,63 @@ def get_game_name(url) -> str:
     return name_str
 
 
-def get_id(url):
-    match = re.search(r'(boardgame\/)([0-9]+)', url)
-    return match.group(2)
+def has_max_games(user):
+    return Boardgame.objects.filter(user=user).count() >= MAX_NUMBER_OF_GAMES
+
+
+def max_games_message():
+    return _("Number of boardgames per account exceeded (max: %(max)s).") % {'max': MAX_NUMBER_OF_GAMES}
+
+
+def add_boardgame(user, url):
+    """Adds the game, returns the error message if it can't be added."""
+    url_pattern = r'(https://)?boardgamegeek.com/boardgame/\d{1,6}(/[0-9a-z-]+)?'
+    if re.match(url_pattern, url) is None:
+        return INVALID_URL
+
+    if not url.startswith("https://"):
+        url = f"https://{url}"
+
+    bgg_id = bgg_id_from_url(url)
+    # Checked before fetching the name, so that duplicates don't cost a request to BGG
+    if Boardgame.objects.filter(bgg_id=bgg_id).exists():
+        return ALREADY_ADDED
+
+    name = get_game_name(url)
+    # Game name should be different then BoardGameGeek
+    if name == "BoardGameGeek":
+        return INVALID_URL
+
+    try:
+        with transaction.atomic(using=get_site_database()):
+            User.objects.select_for_update(no_key=True).get(pk=user.pk)
+
+            if has_max_games(user):
+                return max_games_message()
+
+            Boardgame.objects.create(name=name, bgg_id=bgg_id, user=user, url=url)
+    except IntegrityError:
+        # Someone else added the same game in the meantime
+        return ALREADY_ADDED
+
+    return None
 
 
 @login_required
 @require_http_methods(['GET', 'POST'])
 def create(request):
-    user_boardgames = Boardgame.objects.filter(user=request.user)
     form = BoardgameForm(request.POST or None)
 
     if request.method == 'POST':
-        if user_boardgames.count() >= MAX_NUMBER_OF_GAMES:
-            messages.error(request, _(f"Number of boardgames per account exceeded (max: {MAX_NUMBER_OF_GAMES})."))
+        # Checked again under a lock when adding, this check only skips the request to BGG
+        if has_max_games(request.user):
+            messages.error(request, max_games_message())
         elif form.is_valid():
-            new_url = form.cleaned_data['url']
-            if not validate_game_url(new_url):
-                messages.error(request, _("This is not a valid boardgame url"))
-            else:
-                game_id = get_id(new_url)
-                # TODO: We should save only game id in the model instead of full URL
-                url_part = 'boardgame/' + game_id
-                if Boardgame.objects.filter(url__contains=url_part).exists():
-                    messages.error(
-                        request, _("This boardgame has been already added"))
-                else:
-                    name = get_game_name(new_url)
-                    boardgame = Boardgame(
-                        name=name, user=request.user, url=new_url)
-                    boardgame.save()
-                    return redirect('my_boardgames')
+            error = add_boardgame(request.user, form.cleaned_data['url'])
+            if error is None:
+                return redirect('my_boardgames')
+
+            messages.error(request, error)
         else:
             messages.error(request, _("Can't add boardgame - form is not valid."))
 
@@ -154,20 +173,20 @@ def vote_edit(request):
             content_type='text/html'
         )
 
-    boardgames = Boardgame.objects.filter(pk__in=new_ids)
+    with transaction.atomic(using=get_site_database()):
+        User.objects.select_for_update(no_key=True).get(pk=request.user.pk)
+        # Locked until the votes are saved, so a game can't be deleted in the meantime
+        boardgames = list(Boardgame.objects.select_for_update(no_key=True)
+                          .filter(pk__in=new_ids).order_by('pk'))
 
-    newVotes = list()
-    for boardgame in boardgames:
-        newVotes.append(Vote(user=request.user, boardgame=boardgame))
-
-    Vote.objects.filter(user=request.user).delete()
-    Vote.objects.bulk_create(newVotes)
+        Vote.objects.filter(user=request.user).delete()
+        Vote.objects.bulk_create([Vote(user=request.user, boardgame=boardgame) for boardgame in boardgames])
 
     if (len(new_ids) == 0):
         messages.success(request, "Votes were successfully reset.")
     else:
         games_voted_for = ', '.join(
-            map(lambda boardgame: '<strong>"' + boardgame.name + '"</strong>', list(boardgames))
+            map(lambda boardgame: '<strong>"' + boardgame.name + '"</strong>', boardgames)
         )
         messages.success(request, "Voted for boardgames: {}.".format(games_voted_for))
 
@@ -196,16 +215,19 @@ def toggle_accepted(request):
 @require_http_methods(['POST'])
 def boardgame_delete(request):
     boardgame_id = request.POST.get('boardgame_id')
-    boardgame = get_object_or_404(Boardgame, pk=boardgame_id)
 
-    if boardgame.user != request.user:
-        return HttpResponseBadRequest(
-            '<h1>Bad request(400)</h1>'
-            "You cannot remove someone else's board game",
-            content_type='text/html'
-        )
+    with transaction.atomic(using=get_site_database()):
+        # Waits for the votes being saved for this game, so they're deleted along with it
+        boardgame = get_object_or_404(Boardgame.objects.select_for_update(), pk=boardgame_id)
 
-    boardgame.delete()
+        if boardgame.user != request.user:
+            return HttpResponseBadRequest(
+                '<h1>Bad request(400)</h1>'
+                "You cannot remove someone else's board game",
+                content_type='text/html'
+            )
+
+        boardgame.delete()
 
     messages.success(request, "Deleted boardgame: {}".format(escape(boardgame)))
     return redirect(reverse('my_boardgames'))

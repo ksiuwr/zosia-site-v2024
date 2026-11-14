@@ -105,6 +105,15 @@ class RoomSerializer(serializers.ModelSerializer):
 
         return data
 
+    def update(self, instance, validated_data):
+        # Save only the fields that came in the request, so the stale instance doesn't
+        # overwrite a lock set or removed in the meantime
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save(update_fields=list(validated_data))
+        return instance
+
 
 class RoomWithLockPasswordSerializer(RoomSerializer):
     lock = RoomLockWithPasswordSerializer(read_only=True)
