@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from server.conferences.models import Transport, Zosia
 from server.utils.constants import II_UWR_EMAIL_DOMAIN, MAX_BONUS_MINUTES, MIN_BONUS_MINUTES, \
     PAYMENT_GROUPS, PERSON_TYPE, SHIRT_SIZE_CHOICES, SHIRT_TYPES_CHOICES, UserInternals
+from server.utils.sites import get_site
 from server.utils.time_manager import timedelta_since
 
 
@@ -27,7 +28,7 @@ class UserManager(BaseUserManager):
         if password is not None:
             user.set_password(password)
 
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
@@ -337,7 +338,7 @@ class UserPreferences(models.Model):
 
     @property
     def transfer_title(self):
-        return f"ZOSIA - {self.user.full_name} - {self.user.short_hash} - {self._chosen_options_summary()}"
+        return f"{get_site()['name']} - {self.user.full_name} - {self.user.short_hash} - {self._chosen_options_summary()}"
 
     @property
     def rooming_start_time(self):

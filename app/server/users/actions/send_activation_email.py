@@ -3,7 +3,8 @@ from django.template import loader
 from django.core.mail import EmailMultiAlternatives
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.conf import settings
+
+from server.utils.sites import get_site
 
 
 EMAIL_TEMPLATE_NAME = 'users/signup_email.html'
@@ -37,6 +38,6 @@ class SendActivationEmail:
         body = loader.render_to_string(EMAIL_TEMPLATE_NAME, context)
 
         email_message = EmailMultiAlternatives(
-            subject, body, settings.DEFAULT_MAIL, to=[to_email])
+            subject, body, get_site()["from_email"], to=[to_email])
 
         email_message.send()

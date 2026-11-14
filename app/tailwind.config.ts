@@ -4,7 +4,11 @@ import daisyui from "daisyui";
 import type { Config as DaisyUIConfig } from "daisyui";
 import type { Config } from "tailwindcss";
 
-import { DARK_THEME, LIGHT_THEME } from "./client/utils/themes/themes";
+import {
+  CUSTOM_THEMES,
+  ZOSIA_DARK_THEME,
+  ZOSIA_LIGHT_THEME,
+} from "./client/utils/themes/themes";
 
 export default {
   content: ["./index.html", "./client/**/*.{js,ts,jsx,tsx}"],
@@ -13,6 +17,6 @@ export default {
   },
   plugins: [typography, daisyui],
   daisyui: {
-    themes: [LIGHT_THEME, DARK_THEME],
+    themes: [ZOSIA_LIGHT_THEME, ZOSIA_DARK_THEME, CUSTOM_THEMES],
   } satisfies DaisyUIConfig,
 } satisfies Config;

@@ -15,6 +15,7 @@ import random
 import string
 
 from django.conf.global_settings import DATETIME_INPUT_FORMATS
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 from google.cloud import secretmanager
 import sentry_sdk
@@ -76,9 +77,9 @@ ANYMAIL = {
 }
 
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"
+# Our own emails are sent from the address of the current site (see SITES below),
+# this is only a fallback for emails sent by Django itself
 DEFAULT_FROM_EMAIL = "admin@zosia.org"
-DEFAULT_FROM_EMAIL_NAME = "Zosia Administrators"
-DEFAULT_MAIL = f"{DEFAULT_FROM_EMAIL_NAME} <{DEFAULT_FROM_EMAIL}>"
 
 sentry_dsn = os.environ.get("SENTRY_DSN")
 if sentry_dsn is not None:
@@ -135,6 +136,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # Must come before anything that touches the database (e.g. sessions)
+    "server.utils.sites.SiteMiddleware",
     "server.utils.www_redirect.NoWWWRedirectMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -173,6 +176,7 @@ TEMPLATES = [
                 "server.utils.context_processors.user_context",
                 "server.utils.context_processors.server_time_context",
                 "server.utils.context_processors.recaptcha_context",
+                "server.utils.context_processors.site_context",
             ]
         },
     },
@@ -180,16 +184,45 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "server.wsgi.application"
 
+# Sites
+# One deployment serves all the sites below. The site of a request is picked by
+# its Host header (see server/utils/sites.py) and every site has its own database.
+# Branding of the frontend lives in client/utils/site.ts.
+SITES = {
+    "zosia": {
+        "name": "ZOSIA",
+        "domains": ["zosia.org", "zosia.localhost"],
+        "db_name": "zosia",
+        "from_email": "Zosia Administrators <admin@zosia.org>",
+    },
+    "leosia": {
+        "name": "LEOSIA",
+        "domains": ["leosia.org", "leosia.localhost"],
+        "db_name": "leosia",
+        "from_email": "Leosia Administrators <admin@leosia.org>",
+    },
+}
+
+# Used for hosts that don't match any site and for management commands,
+# so e.g. `SITE=leosia ./manage.py createsuperuser` works on the leosia database
+DEFAULT_SITE = os.environ.get("SITE", "zosia")
+if DEFAULT_SITE not in SITES:
+    raise ImproperlyConfigured(f"SITE must be one of: {', '.join(SITES)}")
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    "default": {
+# The default site's database is "default", the other ones are named after their site
+DATABASES = {}
+for code, site in SITES.items():
+    site["database"] = "default" if code == DEFAULT_SITE else code
+    DATABASES[site["database"]] = {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "zosia",
+        "NAME": site["db_name"],
         "USER": "zosia",
     }
-}
+
+DATABASE_ROUTERS = ["server.utils.sites.SiteRouter"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

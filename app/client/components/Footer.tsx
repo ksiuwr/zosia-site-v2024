@@ -1,3 +1,4 @@
+import { useSite } from "@client/utils/site";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Context, reverse } from "@reactivated";
 import React, { useContext } from "react";
@@ -9,6 +10,7 @@ interface FooterProps {
 
 export const Footer = ({ adminSidebarShown }: FooterProps) => {
   const context = useContext(Context);
+  const site = useSite();
 
   const serverTime = new Date(context.server_time);
 
@@ -58,7 +60,7 @@ export const Footer = ({ adminSidebarShown }: FooterProps) => {
             <div className="flex justify-between gap-2">
               <a
                 className="link text-neutral-content hover:mix-blend-difference"
-                href="https://www.facebook.com/ZOSIA.KSI"
+                href={site.facebookUrl}
                 target="_blank"
                 rel="noreferrer"
               >

@@ -8,11 +8,13 @@ import { AccomodationFieldGroup } from "@client/components/register/Accomodation
 import { OrganizationSelector } from "@client/components/register/OrganizationSelector";
 import { CostSummary } from "@client/components/register/PriceSummary";
 import { calculateAccomodationDayCost } from "@client/utils/payment";
+import { useSite } from "@client/utils/site";
 import { reverse, templates, useForm } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.Register) => {
   const form = useForm({ form: props.form });
+  const site = useSite();
 
   const pageTitle = props.is_user_already_registered
     ? "Update preferences"
@@ -62,7 +64,7 @@ export const Template = (props: templates.Register) => {
       <PageTitle>{pageTitle}</PageTitle>
 
       <CenteredFormContainer>
-        {props.before_discounts ? (
+        {site.showDiscountInfo && props.before_discounts && (
           <Alert type="info">
             <span>
               The first round of funding starts <b>07.01.2026</b>, registering
@@ -74,7 +76,8 @@ export const Template = (props: templates.Register) => {
               bonus time for rooms enrollment.
             </span>
           </Alert>
-        ) : (
+        )}
+        {site.showDiscountInfo && !props.before_discounts && (
           <Alert type="info">
             <span>
               The first round of funding started! - see the{" "}
@@ -121,7 +124,15 @@ export const Template = (props: templates.Register) => {
           <BasicFormField field={form.fields.information} />
           <BasicFormField field={form.fields.vegetarian} />
           <BasicFormField field={form.fields.shirt_size} />
-          <BasicFormField field={form.fields.shirt_type} />
+          {site.showShirtType ? (
+            <BasicFormField field={form.fields.shirt_type} />
+          ) : (
+            <input
+              type="hidden"
+              name={form.fields.shirt_type.name}
+              value={form.values.shirt_type || "m"}
+            />
+          )}
           <BasicFormField field={form.fields.terms_accepted} />
 
           <div className="divider" />

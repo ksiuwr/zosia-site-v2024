@@ -5,11 +5,14 @@ import { ProfileAccountSection } from "@client/components/profile/ProfileAccount
 import { ProfileNavbar } from "@client/components/profile/ProfileNavbar";
 import { ProfilePaymentSection } from "@client/components/profile/ProfilePaymentSection";
 import { ProfileRoomsSection } from "@client/components/profile/ProfileRoomsSection";
+import { useSite } from "@client/utils/site";
 
 import { templates } from "@reactivated";
 import React from "react";
 
 export const Template = (props: templates.Profile) => {
+  const site = useSite();
+
   return (
     <Layout>
       <CenteredContentContainer>
@@ -52,7 +55,7 @@ export const Template = (props: templates.Profile) => {
                 <ProfilePreferencesSection
                   preferences={{
                     vegetarian: props.preferences?.vegetarian,
-                    shirtType: props.shirt_type,
+                    shirtType: site.showShirtType ? props.shirt_type : "",
                     shirtSize: props.shirt_size,
                     transport: props.preferences?.transport?.name,
                     transportDeparture: props.preferences?.transport
