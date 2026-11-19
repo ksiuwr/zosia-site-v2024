@@ -41,6 +41,9 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
 
 # Google API key
 GAPI_KEY = os.environ.get("GAPI_KEY")
+# The key only works on our domains, which Google checks with the Referer header.
+# Django's default "same-origin" policy doesn't send it to other sites at all.
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 ENV = os.environ.get("DJANGO_ENV", "dev")
 
