@@ -86,6 +86,9 @@ STORAGES = {
         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
         "OPTIONS": {
             "bucket_name": bucket_name,
+            # The frontend bundle is dist/index.js after every deploy. With the default
+            # max-age=3600 browsers kept running the old one for up to an hour after a deploy.
+            "object_parameters": {"cache_control": "no-cache"},
         },
     },
 }
