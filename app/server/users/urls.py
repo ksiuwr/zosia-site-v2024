@@ -10,6 +10,7 @@ urlpatterns = [
     path('signup/', anonymous_required(views.signup), name='accounts_signup'),
     path('edit/', views.account_edit, name='accounts_edit'),
     path('mail/', views.mail_to_all, name='mail_all'),
+    path('delete_personal_data/', views.delete_personal_data, name='delete_personal_data'),
     re_path(
         r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,40})/$',
         views.activate, name='accounts_activate'),
