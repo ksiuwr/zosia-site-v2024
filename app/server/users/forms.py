@@ -124,6 +124,23 @@ class UserForm(UserCreationForm):
         return user
 
 
+class DeletePersonalDataForm(forms.Form):
+    confirmation = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['confirmation'].label = \
+            _("Type %(site)s to confirm") % {'site': get_site()['name']}
+
+    def clean_confirmation(self):
+        confirmation = self.cleaned_data['confirmation']
+
+        if confirmation != get_site()['name']:
+            raise forms.ValidationError(_("This is not the name of this site"))
+
+        return confirmation
+
+
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User

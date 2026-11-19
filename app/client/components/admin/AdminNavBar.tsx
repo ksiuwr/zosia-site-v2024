@@ -13,12 +13,23 @@ interface AdminNavBarSection {
   links: { linkTitle: string; href: string }[];
 }
 
-const getNavbarSections = (siteName: string): AdminNavBarSection[] => [
+const getNavbarSections = (
+  siteName: string,
+  isSuperuser: boolean,
+): AdminNavBarSection[] => [
   {
     sectionTitle: "Users",
     links: [
       { linkTitle: "Preferences", href: reverse("user_preferences_index") },
       { linkTitle: "Email users", href: reverse("mail_all") },
+      ...(isSuperuser
+        ? [
+            {
+              linkTitle: "Delete personal data",
+              href: reverse("delete_personal_data"),
+            },
+          ]
+        : []),
     ],
   },
   {
@@ -157,8 +168,8 @@ const getNavbarSections = (siteName: string): AdminNavBarSection[] => [
 ];
 
 export const AdminNavBar = ({ showAsSidebar }: AdminNavBarProps) => {
-  const { request } = useContext(Context);
-  const navbarSections = getNavbarSections(useSite().name);
+  const { request, user } = useContext(Context);
+  const navbarSections = getNavbarSections(useSite().name, user.is_superuser);
 
   return (
     <nav

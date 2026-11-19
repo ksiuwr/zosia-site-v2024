@@ -4,7 +4,8 @@ from reactivated import Pick, template
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
 from .models import Organization, User, UserPreferences, Zosia
-from .forms import EditUserForm, MailForm, OrganizationForm, UserForm, UserPreferencesAdminForm, UserPreferencesForm
+from .forms import DeletePersonalDataForm, EditUserForm, MailForm, OrganizationForm, UserForm, \
+    UserPreferencesAdminForm, UserPreferencesForm
 
 
 @template
@@ -177,3 +178,15 @@ class AdminUsersOrganizationList(NamedTuple):
 class AdminUsersOrganizationUpdate(NamedTuple):
     form: OrganizationForm
     edit_mode: bool
+
+
+class DataCount(NamedTuple):
+    label: str
+    count: int
+
+
+@template
+class AdminDeletePersonalData(NamedTuple):
+    form: DeletePersonalDataForm
+    to_delete: List[DataCount]
+    conference_not_over: bool

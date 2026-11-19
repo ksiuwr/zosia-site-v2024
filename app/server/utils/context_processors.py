@@ -11,6 +11,7 @@ class UserInfo(TypedDict):
     id: int
     is_authenticated: bool
     is_staff: bool
+    is_superuser: bool
     email: str
     first_name: str
     last_name: str
@@ -26,6 +27,7 @@ def user_context(request: HttpRequest) -> UserContext:
             "id": request.user.id if not request.user.is_anonymous else None,
             "is_authenticated": request.user.is_authenticated,
             "is_staff": request.user.is_staff,
+            "is_superuser": request.user.is_superuser,
             "email": request.user.email if not request.user.is_anonymous else "",
             "first_name": request.user.first_name if not request.user.is_anonymous else "",
             "last_name": request.user.last_name if not request.user.is_anonymous else "",

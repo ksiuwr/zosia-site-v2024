@@ -12,9 +12,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import PermissionDenied
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -28,12 +30,14 @@ from .templates import (
     AccountResetPasswordComplete,
     AccountResetPasswordConfirm,
     AccountResetPasswordDone,
+    AdminDeletePersonalData,
     AdminUsersOrganizationList,
     AdminUsersOrganizationUpdate,
     AdminUsersPreferences,
     AdminUsersPreferencesEdit,
     AdminUsersSendEmail,
     AdminUsersSendEmailComplete,
+    DataCount,
     Login,
     Profile,
     Register,
@@ -42,7 +46,7 @@ from .templates import (
 from server.conferences.models import Zosia
 from server.lectures.models import Lecture
 from . import forms
-from .actions import ActivateUser
+from .actions import ActivateUser, DeletePersonalData
 from .forms import OrganizationForm, UserPreferencesAdminForm, UserPreferencesForm
 from .models import Organization, UserPreferences
 from server.utils.constants import (
@@ -211,6 +215,29 @@ def mail_to_all(request):
             return AdminUsersSendEmailComplete(text=text, subject=subject, receivers=receivers).render(request)
 
     return AdminUsersSendEmail(form=form).render(request)
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def delete_personal_data(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    action = DeletePersonalData(keep_session_key=request.session.session_key)
+    form = forms.DeletePersonalDataForm(request.POST or None)
+
+    if form.is_valid():
+        action.call()
+        messages.success(request, _("Personal data has been deleted"))
+        return redirect('delete_personal_data')
+
+    zosia = Zosia.objects.find_active()
+
+    return AdminDeletePersonalData(
+        form=form,
+        to_delete=[DataCount(label, queryset.count()) for label, queryset in action.targets()],
+        conference_not_over=zosia is not None and zosia.end_date >= timezone.localdate(),
+    ).render(request)
 
 
 @require_http_methods(['GET', 'POST'])
