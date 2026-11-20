@@ -1,7 +1,11 @@
 import re
+from unittest import mock
 
+from anymail.exceptions import AnymailRequestsAPIError
 from django.contrib.admin.models import ADDITION, LogEntry
+from django.contrib.messages import get_messages
 from django.contrib.sessions.models import Session
+from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -679,3 +683,38 @@ class DeletePersonalDataSitesTestCase(TestCase):
 
         self.assertFalse(User.objects.using("leosia").exists())
         self.assertQuerySetEqual(User.objects.all(), [zosia_user])
+
+
+@mock.patch('server.users.views.is_recaptcha_valid', return_value=True)
+class SignupViewTestCase(TestCaseWithReact):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('accounts_signup')
+        self.data = {
+            'first_name': 'Jan',
+            'last_name': 'Kowalski',
+            'email': 'jan@example.com',
+            'password1': 'correct-horse-battery',
+            'password2': 'correct-horse-battery',
+            'privacy_consent': True,
+        }
+
+    def test_signup_creates_inactive_user_and_sends_activation_email(self, _):
+        response = self.client.post(self.url, self.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.get(email='jan@example.com').is_active)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ['jan@example.com'])
+
+    @mock.patch('server.users.forms.SendActivationEmail.call',
+                side_effect=AnymailRequestsAPIError('Connection reset by peer'))
+    def test_failed_activation_email_does_not_keep_user(self, *_):
+        with self.assertLogs('server.users.views', level='ERROR'):
+            response = self.client.post(self.url, self.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(email='jan@example.com').exists())
+        messages = [str(m) for m in get_messages(response.wsgi_request)]
+        self.assertEqual(len(messages), 1)
+        self.assertIn('activation email', messages[0])

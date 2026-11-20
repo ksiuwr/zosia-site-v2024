@@ -1,3 +1,6 @@
+import logging
+
+from anymail.exceptions import AnymailError
 from django.contrib import messages
 from django.contrib.auth.views import (
     LoginView,
@@ -61,6 +64,8 @@ from server.utils.forms import errors_format
 from server.utils.recaptcha import is_recaptcha_valid
 from server.utils.sites import get_site
 from server.utils.views import csv_response
+
+logger = logging.getLogger(__name__)
 
 
 class ReactLoginView(LoginView):
@@ -146,8 +151,13 @@ def signup(request):
 
     if request.method == 'POST':
         if form.is_valid() and is_recaptcha_valid(request):
-            form.save(request)
-            return SignUp(form=form, is_signup_successful=True).render(request)
+            try:
+                form.save(request)
+            except AnymailError:
+                logger.exception("Sending the activation email failed")
+                messages.error(request, _("We couldn't send you the activation email, please try again in a moment."))
+            else:
+                return SignUp(form=form, is_signup_successful=True).render(request)
 
     return SignUp(form=form).render(request)
 

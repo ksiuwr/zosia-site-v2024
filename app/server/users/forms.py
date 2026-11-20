@@ -10,7 +10,7 @@ from server.conferences.models import Transport, Zosia
 from .actions import SendActivationEmail, SendEmailToAll
 from .models import Organization, User, UserPreferences
 from server.utils.constants import PAYMENT_GROUPS
-from server.utils.sites import get_site
+from server.utils.sites import get_site, site_atomic
 
 GROUPS = (
     ('pick', 'Pick users'),
@@ -108,6 +108,9 @@ class UserForm(UserCreationForm):
         self.fields['privacy_consent'].label = mark_safe(label)
         self.fields['privacy_consent'].help_text = mark_safe(help_text)
 
+    # Without the activation email the account can't be activated and its email
+    # can't sign up again, so the user is rolled back if sending fails
+    @site_atomic
     def save(self, request):
         user = super().save(commit=False)
         user.is_active = False
