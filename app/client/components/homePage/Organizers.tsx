@@ -16,7 +16,7 @@ export const Organizers = () => {
     {
       name: "Koło Studentów Informatyki",
       logoPath: `${context.STATIC_URL}imgs/Logo_KSI.svg`,
-      url: "http://ksi.ii.uni.wroc.pl/",
+      url: "http://ksi.edu.pl/",
     },
   ];
 

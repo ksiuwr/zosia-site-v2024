@@ -47,7 +47,7 @@ const SITES: Record<string, SiteConfig> = {
     showDiscountInfo: true,
     termsTitle:
       "Regulamin Zimowego Obozu Studentów Informatyki A oraz warunki sprzedaży",
-    cancellationDeadline: "31/01/2026 r.",
+    cancellationDeadline: "31/01/2027 r.",
     invitedRoomsDeadline: "31 stycznia",
   },
   leosia: {
